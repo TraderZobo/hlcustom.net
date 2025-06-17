@@ -1,14 +1,16 @@
 <!DOCTYPE html>
 <script>
-  const correctPin = "12345"; // change this to your PIN
+  const correctPin = "12345"; // Change this to your PIN
   const enteredPin = prompt("Enter 5-digit staff PIN:");
 
   if (enteredPin !== correctPin) {
-    const overlay = document.getElementById("lockOverlay");
-    overlay.style.display = "flex";
-    document.body.innerHTML = ""; // Optional: clear rest of body
-    document.body.appendChild(overlay); // Re-add the overlay
-    throw new Error("Blocked by PIN");
+    // Create full-screen overlay
+    const overlay = document.createElement("div");
+    overlay.id = "lockOverlay";
+    overlay.textContent = "ACCESS DENIED";
+    document.body.innerHTML = ""; // Clear everything
+    document.body.appendChild(overlay); // Show denial overlay
+    throw new Error("Access blocked");
   }
 </script>
 
@@ -21,23 +23,20 @@
     <style>
   
 <style>
-  #lockOverlay {
-    display: none;
+    #lockOverlay {
     position: fixed;
     top: 0; left: 0;
     width: 100vw;
     height: 100vh;
-    background: black;
+    background-color: black;
     color: red;
-    font-size: 3rem;
+    font-size: 5vw;
     font-weight: bold;
     display: flex;
-    justify-content: center;
     align-items: center;
-    z-index: 999999;
+    justify-content: center;
+    z-index: 9999999;
   }
-</style>
-<div id="lockOverlay">ACCESS DENIED</div>
 
 
       
