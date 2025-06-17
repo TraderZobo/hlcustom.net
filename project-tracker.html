@@ -235,6 +235,19 @@
     </style>
 </head>
 <body>
+
+<script>
+  const correctPin = "12345"; // Change this
+  const enteredPin = prompt("Enter 5-digit staff PIN:");
+
+  if (enteredPin !== correctPin) {
+    document.body.innerHTML = "<h1 style='text-align:center;margin-top:20%;color:red;'>Access Denied</h1>";
+    throw new Error("Blocked: Invalid PIN");
+  }
+</script>
+
+
+    
     <div class="dashboard">
         <div class="sidebar">
             <h2>H@L Custom - Dashboard</h2>
@@ -444,15 +457,6 @@
 
     <script>
 
-
-  const correctPin = "12345"; // <-- You can change this to your PIN
-
-  const enteredPin = prompt("Enter 5-digit staff PIN:");
-
-  if (enteredPin !== correctPin) {
-    document.body.innerHTML = "<h1 style='text-align:center;margin-top:20%;color:red;'>Access Denied</h1>";
-    throw new Error("Incorrect PIN");
-  }
 
 
  
