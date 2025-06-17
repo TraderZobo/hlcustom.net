@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>H@L Custom - Garage Project Dashboard</title>
+    <style>
+        :root {
+            --primary: #2443f0;
+            --secondary: #f59e0b;
+            --success: #10b981;
+            --danger: #ef4444;
+            --light: #f3f4f6;
+            --dark: #2b4ca7;
+            --gray: #000000;
+        }
+        
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9fafb;
+            color: var(--dark);
+             opacity: 1 !important;
+    animation: none !important;
+    transition: none !important;
+        }
+        
+        .dashboard {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            min-height: 100vh;
+        }
+        
+        .sidebar {
+            background: white;
+            border-right: 1px solid #e5e7eb;
+            padding: 1.5rem;
+        }
+        
+        .main-content {
+            padding: 2rem;
+            background: #000000;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .project-card {
+            border-left: 4px solid var(--primary);
+            transition: all 0.2s;
+            position: relative;
+        }
+        
+        .project-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .project-card.sold {
+            border-left-color: var(--success);
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .btn-sm {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.875rem;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            text-align: center;
+            padding: 1.5rem;
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 0.5rem 0;
+        }
+        
+        .profit {
+            color: var(--success);
+        }
+        
+        .loss {
+            color: var(--danger);
+        }
+        
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s;
+        }
+        
+        .modal.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 0.5rem;
+            width: 100%;
+            max-width: 500px;
+            padding: 2rem;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.375rem;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .badge-active {
+            background-color: #dbeafe;
+            color: var(--primary);
+        }
+        
+        .badge-sold {
+            background-color: #dcfce7;
+            color: var(--success);
+        }
+        
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid #e5e7eb;
+            margin-bottom: 1.5rem;
+        }
+        
+        .tab {
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+        }
+        
+        .tab.active {
+            border-bottom-color: var(--primary);
+            color: var(--primary);
+            font-weight: 500;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .project-tag {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            background-color: #e5e7eb;
+            border-radius: 0.25rem;
+            font-size: 0.75rem;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .edit-target-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            color: var(--gray);
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <div class="sidebar">
+            <h2>H@L Custom - Dashboard</h2>
+            <nav>
+                  <ul style="list-style: none; padding: 0;">
+                <li style="margin-bottom: 1rem;">
+                    <a href="index.html" style="font-weight: 500; color: var(--primary);">Home</a>
+                </li>
+            </ul>
+            </nav>
+        </div>
+        
+        <div class="main-content">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                <h1 style="margin: 0; font-size: 1.5rem; font-weight: 600;">Project Dashboard</h1>
+                <button id="newProjectBtn" class="btn btn-primary">+ New Project</button>
+            </div>
+            
+            <div class="stats">
+                <div class="card stat-card">
+                    <div>Total Invested</div>
+                    <div class="stat-value" id="totalInvested">$0.00</div>
+                    <div style="color: var(--gray); font-size: 0.875rem;">Across all projects</div>
+                </div>
+                <div class="card stat-card">
+                    <div>Total Revenue</div>
+                    <div class="stat-value" id="totalRevenue">$0.00</div>
+                    <div style="color: var(--gray); font-size: 0.875rem;">From sold items</div>
+                </div>
+                <div class="card stat-card">
+                    <div>Total Profit</div>
+                    <div class="stat-value" id="totalProfit">$0.00</div>
+                    <div style="color: var(--gray); font-size: 0.875rem;">Net profit/loss</div>
+                </div>
+            </div>
+            
+            <div class="tabs">
+                <div class="tab active" data-tab="active">Active Projects</div>
+                <div class="tab" data-tab="sold">Sold Items</div>
+            </div>
+            
+            <div class="tab-content active" id="activeProjects">
+                <div class="projects-grid" id="projectsContainer">
+                    <div class="card" style="text-align: center; padding: 2rem; color: var(--gray);">
+                        No active projects. Add your first project to get started!
+                    </div>
+                </div>
+            </div>
+            
+            <div class="tab-content" id="soldProjects">
+                <div class="projects-grid" id="soldProjectsContainer">
+                    <div class="card" style="text-align: center; padding: 2rem; color: var(--gray);">
+                        No sold items yet
+                    </div>
+                </div>
+            </div>
+            
+            <h2 style="margin: 1.5rem 0 1rem; font-size: 1.25rem; font-weight: 600;"></h2>
+            <div class="card" id="goalsContainer">
+                <div style="text-align: center; padding: 1rem; color: var(--gray);">
+                    <a href="#" id="addGoalBtn" style="color: var(--primary); text-decoration: none; font-weight: 500;"></a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- New Project Modal -->
+    <div class="modal" id="projectModal">
+        <div class="modal-content">
+            <h2 style="margin-top: 0;">Add New Project</h2>
+            <form id="projectForm">
+                <div class="form-group">
+                    <label for="projectTitle">Item Name*</label>
+                    <input type="text" id="projectTitle" class="form-control" required placeholder="e.g. Honda Lawn Mower">
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div class="form-group">
+                        <label for="projectCost">Purchase Price ($)*</label>
+                        <input type="number" step="0.01" id="projectCost" class="form-control" required placeholder="0.00">
+                    </div>
+                    <div class="form-group">
+                        <label for="targetPrice">Target Price ($)</label>
+                        <input type="number" step="0.01" id="targetPrice" class="form-control" placeholder="0.00">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="projectCategory">Category</label>
+                    <select id="projectCategory" class="form-control">
+                        <option value="">Select category</option>
+                        <option value="lawnmower">Lawn Mower</option>
+                        <option value="bike">Bike</option>
+                        <option value="tool">Tool</option>
+                        <option value="furniture">Furniture</option>
+                        <option value="electronics">Electronics</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="purchaseDate">Purchase Date</label>
+                    <input type="date" id="purchaseDate" class="form-control">
+                </div>
+                
+                <div class="form-group">
+                    <label for="projectSource">Source</label>
+                    <input type="text" id="projectSource" class="form-control" placeholder="e.g. Craigslist, Facebook Marketplace">
+                </div>
+                
+                <div class="form-group">
+                    <label for="projectDesc">Description & Notes</label>
+                    <textarea id="projectDesc" class="form-control" rows="4" placeholder="Condition, repairs needed, special features..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label>Tags</label>
+                    <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.5rem;">
+                        <button type="button" class="tag-btn" data-tag="needs-repair">Needs Repair</button>
+                        <button type="button" class="tag-btn" data-tag="good-condition">Good Condition</button>
+                        <button type="button" class="tag-btn" data-tag="quick-flip">Quick Flip</button>
+                        <button type="button" class="tag-btn" data-tag="project">Project</button>
+                    </div>
+                    <input type="hidden" id="projectTags">
+                </div>
+                
+                <div style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1.5rem;">
+                    <button type="button" id="cancelProjectBtn" style="background: none; border: none; color: var(--gray); cursor: pointer;">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Project</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Edit Target Price Modal -->
+    <div class="modal" id="targetModal">
+        <div class="modal-content">
+            <h2 style="margin-top: 0;">Edit Target Price</h2>
+            <form id="targetForm">
+                <input type="hidden" id="editProjectId">
+                <div class="form-group">
+                    <label for="editTargetPrice">Target Price ($)</label>
+                    <input type="number" step="0.01" id="editTargetPrice" class="form-control" placeholder="0.00">
+                </div>
+                <div style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1.5rem;">
+                    <button type="button" id="cancelTargetBtn" style="background: none; border: none; color: var(--gray); cursor: pointer;">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Sell Project Modal -->
+    <div class="modal" id="sellModal">
+        <div class="modal-content">
+            <h2 style="margin-top: 0;">Mark as Sold</h2>
+            <form id="sellForm">
+                <input type="hidden" id="sellProjectId">
+                <div class="form-group">
+                    <label for="sellPrice">Selling Price ($)*</label>
+                    <input type="number" step="0.01" id="sellPrice" class="form-control" required placeholder="0.00">
+                </div>
+                <div class="form-group">
+                    <label for="sellDate">Sale Date</label>
+                    <input type="date" id="sellDate" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="sellPlatform">Sale Platform</label>
+                    <input type="text" id="sellPlatform" class="form-control" placeholder="e.g. eBay, Facebook">
+                </div>
+                <div class="form-group">
+                    <label for="buyerNotes">Buyer Notes</label>
+                    <textarea id="buyerNotes" class="form-control" rows="3" placeholder="Any notes about the sale"></textarea>
+                </div>
+                <div style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1.5rem;">
+                    <button type="button" id="cancelSellBtn" style="background: none; border: none; color: var(--gray); cursor: pointer;">Cancel</button>
+                    <button type="submit" class="btn btn-primary" style="background-color: var(--success);">Mark as Sold</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- New Goal Modal -->
+    <div class="modal" id="goalModal">
+        <div class="modal-content">
+            <h2 style="margin-top: 0;">Add New Goal</h2>
+            <form id="goalForm">
+                <div class="form-group">
+                    <label for="goalText">Goal Description*</label>
+                    <input type="text" id="goalText" class="form-control" required placeholder="e.g. Flip 3 mowers this month">
+                </div>
+                <div class="form-group">
+                    <label for="goalTarget">Target ($ or quantity)</label>
+                    <input type="text" id="goalTarget" class="form-control" placeholder="e.g. 500 or 3">
+                </div>
+                <div class="form-group">
+                    <label for="goalDueDate">Due Date</label>
+                    <input type="date" id="goalDueDate" class="form-control">
+                </div>
+                <div style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1.5rem;">
+                    <button type="button" id="cancelGoalBtn" style="background: none; border: none; color: var(--gray); cursor: pointer;">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Add Goal</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Data storage
+            let projects = JSON.parse(localStorage.getItem('projects')) || [];
+            let goals = JSON.parse(localStorage.getItem('goals')) || [];
+            
+            // DOM elements
+            const projectsContainer = document.getElementById('projectsContainer');
+            const soldProjectsContainer = document.getElementById('soldProjectsContainer');
+            const goalsContainer = document.getElementById('goalsContainer');
+            const newProjectBtn = document.getElementById('newProjectBtn');
+            const addGoalBtn = document.getElementById('addGoalBtn');
+            const projectModal = document.getElementById('projectModal');
+            const targetModal = document.getElementById('targetModal');
+            const sellModal = document.getElementById('sellModal');
+            const goalModal = document.getElementById('goalModal');
+            const projectForm = document.getElementById('projectForm');
+            const targetForm = document.getElementById('targetForm');
+            const sellForm = document.getElementById('sellForm');
+            const goalForm = document.getElementById('goalForm');
+            const cancelProjectBtn = document.getElementById('cancelProjectBtn');
+            const cancelTargetBtn = document.getElementById('cancelTargetBtn');
+            const cancelSellBtn = document.getElementById('cancelSellBtn');
+            const cancelGoalBtn = document.getElementById('cancelGoalBtn');
+            const totalInvestedEl = document.getElementById('totalInvested');
+            const totalRevenueEl = document.getElementById('totalRevenue');
+            const totalProfitEl = document.getElementById('totalProfit');
+            const tabs = document.querySelectorAll('.tab');
+            const tabContents = document.querySelectorAll('.tab-content');
+            
+            // Initialize the app
+            renderProjects();
+            renderGoals();
+            updateStats();
+            
+            // Tab switching
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tabContents.forEach(c => c.classList.remove('active'));
+                    
+                    tab.classList.add('active');
+                    document.getElementById(`${tab.dataset.tab}Projects`).classList.add('active');
+                });
+            });
+            
+            // Event listeners
+            newProjectBtn.addEventListener('click', () => {
+                projectModal.classList.add('active');
+            });
+            
+            addGoalBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                goalModal.classList.add('active');
+            });
+            
+            cancelProjectBtn.addEventListener('click', () => {
+                projectModal.classList.remove('active');
+                projectForm.reset();
+            });
+            
+            cancelTargetBtn.addEventListener('click', () => {
+                targetModal.classList.remove('active');
+                targetForm.reset();
+            });
+            
+            cancelSellBtn.addEventListener('click', () => {
+                sellModal.classList.remove('active');
+                sellForm.reset();
+            });
+            
+            cancelGoalBtn.addEventListener('click', () => {
+                goalModal.classList.remove('active');
+                goalForm.reset();
+            });
+            
+            // Tag buttons
+            document.querySelectorAll('.tag-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    this.classList.toggle('btn-primary');
+                });
+            });
+            
+            projectForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const title = document.getElementById('projectTitle').value;
+                const cost = parseFloat(document.getElementById('projectCost').value);
+                const targetPrice = parseFloat(document.getElementById('targetPrice').value) || null;
+                const description = document.getElementById('projectDesc').value;
+                const category = document.getElementById('projectCategory').value;
+                const source = document.getElementById('projectSource').value;
+                const purchaseDate = document.getElementById('purchaseDate').value || new Date().toISOString().split('T')[0];
+                
+                // Get selected tags
+                const tags = Array.from(document.querySelectorAll('.tag-btn.btn-primary'))
+                    .map(btn => btn.dataset.tag).join(',');
+                
+                const newProject = {
+                    id: Date.now().toString(),
+                    title,
+                    buy_price: cost,
+                    target_price: targetPrice,
+                    description,
+                    category,
+                    source,
+                    purchase_date: purchaseDate,
+                    tags,
+                    status: 'active',
+                    created_at: new Date().toISOString()
+                };
+                
+                projects.push(newProject);
+                saveProjects();
+                renderProjects();
+                updateStats();
+                projectModal.classList.remove('active');
+                projectForm.reset();
+            });
+            
+            targetForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const projectId = document.getElementById('editProjectId').value;
+                const targetPrice = parseFloat(document.getElementById('editTargetPrice').value) || null;
+                
+                const project = projects.find(p => p.id === projectId);
+                if (project) {
+                    project.target_price = targetPrice;
+                    saveProjects();
+                    renderProjects();
+                    targetModal.classList.remove('active');
+                }
+            });
+            
+            sellForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const projectId = document.getElementById('sellProjectId').value;
+                const sellPrice = parseFloat(document.getElementById('sellPrice').value);
+                const buyerNotes = document.getElementById('buyerNotes').value;
+                const sellDate = document.getElementById('sellDate').value || new Date().toISOString().split('T')[0];
+                const sellPlatform = document.getElementById('sellPlatform').value;
+                
+                const project = projects.find(p => p.id === projectId);
+                if (project) {
+                    project.sell_price = sellPrice;
+                    project.status = 'sold';
+                    project.sold_at = sellDate;
+                    project.buyer_notes = buyerNotes;
+                    project.sell_platform = sellPlatform;
+                    
+                    saveProjects();
+                    renderProjects();
+                    updateStats();
+                    sellModal.classList.remove('active');
+                    sellForm.reset();
+                }
+            });
+            
+            goalForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const goalText = document.getElementById('goalText').value;
+                const goalTarget = document.getElementById('goalTarget').value;
+                const goalDueDate = document.getElementById('goalDueDate').value;
+                
+                const newGoal = {
+                    id: Date.now().toString(),
+                    description: goalText,
+                    target: goalTarget,
+                    due_date: goalDueDate,
+                    completed: false,
+                    created_at: new Date().toISOString()
+                };
+                
+                goals.push(newGoal);
+                saveGoals();
+                renderGoals();
+                goalModal.classList.remove('active');
+                goalForm.reset();
+            });
+            
+            // Functions
+            function renderProjects() {
+                projectsContainer.innerHTML = '';
+                soldProjectsContainer.innerHTML = '';
+                
+                const activeProjects = projects.filter(p => p.status === 'active');
+                const soldProjects = projects.filter(p => p.status === 'sold');
+                
+                if (activeProjects.length === 0) {
+                    projectsContainer.innerHTML = `
+                        <div class="card" style="grid-column: 1 / -1; text-align: center; padding: 2rem; color: var(--gray);">
+                            No active projects. Add your first project to get started!
+                        </div>
+                    `;
+                } else {
+                    activeProjects.forEach(project => {
+                        const projectCard = document.createElement('div');
+                        projectCard.className = 'card project-card';
+                        projectCard.innerHTML = `
+                            <button class="edit-target-btn" data-id="${project.id}" title="Edit target price">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                </svg>
+                            </button>
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">
+                                <h3 style="margin: 0; font-size: 1.125rem; font-weight: 600;">${project.title}</h3>
+                                <span class="badge badge-active">Active</span>
+                            </div>
+                            ${project.category ? `<div style="font-size: 0.875rem; color: var(--gray); margin-bottom: 0.5rem;">${formatCategory(project.category)}</div>` : ''}
+                            <p style="color: var(--gray); margin-bottom: 1rem; font-size: 0.875rem;">${project.description || 'No description'}</p>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
+                                <div>
+                                    <div style="font-size: 0.875rem; color: var(--gray);">Cost</div>
+                                    <div style="font-weight: 600;">$${project.buy_price.toFixed(2)}</div>
+                                </div>
+                                <div>
+                                    <div style="font-size: 0.875rem; color: var(--gray);">Target Price</div>
+                                    <div style="font-weight: 600;">${project.target_price ? '$'+project.target_price.toFixed(2) : '--'}</div>
+                                </div>
+                            </div>
+                            ${project.tags ? `<div style="margin-bottom: 1rem;">${renderTags(project.tags)}</div>` : ''}
+                            <div style="display: flex; gap: 0.5rem;">
+                                <button class="btn btn-primary btn-sm mark-sold-btn" data-id="${project.id}" style="flex: 1;">Mark Sold</button>
+                                <button class="btn btn-sm" style="flex: 1; background-color: #e5e7eb; color: var(--dark);" data-id="${project.id}">Edit</button>
+                            </div>
+                        `;
+                        projectsContainer.appendChild(projectCard);
+                    });
+                }
+                
+                if (soldProjects.length === 0) {
+                    soldProjectsContainer.innerHTML = `
+                        <div class="card" style="grid-column: 1 / -1; text-align: center; padding: 2rem; color: var(--gray);">
+                            No sold items yet
+                        </div>
+                    `;
+                } else {
+                    soldProjects.forEach(project => {
+                        const profit = project.sell_price - project.buy_price;
+                        const profitClass = profit >= 0 ? 'profit' : 'loss';
+                        
+                        const projectCard = document.createElement('div');
+                        projectCard.className = 'card project-card sold';
+                        projectCard.innerHTML = `
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">
+                                <h3 style="margin: 0; font-size: 1.125rem; font-weight: 600;">${project.title}</h3>
+                                <span class="badge badge-sold">Sold</span>
+                            </div>
+                            ${project.category ? `<div style="font-size: 0.875rem; color: var(--gray); margin-bottom: 0.5rem;">${formatCategory(project.category)}</div>` : ''}
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                                <div>
+                                    <div style="font-size: 0.875rem; color: var(--gray);">Cost</div>
+                                    <div style="font-weight: 600;">$${project.buy_price.toFixed(2)}</div>
+                                </div>
+                                <div>
+                                    <div style="font-size: 0.875rem; color: var(--gray);">Sold For</div>
+                                    <div style="font-weight: 600;">$${project.sell_price.toFixed(2)}</div>
+                                </div>
+                            </div>
+                            <div style="margin-bottom: 1rem;">
+                                <div style="font-size: 0.875rem; color: var(--gray);">Profit</div>
+                                <div style="font-weight: 600; font-size: 1.25rem;" class="${profitClass}">$${Math.abs(profit).toFixed(2)} ${profit >= 0 ? 'Profit' : 'Loss'}</div>
+                            </div>
+                            <div style="font-size: 0.875rem; color: var(--gray);">
+                                Sold on ${formatDate(project.sold_at)} ${project.sell_platform ? 'via '+project.sell_platform : ''}
+                            </div>
+                        `;
+                        soldProjectsContainer.appendChild(projectCard);
+                    });
+                }
+                
+                // Add event listeners to buttons
+                document.querySelectorAll('.mark-sold-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const projectId = e.target.getAttribute('data-id');
+                        document.getElementById('sellProjectId').value = projectId;
+                        sellModal.classList.add('active');
+                    });
+                });
+                
+                document.querySelectorAll('.edit-target-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const projectId = e.target.closest('button').getAttribute('data-id');
+                        const project = projects.find(p => p.id === projectId);
+                        if (project) {
+                            document.getElementById('editProjectId').value = projectId;
+                            document.getElementById('editTargetPrice').value = project.target_price || '';
+                            targetModal.classList.add('active');
+                        }
+                    });
+                });
+            }
+            
+            function renderGoals() {
+                goalsContainer.innerHTML = '';
+                
+                if (goals.length === 0) {
+                    goalsContainer.innerHTML = `
+                        <div style="text-align: center; padding: 1rem; color: var(--gray);">
+                          <a href="#" id="addGoalBtn" style="color: var(--primary); text-decoration: none; font-weight: 500;">All rights reserved, H@L Custom, 2021. Houghton Lake Michigan</a>
+                        </div>
+                    `;
+                } else {
+                    goals.forEach(goal => {
+                        const goalEl = document.createElement('div');
+                        goalEl.style.display = 'flex';
+                        goalEl.style.alignItems = 'center';
+                        goalEl.style.justifyContent = 'space-between';
+                        goalEl.style.padding = '0.75rem 0';
+                        goalEl.style.borderBottom = '1px solid #e5e7eb';
+                        
+                        goalEl.innerHTML = `
+                            <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                <input type="checkbox" ${goal.completed ? 'checked' : ''} class="complete-goal" data-id="${goal.id}" style="width: 1.25rem; height: 1.25rem;">
+                                <div>
+                                    <span style="${goal.completed ? 'text-decoration: line-through; color: var(--gray);' : ''}">${goal.description}</span>
+                                    ${goal.target || goal.due_date ? `
+                                        <div style="font-size: 0.75rem; color: var(--gray); margin-top: 0.25rem;">
+                                            ${goal.target ? `Target: ${goal.target}` : ''}
+                                            ${goal.target && goal.due_date ? ' • ' : ''}
+                                            ${goal.due_date ? `Due: ${formatDate(goal.due_date)}` : ''}
+                                        </div>
+                                    ` : ''}
+                                </div>
+                            </div>
+                            <button class="delete-goal" data-id="${goal.id}" style="background: none; border: none; color: var(--gray); cursor: pointer;">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                </svg>
+                            </button>
+                        `;
+                        goalsContainer.appendChild(goalEl);
+                    });
+                    
+                    // Add "Add Goal" button at bottom
+                    const addGoalDiv = document.createElement('div');
+                    addGoalDiv.style.padding = '0.75rem 0';
+                    addGoalDiv.style.textAlign = 'center';
+                    addGoalDiv.innerHTML = `
+                        <a href="#" id="addGoalBtn" style="color: var(--primary); text-decoration: none; font-weight: 500; display: inline-flex; align-items: center; gap: 0.5rem;">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                            </svg>
+                            Add Goal
+                        </a>
+                    `;
+                    goalsContainer.appendChild(addGoalDiv);
+                }
+                
+                // Add event listeners to goal buttons
+                document.querySelectorAll('.complete-goal').forEach(checkbox => {
+                    checkbox.addEventListener('change', (e) => {
+                        const goalId = e.target.getAttribute('data-id');
+                        const goal = goals.find(g => g.id === goalId);
+                        if (goal) {
+                            goal.completed = e.target.checked;
+                            saveGoals();
+                            renderGoals();
+                        }
+                    });
+                });
+                
+                document.querySelectorAll('.delete-goal').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const goalId = e.target.getAttribute('data-id');
+                        if (confirm('Are you sure you want to delete this goal?')) {
+                            goals = goals.filter(g => g.id !== goalId);
+                            saveGoals();
+                            renderGoals();
+                        }
+                    });
+                });
+            }
+            
+            function updateStats() {
+                const invested = projects.reduce((sum, p) => sum + p.buy_price, 0);
+                const revenue = projects
+                    .filter(p => p.status === 'sold')
+                    .reduce((sum, p) => sum + p.sell_price, 0);
+                const profit = revenue - invested;
+                
+                totalInvestedEl.textContent = `$${invested.toFixed(2)}`;
+                totalRevenueEl.textContent = `$${revenue.toFixed(2)}`;
+                totalProfitEl.textContent = `$${profit.toFixed(2)}`;
+                
+                // Set profit color
+                if (profit >= 0) {
+                    totalProfitEl.className = 'stat-value profit';
+                } else {
+                    totalProfitEl.className = 'stat-value loss';
+                }
+            }
+            
+            function saveProjects() {
+                localStorage.setItem('projects', JSON.stringify(projects));
+            }
+            
+            function saveGoals() {
+                localStorage.setItem('goals', JSON.stringify(goals));
+            }
+            
+            function formatCategory(category) {
+                const categories = {
+                    'lawnmower': 'Lawn Mower',
+                    'bike': 'Bike',
+                    'tool': 'Tool',
+                    'furniture': 'Furniture',
+                    'electronics': 'Electronics',
+                    'other': 'Other'
+                };
+                return categories[category] || category;
+            }
+            
+            function renderTags(tags) {
+                if (!tags) return '';
+                return tags.split(',').map(tag => 
+                    `<span class="project-tag">${tag.replace('-', ' ')}</span>`
+                ).join('');
+            }
+            
+            function formatDate(dateStr) {
+                if (!dateStr) return '';
+                const date = new Date(dateStr);
+                return date.toLocaleDateString();
+            }
+        });
+    </script>
+</body>
+</html>

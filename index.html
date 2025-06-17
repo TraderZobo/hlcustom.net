@@ -1,0 +1,1519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>H@L Custom - Small Engine Specialists | Houghton Lake, MI</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1A1A1A; /* Dark black */
+            --secondary: #FF5E14; /* Orange accent */
+            --accent: #FF5E14;
+            --dark: #121212;
+            --light: #F5F5F5;
+            --gray: #333333;
+            --light-gray: #E0E0E0;
+            --card-bg: #252525;
+            --section-bg: #1E1E1E;
+            --text-light: #FFFFFF;
+            --text-gray: #B0B0B0;
+        }
+
+        /* Loading Screen */
+        #loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--primary);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease-out;
+        }
+
+        .loading-content {
+            text-align: center;
+            color: var(--text-light);
+        }
+
+        .loading-logo {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            font-family: 'Kanit', sans-serif;
+        }
+
+        .loading-logo span {
+            color: var(--secondary);
+        }
+
+        .loading-animation {
+            width: 200px;
+            height: 100px;
+            position: relative;
+            margin: 2rem auto;
+            overflow: hidden;
+        }
+
+        .lawnmower {
+            position: absolute;
+            width: 60px;
+            height: 40px;
+            background-color: var(--secondary);
+            border-radius: 5px;
+            bottom: 10px;
+            left: -60px;
+            animation: mow 3s linear infinite;
+        }
+
+        .lawnmower:before {
+            content: "";
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: #333;
+            border-radius: 50%;
+            bottom: -5px;
+            left: 5px;
+        }
+
+        .lawnmower:after {
+            content: "";
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: #333;
+            border-radius: 50%;
+            bottom: -5px;
+            right: 5px;
+        }
+
+        .grass {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 30px;
+            background: repeating-linear-gradient(
+                90deg,
+                transparent,
+                transparent 10px,
+                #2E7D32 10px,
+                #2E7D32 20px
+            );
+        }
+
+        .cut-grass {
+            position: absolute;
+            bottom: 0;
+            width: 0;
+            height: 30px;
+            background: repeating-linear-gradient(
+                90deg,
+                transparent,
+                transparent 10px,
+                #4CAF50 10px,
+                #4CAF50 20px
+            );
+            animation: grass-cut 3s linear infinite;
+        }
+
+        @keyframes mow {
+            0% { left: -60px; }
+            100% { left: 200px; }
+        }
+
+        @keyframes grass-cut {
+            0% { width: 0; }
+            100% { width: 100%; }
+        }
+
+        /* Main Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            line-height: 1.6;
+            color: var(--text-light);
+            background-color: var(--dark);
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Kanit', sans-serif;
+            font-weight: 700;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        section {
+            padding: 4rem 0;
+            position: relative;
+        }
+
+        .section-bg {
+            background-color: var(--section-bg);
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 2rem;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s ease;
+        }
+
+        .section-title.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .section-title h2 {
+            font-size: 2.2rem;
+            color: var(--text-light);
+            margin-bottom: 0.5rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title h2:after {
+            content: "";
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background-color: var(--secondary);
+        }
+
+        .section-title p {
+            font-size: 1rem;
+            color: var(--text-gray);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.7rem 1.8rem;
+            background-color: var(--secondary);
+            color: var(--text-light);
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-family: 'Kanit', sans-serif;
+        }
+
+        .btn:hover {
+            background-color: #E65100;
+            transform: translateY(-2px);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 2px solid var(--secondary);
+            color: var(--secondary);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--secondary);
+            color: var(--text-light);
+        }
+
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: rgba(26, 26, 26, 0.95);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            z-index: 1000;
+            transition: all 0.3s ease;
+            border-bottom: 1px solid var(--gray);
+        }
+
+        header.scrolled {
+            background-color: rgba(26, 26, 26, 0.98);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+
+        .logo {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--text-light);
+            text-decoration: none;
+            font-family: 'Kanit', sans-serif;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo span {
+            color: var(--secondary);
+        }
+
+        .logo-icon {
+            margin-right: 0.5rem;
+            font-size: 1.3rem;
+            color: var(--secondary);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .nav-links a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            position: relative;
+            opacity: 0.9;
+        }
+
+        .nav-links a:hover {
+            opacity: 1;
+            color: var(--secondary);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--text-light);
+            cursor: pointer;
+        }
+
+        /* Hero */
+        .hero {
+            height: 90vh;
+            min-height: 600px;
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
+                        url('https://images.unsplash.com/photo-1592155931584-901a157a8b02?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') no-repeat center center/cover;
+            display: flex;
+            align-items: center;
+            color: var(--text-light);
+            position: relative;
+            overflow: hidden;
+            border-bottom: 1px solid var(--gray);
+        }
+
+    .hero-content {
+    max-width: 800px;
+    opacity: 1 !important; /* Force visibility */
+    transform: none !important; /* Remove any transform */
+}
+
+        .hero h1 {
+            font-size: 2.8rem;
+            margin-bottom: 1.2rem;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            color: var(--text-gray);
+        }
+
+        .hero-btns {
+            display: flex;
+            gap: 1rem;
+        }
+
+        /* About */
+        .about-section {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .about-text {
+            opacity: 0;
+            transform: translateX(-30px);
+            transition: all 0.6s ease;
+        }
+
+        .about-text.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .about-text h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1.2rem;
+            color: var(--text-light);
+        }
+
+        .about-text p {
+            margin-bottom: 1.2rem;
+            font-size: 1rem;
+            line-height: 1.7;
+            color: var(--text-gray);
+        }
+
+        .about-image {
+            position: relative;
+            opacity: 0;
+            transform: translateX(30px);
+            transition: all 0.6s ease;
+        }
+
+        .about-image.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .about-image img {
+            width: 100%;
+            border-radius: 8px;
+            border: 1px solid var(--gray);
+        }
+
+        /* Who We Are */
+        .who-we-are {
+            background-color: var(--primary);
+            color: var(--text-light);
+            position: relative;
+            border-top: 1px solid var(--gray);
+            border-bottom: 1px solid var(--gray);
+        }
+
+        .who-we-are .section-title h2 {
+            color: var(--text-light);
+        }
+
+        .who-we-are .section-title p {
+            color: var(--text-gray);
+        }
+
+        .team-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .team-card {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateY(30px);
+            border: 1px solid var(--gray);
+        }
+
+        .team-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .team-card:nth-child(1) { transition-delay: 0.1s; }
+        .team-card:nth-child(2) { transition-delay: 0.2s; }
+
+        .team-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--secondary);
+        }
+
+        .team-img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--secondary);
+            margin: 0 auto 1.2rem;
+        }
+
+        .team-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .team-card p {
+            color: var(--text-gray);
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+        }
+
+        .team-social {
+            display: flex;
+            justify-content: center;
+            gap: 0.8rem;
+        }
+
+        .team-social a {
+            color: var(--text-light);
+            background-color: var(--gray);
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .team-social a:hover {
+            background-color: var(--secondary);
+            color: var(--text-light);
+        }
+
+        /* Our Approach */
+        .approach-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .approach-card {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            padding: 1.5rem;
+            border: 1px solid var(--gray);
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .approach-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .approach-card:nth-child(1) { transition-delay: 0.1s; }
+        .approach-card:nth-child(2) { transition-delay: 0.2s; }
+        .approach-card:nth-child(3) { transition-delay: 0.3s; }
+
+        .approach-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--secondary);
+        }
+
+        .approach-icon {
+            font-size: 2rem;
+            color: var(--secondary);
+            margin-bottom: 1.2rem;
+        }
+
+        .approach-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.8rem;
+            color: var(--text-light);
+        }
+
+        .approach-card p {
+            color: var(--text-gray);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* Services */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .service-card {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            opacity: 0;
+            transform: translateY(30px);
+            border: 1px solid var(--gray);
+        }
+
+        .service-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .service-card:nth-child(1) { transition-delay: 0.1s; }
+        .service-card:nth-child(2) { transition-delay: 0.2s; }
+        .service-card:nth-child(3) { transition-delay: 0.3s; }
+        .service-card:nth-child(4) { transition-delay: 0.4s; }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--secondary);
+        }
+
+        .service-img {
+            height: 180px;
+            background-size: cover;
+            background-position: center;
+            border-bottom: 1px solid var(--gray);
+        }
+
+        .service-content {
+            padding: 1.2rem;
+        }
+
+        .service-content h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-light);
+        }
+
+        .service-content p {
+            color: var(--text-gray);
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+        }
+
+        .service-specs {
+            margin-top: 1.2rem;
+            padding-top: 1.2rem;
+            border-top: 1px solid var(--gray);
+        }
+
+        .spec-item {
+            display: flex;
+            margin-bottom: 0.5rem;
+            align-items: center;
+        }
+
+        .spec-icon {
+            color: var(--secondary);
+            margin-right: 0.5rem;
+            flex-shrink: 0;
+            font-size: 0.9rem;
+        }
+
+        .spec-text {
+            font-size: 0.9rem;
+            color: var(--text-gray);
+        }
+
+        /* What We Don't Do */
+        .no-service-section {
+            background-color: var(--primary);
+            border-top: 1px solid var(--gray);
+            border-bottom: 1px solid var(--gray);
+        }
+
+        .no-service-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--gray);
+        }
+
+        .no-service-icon {
+            color: var(--accent);
+        }
+
+        /* Booking CTA */
+        .booking-cta {
+            text-align: center;
+            padding: 3rem 0;
+            background-color: var(--primary);
+            border-top: 1px solid var(--gray);
+            border-bottom: 1px solid var(--gray);
+        }
+
+        .booking-cta h2 {
+            font-size: 2rem;
+            margin-bottom: 1.2rem;
+            color: var(--text-light);
+        }
+
+        .booking-cta p {
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto 2rem;
+            color: var(--text-gray);
+        }
+
+        /* Stats */
+        .stats {
+            background-color: var(--primary);
+            color: var(--text-light);
+            padding: 3rem 0;
+            text-align: center;
+            border-top: 1px solid var(--gray);
+            border-bottom: 1px solid var(--gray);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+        }
+
+        .stat-item {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s ease;
+        }
+
+        .stat-item.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .stat-item:nth-child(1) { transition-delay: 0.1s; }
+        .stat-item:nth-child(2) { transition-delay: 0.2s; }
+        .stat-item:nth-child(3) { transition-delay: 0.3s; }
+        .stat-item:nth-child(4) { transition-delay: 0.4s; }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--secondary);
+            font-family: 'Kanit', sans-serif;
+        }
+
+        .stat-label {
+            font-size: 1rem;
+            color: var(--text-gray);
+        }
+
+        /* Contact */
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .contact-info {
+            opacity: 0;
+            transform: translateX(-30px);
+            transition: all 0.6s ease;
+        }
+
+        .contact-info.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .contact-info h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1.2rem;
+            color: var(--text-light);
+        }
+
+        .contact-method {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.2rem;
+        }
+
+        .contact-icon {
+            width: 45px;
+            height: 45px;
+            background-color: var(--secondary);
+            color: var(--text-light);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            margin-right: 1rem;
+            flex-shrink: 0;
+        }
+
+        .contact-details h4 {
+            font-size: 1.1rem;
+            margin-bottom: 0.3rem;
+            color: var(--text-light);
+        }
+
+        .contact-details p, .contact-details a {
+            color: var(--text-gray);
+            text-decoration: none;
+            transition: color 0.3s ease;
+            font-size: 0.95rem;
+        }
+
+        .contact-details a:hover {
+            color: var(--secondary);
+        }
+
+        .contact-map {
+            opacity: 0;
+            transform: translateX(30px);
+            transition: all 0.6s ease;
+        }
+
+        .contact-map.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .contact-map iframe {
+            width: 100%;
+            height: 100%;
+            min-height: 350px;
+            border-radius: 8px;
+            border: 1px solid var(--gray);
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--primary);
+            color: var(--text-light);
+            padding: 3rem 0 1.5rem;
+            border-top: 1px solid var(--gray);
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-col h4 {
+            font-size: 1.2rem;
+            margin-bottom: 1.2rem;
+            position: relative;
+            padding-bottom: 8px;
+        }
+
+        .footer-col h4:after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 2px;
+            background-color: var(--secondary);
+        }
+
+        .footer-col p {
+            margin-bottom: 1rem;
+            color: var(--text-gray);
+            font-size: 0.9rem;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.7rem;
+        }
+
+        .footer-links a {
+            color: var(--text-gray);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .footer-links a:hover {
+            color: var(--secondary);
+            padding-left: 5px;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 0.8rem;
+        }
+
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 35px;
+            height: 35px;
+            background-color: var(--gray);
+            border-radius: 50%;
+            color: var(--text-light);
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .social-links a:hover {
+            background-color: var(--secondary);
+            color: var(--text-light);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--gray);
+        }
+
+        .footer-bottom p {
+            color: var(--text-gray);
+            font-size: 0.85rem;
+        }
+
+        /* Admin Button */
+        .admin-btn {
+            position: fixed;
+            bottom: 1.5rem;
+            right: 1.5rem;
+            background-color: var(--secondary);
+            color: var(--text-light);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            z-index: 100;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            opacity: 0;
+            transform: translateY(20px);
+            border: none;
+            cursor: pointer;
+        }
+
+        .admin-btn.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .admin-btn:hover {
+            transform: translateY(-5px) scale(1.05);
+            background-color: #E65100;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .about-content,
+            .contact-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .about-image {
+                order: -1;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 80%;
+                max-width: 300px;
+                height: 100vh;
+                background-color: var(--primary);
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                gap: 1.5rem;
+                transition: right 0.3s ease;
+                z-index: 999;
+                border-left: 1px solid var(--gray);
+            }
+
+            .nav-links.active {
+                right: 0;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+                z-index: 1000;
+            }
+
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .hero-btns {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .section-title h2 {
+                font-size: 1.8rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .admin-btn {
+                width: 45px;
+                height: 45px;
+                font-size: 1.1rem;
+                bottom: 1rem;
+                right: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loading-screen">
+        <div class="loading-content">
+            <div class="loading-logo">H@L<span>Custom</span></div>
+            <div class="loading-animation">
+                <div class="lawnmower"></div>
+                <div class="grass"></div>
+                <div class="cut-grass"></div>
+            </div>
+            <p>Reviving your small engines...</p>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header id="header">
+        <div class="container">
+            <nav>
+                <a href="#" class="logo">
+                    <i class="fas fa-tools logo-icon"></i>
+                    H@L<span>Custom</span>
+                </a>
+                <div class="nav-links" id="navLinks">
+                    <a href="#about">About</a>
+                    <a href="#services">Services</a>
+                    <a href="#approach">Approach</a>
+                    <a href="#contact">Contact</a>
+                    <a href="YOUR_GOOGLE_SHEETS_LINK" class="btn">Book Repair</a>
+                </div>
+                <button class="mobile-menu-btn" id="mobileMenuBtn">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content" id="heroContent" style="opacity: 1; transform: none;">
+                <h1>Small Engine Specialists</h1>
+                <p>Hayden & Logan - Houghton Lake's trusted source for no-nonsense small engine repairs. We replace parts, not promises.</p>
+                <div class="hero-btns">
+                    <a href="#services" class="btn btn-outline">Our Services</a>
+                    <a href="YOUR_GOOGLE_SHEETS_LINK" class="btn">Book Repair Now</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about-section section-bg">
+        <div class="container">
+            <div class="about-content">
+                <div class="about-text" id="aboutText">
+                    <h3>Straightforward Engine Repairs</h3>
+                    <p>At H@L Custom, we cut through the BS. No unnecessary services, no upselling - just honest diagnostics and quality part replacements.</p>
+                    <p>Founded by two Houghton Lake natives who grew up fixing small engines, we specialize in what we know best: getting your equipment running again with minimal downtime.</p>
+                    <p>We don't sharpen blades. We don't tweak carbs. We replace what's broken and get you back to work.</p>
+                </div>
+                <div class="about-image" id="aboutImage">
+                    <img src="https://images.unsplash.com/photo-1581093196278-9a7b1f1c0f7b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="H@L Custom shop">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Who We Are Section -->
+    <section id="who-we-are" class="who-we-are">
+        <div class="container">
+            <div class="section-title" id="whoWeAreTitle">
+                <h2>The Team</h2>
+                <p>Two guys who know small engines inside out</p>
+            </div>
+            <div class="team-cards">
+                <div class="team-card" id="teamCard1">
+                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80" alt="Hayden" class="team-img">
+                    <h3>Hayden</h3>
+                    <p>Diagnostics & Repair</p>
+                    <p>8 years experience with small engines. Specializes in lawn equipment and dirt bikes.</p>
+                    <div class="team-social">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                <div class="team-card" id="teamCard2">
+                    <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80" alt="Logan" class="team-img">
+                    <h3>Logan</h3>
+                    <p>Parts & Systems Expert</p>
+                    <p>Knows every nut and bolt in small engines. Focuses on fuel and electrical systems.</p>
+                    <div class="team-social">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Our Approach Section -->
+    <section id="approach" class="section-bg">
+        <div class="container">
+            <div class="section-title" id="approachTitle">
+                <h2>Our Process</h2>
+                <p>How we get your equipment running again</p>
+            </div>
+            <div class="approach-grid">
+                <div class="approach-card" id="approachCard1">
+                    <div class="approach-icon">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <h3>Diagnose</h3>
+                    <p>We thoroughly test your equipment to identify the exact issue before recommending any repairs.</p>
+                </div>
+                <div class="approach-card" id="approachCard2">
+                    <div class="approach-icon">
+                        <i class="fas fa-exchange-alt"></i>
+                    </div>
+                    <h3>Replace</h3>
+                    <p>We install quality replacement parts - no temporary fixes that will fail again soon.</p>
+                </div>
+                <div class="approach-card" id="approachCard3">
+                    <div class="approach-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <h3>Test</h3>
+                    <p>Every repair undergoes rigorous testing to ensure it meets our standards before returning to you.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="section-bg">
+        <div class="container">
+            <div class="section-title" id="servicesTitle">
+                <h2>Our Services</h2>
+                <p>What we can fix for you</p>
+            </div>
+            <div class="services-grid">
+                <div class="service-card" id="service1">
+                    <div class="service-img" style="background-image: url('https://images.unsplash.com/photo-1586771107445-d3ca888129ce?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');"></div>
+                    <div class="service-content">
+                        <h3>Lawn Mowers</h3>
+                        <p>S-tier service for all push and riding mowers.</p>
+                        <div class="service-specs">
+                            <div class="spec-item">
+                                <div class="spec-icon">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                                <div class="spec-text">Push mowers</div>
+                            </div>
+                            <div class="spec-item">
+                                <div class="spec-icon">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                                <div class="spec-text">Riding mowers</div>
+                            </div>
+                            <div class="spec-item">
+                                <div class="spec-icon">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                                <div class="spec-text">Zero-turn mowers</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="service-card" id="service2">
+                    <div class="service-img" style="background-image: url('https://images.unsplash.com/photo-1585496459471-22dbb0cc52b3?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');"></div>
+                    <div class="service-content">
+                        <h3>Dirt Bikes</h3>
+                        <p>Complete diagnostics and part replacement.</p>
+                        <div class="service-specs">
+                            <div class="spec-item">
+                                <div class="spec-icon">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                                <div class="spec-text">2-stroke engines</div>
+                            </div>
+                            <div class="spec-item">
+                                <div class="spec-icon">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                                <div class="spec-text">4-stroke engines</div>
+                            </div>
+                            <div class="spec-item">
+                                <div class="spec-icon">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                                <div class="spec-text">All major brands</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="service-card" id="service3">
+                    <div class="service-img" style="background-image: url('https://images.unsplash.com/photo-1581093196278-9a7b1f1c0f7b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');"></div>
+                    <div class="service-content">
+                        <h3>Weed Whackers</h3>
+                        <p>From carb issues to spark plug replacements.</p>
+                        <div class="service-specs">
+                            <div class="spec-item">
+                                <div class="spec-icon">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                                <div class="spec-text">Gas-powered trimmers</div>
+                            </div>
+                            <div class="spec-item">
+                                <div class="spec-icon">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                                <div class="spec-text">Edgers</div>
+                            </div>
+                            <div class="spec-item">
+                                <div class="spec-icon">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                                <div class="spec-text">Brush cutters</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="service-card" id="service4">
+                    <div class="service-img" style="background-image: url('https://images.unsplash.com/photo-1589384267710-503e5a6c6407?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');"></div>
+                    <div class="service-content">
+                        <h3>Diagnostics</h3>
+                        <p>Can't figure out what's wrong? We'll pinpoint it.</p>
+                        <div class="service-specs">
+                            <div class="spec-item">
+                                <div class="spec-icon">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                                <div class="spec-text">Compression testing</div>
+                            </div>
+                            <div class="spec-item">
+                                <div class="spec-icon">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                                <div class="spec-text">Electrical diagnostics</div>
+                            </div>
+                            <div class="spec-item">
+                                <div class="spec-icon">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                                <div class="spec-text">Fuel system analysis</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- What We Don't Do Section -->
+    <section class="no-service-section">
+        <div class="container">
+            <div class="section-title">
+                <h2>What We Don't Do</h2>
+                <p>To provide the best service, we focus on our specialties</p>
+            </div>
+            <div class="approach-grid">
+                <div class="approach-card no-service-card">
+                    <div class="approach-icon no-service-icon">
+                        <i class="fas fa-times"></i>
+                    </div>
+                    <h3>No Generators</h3>
+                    <p>We don't work on generators or power washers.</p>
+                </div>
+                <div class="approach-card no-service-card">
+                    <div class="approach-icon no-service-icon">
+                        <i class="fas fa-times"></i>
+                    </div>
+                    <h3>No Side-by-Sides</h3>
+                    <p>UTVs and side-by-sides are outside our scope.</p>
+                </div>
+                <div class="approach-card no-service-card">
+                    <div class="approach-icon no-service-icon">
+                        <i class="fas fa-times"></i>
+                    </div>
+                    <h3>No Sharpening</h3>
+                    <p>We don't sharpen blades or chains.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Booking CTA -->
+    <section class="booking-cta">
+        <div class="container">
+            <h2>Need Your Equipment Fixed?</h2>
+            <p>Book your repair appointment today through our simple scheduling system</p>
+            <a href="YOUR_GOOGLE_SHEETS_LINK" class="btn">Book Repair Now</a>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-item" id="stat1">
+                    <div class="stat-number">100%</div>
+                    <div class="stat-label">Parts Warranty</div>
+                </div>
+                <div class="stat-item" id="stat2">
+                    <div class="stat-number">24h</div>
+                    <div class="stat-label">Quick Turnaround</div>
+                </div>
+                <div class="stat-item" id="stat3">
+                    <div class="stat-number">500+</div>
+                    <div class="stat-label">Engines Revived</div>
+                </div>
+                <div class="stat-item" id="stat4">
+                    <div class="stat-number">0</div>
+                    <div class="stat-label">Blades Sharpened</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact">
+        <div class="container">
+            <div class="section-title" id="contactTitle">
+                <h2>Contact Us</h2>
+                <p>Get in touch to schedule your small engine repair</p>
+            </div>
+            <div class="contact-grid">
+                <div class="contact-info" id="contactInfo">
+                    <h3>How to Reach Us</h3>
+                    <div class="contact-method">
+                        <div class="contact-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <div class="contact-details">
+                            <h4>Our Location</h4>
+                            <p>123 Engine Street, Houghton Lake, MI 48629</p>
+                        </div>
+                    </div>
+                    <div class="contact-method">
+                        <div class="contact-icon">
+                            <i class="fas fa-phone-alt"></i>
+                        </div>
+                        <div class="contact-details">
+                            <h4>Call Us</h4>
+                            <p><a href="tel:+19895551234">(989) 555-1234</a></p>
+                        </div>
+                    </div>
+                    <div class="contact-method">
+                        <div class="contact-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div class="contact-details">
+                            <h4>Email Us</h4>
+                            <p><a href="mailto:service@halcustom.com">service@halcustom.com</a></p>
+                        </div>
+                    </div>
+                    <div class="contact-method">
+                        <div class="contact-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="contact-details">
+                            <h4>Hours</h4>
+                            <p>Mon-Fri: 8am - 6pm</p>
+                            <p>Sat: 9am - 2pm</p>
+                            <p>Sun: Closed</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="contact-map" id="contactMap">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2822.7806760800236!2d-84.7649876844586!3d44.31417957909819!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8821a9a1e6b1693d%3A0x1c3a3ee5e8f5b1a1!2sHoughton%20Lake%2C%20MI%2048629!5e0!3m2!1sen!2sus!4v1620000000000!5m2!1sen!2sus" allowfullscreen="" loading="lazy"></iframe>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h4>H@L Custom</h4>
+                    <p>Small engine repair specialists serving Houghton Lake and surrounding areas.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4>Services</h4>
+                    <ul class="footer-links">
+                        <li><a href="#services">Lawn Mower Repair</a></li>
+                        <li><a href="#services">Dirt Bike Service</a></li>
+                        <li><a href="#services">Weed Whacker Repair</a></li>
+                        <li><a href="#services">Small Engine Diagnostics</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Quick Links</h4>
+                    <ul class="footer-links">
+                        <li><a href="#about">About Us</a></li>
+                        <li><a href="#approach">Our Approach</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                        <li><a href="YOUR_GOOGLE_SHEETS_LINK">Book Repair</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Contact Info</h4>
+                    <p><i class="fas fa-map-marker-alt"></i> 123 Engine St, Houghton Lake, MI</p>
+                    <p><i class="fas fa-phone-alt"></i> (989) 555-1234</p>
+                    <p><i class="fas fa-envelope"></i> service@halcustom.com</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 H@L Custom. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Admin Button -->
+    <button class="admin-btn" id="adminBtn">
+        <i class="fas fa-tools"></i>
+    </button>
+
+    <script>
+        // Loading Screen
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                document.getElementById('loading-screen').style.opacity = '0';
+                setTimeout(function() {
+                    document.getElementById('loading-screen').style.display = 'none';
+                    // Show admin button after loading (you can add login logic later)
+                    setTimeout(function() {
+                        document.getElementById('adminBtn').classList.add('visible');
+                    }, 1000);
+                }, 500);
+            }, 2000); // Adjust this timeout to match your loading animation
+        });
+
+        // Mobile Menu Toggle
+        document.getElementById('mobileMenuBtn').addEventListener('click', function() {
+            document.getElementById('navLinks').classList.toggle('active');
+            this.innerHTML = this.innerHTML.includes('times') ? 
+                '<i class="fas fa-bars"></i>' : '<i class="fas fa-times"></i>';
+        });
+
+        // Header Scroll Effect
+        window.addEventListener('scroll', function() {
+            if (window.scrollY > 50) {
+                document.getElementById('header').classList.add('scrolled');
+            } else {
+                document.getElementById('header').classList.remove('scrolled');
+            }
+        });
+
+        // Admin Button Click
+        document.getElementById('adminBtn').addEventListener('click', function() {
+            // You can implement your admin login logic here
+            window.location.href = "project-tracker.html";
+        });
+
+        // Scroll Animation
+        function checkScroll() {
+            const elements = [
+                
+                { id: 'aboutText', offset: 0.8 },
+                { id: 'aboutImage', offset: 0.8 },
+                { id: 'whoWeAreTitle', offset: 0.8 },
+                { id: 'teamCard1', offset: 0.8 },
+                { id: 'teamCard2', offset: 0.8 },
+                { id: 'approachTitle', offset: 0.8 },
+                { id: 'approachCard1', offset: 0.8 },
+                { id: 'approachCard2', offset: 0.8 },
+                { id: 'approachCard3', offset: 0.8 },
+                { id: 'servicesTitle', offset: 0.8 },
+                { id: 'service1', offset: 0.8 },
+                { id: 'service2', offset: 0.8 },
+                { id: 'service3', offset: 0.8 },
+                { id: 'service4', offset: 0.8 },
+                { id: 'stat1', offset: 0.8 },
+                { id: 'stat2', offset: 0.8 },
+                { id: 'stat3', offset: 0.8 },
+                { id: 'stat4', offset: 0.8 },
+                { id: 'contactTitle', offset: 0.8 },
+                { id: 'contactInfo', offset: 0.8 },
+                { id: 'contactMap', offset: 0.8 }
+            ];
+
+            elements.forEach(element => {
+                const el = document.getElementById(element.id);
+                if (el) {
+                    const position = el.getBoundingClientRect().top;
+                    const screenPosition = window.innerHeight * element.offset;
+                    
+                    if (position < screenPosition) {
+                        el.classList.add('visible');
+                    }
+                }
+            });
+        }
+
+        window.addEventListener('scroll', checkScroll);
+        window.addEventListener('load', checkScroll);
+
+        // Google Sheets Link
+        document.addEventListener('DOMContentLoaded', function() {
+            // Replace this with your actual Google Sheets link
+            const sheetsLink = 'YOUR_GOOGLE_SHEETS_LINK';
+            
+            // Make all booking buttons redirect to your sheet
+            document.querySelectorAll('a[href="YOUR_GOOGLE_SHEETS_LINK"]').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    window.location.href = sheetsLink;
+                });
+            });
+        });
+    </script>
+</body>
+</html>
