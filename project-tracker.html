@@ -1,29 +1,10 @@
 <!DOCTYPE html>
-<script>
-  const correctPin = "12345"; // Change this to your PIN
-  const enteredPin = prompt("Enter 5-digit staff PIN:");
-
-  if (enteredPin !== correctPin) {
-    // Create full-screen overlay
-    const overlay = document.createElement("div");
-    overlay.id = "lockOverlay";
-    overlay.textContent = "ACCESS DENIED";
-    document.body.innerHTML = ""; // Clear everything
-    document.body.appendChild(overlay); // Show denial overlay
-    throw new Error("Access blocked");
-  }
-</script>
-
-
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>H@L Custom - Garage Project Dashboard</title>
     <style>
-  
-<style>
- 
         :root {
             --primary: #2443f0;
             --secondary: #f59e0b;
@@ -40,11 +21,84 @@
             padding: 0;
             background-color: #f9fafb;
             color: var(--dark);
-             opacity: 1 !important;
-    animation: none !important;
-    transition: none !important;
+            opacity: 1 !important;
+            animation: none !important;
+            transition: none !important;
         }
         
+        /* Login Page Styles */
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f3f4f6;
+        }
+        
+        .login-box {
+            background: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            width: 100%;
+            max-width: 400px;
+        }
+        
+        .login-title {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+        
+        .login-form .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .login-form label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        
+        .login-form input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.375rem;
+            font-size: 1rem;
+        }
+        
+        .login-btn {
+            width: 100%;
+            padding: 0.75rem;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 0.375rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .login-btn:hover {
+            background-color: var(--dark);
+        }
+        
+        .error-message {
+            color: var(--danger);
+            margin-top: 1rem;
+            text-align: center;
+            font-size: 0.875rem;
+        }
+        
+        /* Hide dashboard by default */
+        .dashboard {
+            display: none;
+        }
+        
+        /* Rest of your existing styles */
         .dashboard {
             display: grid;
             grid-template-columns: 250px 1fr;
@@ -254,11 +308,27 @@
     </style>
 </head>
 <body>
-
-
-
+    <!-- Login Section -->
+    <div class="login-container" id="loginContainer">
+        <div class="login-box">
+            <h1 class="login-title">H@L Custom Dashboard</h1>
+            <form class="login-form" id="loginForm">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <button type="submit" class="login-btn">Sign In</button>
+                <div class="error-message" id="errorMessage"></div>
+            </form>
+        </div>
+    </div>
     
-    <div class="dashboard">
+    <!-- Dashboard Section (hidden by default) -->
+    <div class="dashboard" id="dashboard">
         <div class="sidebar">
             <h2>H@L Custom - Dashboard</h2>
             <nav>
@@ -466,439 +536,472 @@
     </div>
 
     <script>
-
-
-
- 
-
-        
         document.addEventListener('DOMContentLoaded', function() {
-            // Data storage
-            let projects = JSON.parse(localStorage.getItem('projects')) || [];
-            let goals = JSON.parse(localStorage.getItem('goals')) || [];
+            // Login functionality
+            const loginContainer = document.getElementById('loginContainer');
+            const dashboard = document.getElementById('dashboard');
+            const loginForm = document.getElementById('loginForm');
+            const errorMessage = document.getElementById('errorMessage');
             
-            // DOM elements
-            const projectsContainer = document.getElementById('projectsContainer');
-            const soldProjectsContainer = document.getElementById('soldProjectsContainer');
-            const goalsContainer = document.getElementById('goalsContainer');
-            const newProjectBtn = document.getElementById('newProjectBtn');
-            const addGoalBtn = document.getElementById('addGoalBtn');
-            const projectModal = document.getElementById('projectModal');
-            const targetModal = document.getElementById('targetModal');
-            const sellModal = document.getElementById('sellModal');
-            const goalModal = document.getElementById('goalModal');
-            const projectForm = document.getElementById('projectForm');
-            const targetForm = document.getElementById('targetForm');
-            const sellForm = document.getElementById('sellForm');
-            const goalForm = document.getElementById('goalForm');
-            const cancelProjectBtn = document.getElementById('cancelProjectBtn');
-            const cancelTargetBtn = document.getElementById('cancelTargetBtn');
-            const cancelSellBtn = document.getElementById('cancelSellBtn');
-            const cancelGoalBtn = document.getElementById('cancelGoalBtn');
-            const totalInvestedEl = document.getElementById('totalInvested');
-            const totalRevenueEl = document.getElementById('totalRevenue');
-            const totalProfitEl = document.getElementById('totalProfit');
-            const tabs = document.querySelectorAll('.tab');
-            const tabContents = document.querySelectorAll('.tab-content');
+            // Check if user is already logged in
+            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
             
-            // Initialize the app
-            renderProjects();
-            renderGoals();
-            updateStats();
+            if (isLoggedIn) {
+                loginContainer.style.display = 'none';
+                dashboard.style.display = 'grid';
+            } else {
+                loginContainer.style.display = 'flex';
+                dashboard.style.display = 'none';
+            }
             
-            // Tab switching
-            tabs.forEach(tab => {
-                tab.addEventListener('click', () => {
-                    tabs.forEach(t => t.classList.remove('active'));
-                    tabContents.forEach(c => c.classList.remove('active'));
+            // Handle login form submission
+            loginForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const username = document.getElementById('username').value;
+                const password = document.getElementById('password').value;
+                
+                // Check credentials
+                if (username === 'H@LCUSTOM' && password === 'H@L219') {
+                    // Successful login
+                    localStorage.setItem('isLoggedIn', 'true');
+                    loginContainer.style.display = 'none';
+                    dashboard.style.display = 'grid';
+                    errorMessage.textContent = '';
                     
-                    tab.classList.add('active');
-                    document.getElementById(`${tab.dataset.tab}Projects`).classList.add('active');
-                });
-            });
-            
-            // Event listeners
-            newProjectBtn.addEventListener('click', () => {
-                projectModal.classList.add('active');
-            });
-            
-            addGoalBtn.addEventListener('click', (e) => {
-                e.preventDefault();
-                goalModal.classList.add('active');
-            });
-            
-            cancelProjectBtn.addEventListener('click', () => {
-                projectModal.classList.remove('active');
-                projectForm.reset();
-            });
-            
-            cancelTargetBtn.addEventListener('click', () => {
-                targetModal.classList.remove('active');
-                targetForm.reset();
-            });
-            
-            cancelSellBtn.addEventListener('click', () => {
-                sellModal.classList.remove('active');
-                sellForm.reset();
-            });
-            
-            cancelGoalBtn.addEventListener('click', () => {
-                goalModal.classList.remove('active');
-                goalForm.reset();
-            });
-            
-            // Tag buttons
-            document.querySelectorAll('.tag-btn').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    this.classList.toggle('btn-primary');
-                });
-            });
-            
-            projectForm.addEventListener('submit', (e) => {
-                e.preventDefault();
-                const title = document.getElementById('projectTitle').value;
-                const cost = parseFloat(document.getElementById('projectCost').value);
-                const targetPrice = parseFloat(document.getElementById('targetPrice').value) || null;
-                const description = document.getElementById('projectDesc').value;
-                const category = document.getElementById('projectCategory').value;
-                const source = document.getElementById('projectSource').value;
-                const purchaseDate = document.getElementById('purchaseDate').value || new Date().toISOString().split('T')[0];
-                
-                // Get selected tags
-                const tags = Array.from(document.querySelectorAll('.tag-btn.btn-primary'))
-                    .map(btn => btn.dataset.tag).join(',');
-                
-                const newProject = {
-                    id: Date.now().toString(),
-                    title,
-                    buy_price: cost,
-                    target_price: targetPrice,
-                    description,
-                    category,
-                    source,
-                    purchase_date: purchaseDate,
-                    tags,
-                    status: 'active',
-                    created_at: new Date().toISOString()
-                };
-                
-                projects.push(newProject);
-                saveProjects();
-                renderProjects();
-                updateStats();
-                projectModal.classList.remove('active');
-                projectForm.reset();
-            });
-            
-            targetForm.addEventListener('submit', (e) => {
-                e.preventDefault();
-                const projectId = document.getElementById('editProjectId').value;
-                const targetPrice = parseFloat(document.getElementById('editTargetPrice').value) || null;
-                
-                const project = projects.find(p => p.id === projectId);
-                if (project) {
-                    project.target_price = targetPrice;
-                    saveProjects();
-                    renderProjects();
-                    targetModal.classList.remove('active');
+                    // Initialize the dashboard
+                    initDashboard();
+                } else {
+                    // Failed login
+                    errorMessage.textContent = 'Invalid username or password';
                 }
             });
             
-            sellForm.addEventListener('submit', (e) => {
-                e.preventDefault();
-                const projectId = document.getElementById('sellProjectId').value;
-                const sellPrice = parseFloat(document.getElementById('sellPrice').value);
-                const buyerNotes = document.getElementById('buyerNotes').value;
-                const sellDate = document.getElementById('sellDate').value || new Date().toISOString().split('T')[0];
-                const sellPlatform = document.getElementById('sellPlatform').value;
+            function initDashboard() {
+                // Data storage
+                let projects = JSON.parse(localStorage.getItem('projects')) || [];
+                let goals = JSON.parse(localStorage.getItem('goals')) || [];
                 
-                const project = projects.find(p => p.id === projectId);
-                if (project) {
-                    project.sell_price = sellPrice;
-                    project.status = 'sold';
-                    project.sold_at = sellDate;
-                    project.buyer_notes = buyerNotes;
-                    project.sell_platform = sellPlatform;
+                // DOM elements
+                const projectsContainer = document.getElementById('projectsContainer');
+                const soldProjectsContainer = document.getElementById('soldProjectsContainer');
+                const goalsContainer = document.getElementById('goalsContainer');
+                const newProjectBtn = document.getElementById('newProjectBtn');
+                const addGoalBtn = document.getElementById('addGoalBtn');
+                const projectModal = document.getElementById('projectModal');
+                const targetModal = document.getElementById('targetModal');
+                const sellModal = document.getElementById('sellModal');
+                const goalModal = document.getElementById('goalModal');
+                const projectForm = document.getElementById('projectForm');
+                const targetForm = document.getElementById('targetForm');
+                const sellForm = document.getElementById('sellForm');
+                const goalForm = document.getElementById('goalForm');
+                const cancelProjectBtn = document.getElementById('cancelProjectBtn');
+                const cancelTargetBtn = document.getElementById('cancelTargetBtn');
+                const cancelSellBtn = document.getElementById('cancelSellBtn');
+                const cancelGoalBtn = document.getElementById('cancelGoalBtn');
+                const totalInvestedEl = document.getElementById('totalInvested');
+                const totalRevenueEl = document.getElementById('totalRevenue');
+                const totalProfitEl = document.getElementById('totalProfit');
+                const tabs = document.querySelectorAll('.tab');
+                const tabContents = document.querySelectorAll('.tab-content');
+                
+                // Initialize the app
+                renderProjects();
+                renderGoals();
+                updateStats();
+                
+                // Tab switching
+                tabs.forEach(tab => {
+                    tab.addEventListener('click', () => {
+                        tabs.forEach(t => t.classList.remove('active'));
+                        tabContents.forEach(c => c.classList.remove('active'));
+                        
+                        tab.classList.add('active');
+                        document.getElementById(`${tab.dataset.tab}Projects`).classList.add('active');
+                    });
+                });
+                
+                // Event listeners
+                newProjectBtn.addEventListener('click', () => {
+                    projectModal.classList.add('active');
+                });
+                
+                addGoalBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    goalModal.classList.add('active');
+                });
+                
+                cancelProjectBtn.addEventListener('click', () => {
+                    projectModal.classList.remove('active');
+                    projectForm.reset();
+                });
+                
+                cancelTargetBtn.addEventListener('click', () => {
+                    targetModal.classList.remove('active');
+                    targetForm.reset();
+                });
+                
+                cancelSellBtn.addEventListener('click', () => {
+                    sellModal.classList.remove('active');
+                    sellForm.reset();
+                });
+                
+                cancelGoalBtn.addEventListener('click', () => {
+                    goalModal.classList.remove('active');
+                    goalForm.reset();
+                });
+                
+                // Tag buttons
+                document.querySelectorAll('.tag-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        this.classList.toggle('btn-primary');
+                    });
+                });
+                
+                projectForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const title = document.getElementById('projectTitle').value;
+                    const cost = parseFloat(document.getElementById('projectCost').value);
+                    const targetPrice = parseFloat(document.getElementById('targetPrice').value) || null;
+                    const description = document.getElementById('projectDesc').value;
+                    const category = document.getElementById('projectCategory').value;
+                    const source = document.getElementById('projectSource').value;
+                    const purchaseDate = document.getElementById('purchaseDate').value || new Date().toISOString().split('T')[0];
                     
+                    // Get selected tags
+                    const tags = Array.from(document.querySelectorAll('.tag-btn.btn-primary'))
+                        .map(btn => btn.dataset.tag).join(',');
+                    
+                    const newProject = {
+                        id: Date.now().toString(),
+                        title,
+                        buy_price: cost,
+                        target_price: targetPrice,
+                        description,
+                        category,
+                        source,
+                        purchase_date: purchaseDate,
+                        tags,
+                        status: 'active',
+                        created_at: new Date().toISOString()
+                    };
+                    
+                    projects.push(newProject);
                     saveProjects();
                     renderProjects();
                     updateStats();
-                    sellModal.classList.remove('active');
-                    sellForm.reset();
-                }
-            });
-            
-            goalForm.addEventListener('submit', (e) => {
-                e.preventDefault();
-                const goalText = document.getElementById('goalText').value;
-                const goalTarget = document.getElementById('goalTarget').value;
-                const goalDueDate = document.getElementById('goalDueDate').value;
-                
-                const newGoal = {
-                    id: Date.now().toString(),
-                    description: goalText,
-                    target: goalTarget,
-                    due_date: goalDueDate,
-                    completed: false,
-                    created_at: new Date().toISOString()
-                };
-                
-                goals.push(newGoal);
-                saveGoals();
-                renderGoals();
-                goalModal.classList.remove('active');
-                goalForm.reset();
-            });
-            
-            // Functions
-            function renderProjects() {
-                projectsContainer.innerHTML = '';
-                soldProjectsContainer.innerHTML = '';
-                
-                const activeProjects = projects.filter(p => p.status === 'active');
-                const soldProjects = projects.filter(p => p.status === 'sold');
-                
-                if (activeProjects.length === 0) {
-                    projectsContainer.innerHTML = `
-                        <div class="card" style="grid-column: 1 / -1; text-align: center; padding: 2rem; color: var(--gray);">
-                            No active projects. Add your first project to get started!
-                        </div>
-                    `;
-                } else {
-                    activeProjects.forEach(project => {
-                        const projectCard = document.createElement('div');
-                        projectCard.className = 'card project-card';
-                        projectCard.innerHTML = `
-                            <button class="edit-target-btn" data-id="${project.id}" title="Edit target price">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                                </svg>
-                            </button>
-                            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">
-                                <h3 style="margin: 0; font-size: 1.125rem; font-weight: 600;">${project.title}</h3>
-                                <span class="badge badge-active">Active</span>
-                            </div>
-                            ${project.category ? `<div style="font-size: 0.875rem; color: var(--gray); margin-bottom: 0.5rem;">${formatCategory(project.category)}</div>` : ''}
-                            <p style="color: var(--gray); margin-bottom: 1rem; font-size: 0.875rem;">${project.description || 'No description'}</p>
-                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
-                                <div>
-                                    <div style="font-size: 0.875rem; color: var(--gray);">Cost</div>
-                                    <div style="font-weight: 600;">$${project.buy_price.toFixed(2)}</div>
-                                </div>
-                                <div>
-                                    <div style="font-size: 0.875rem; color: var(--gray);">Target Price</div>
-                                    <div style="font-weight: 600;">${project.target_price ? '$'+project.target_price.toFixed(2) : '--'}</div>
-                                </div>
-                            </div>
-                            ${project.tags ? `<div style="margin-bottom: 1rem;">${renderTags(project.tags)}</div>` : ''}
-                            <div style="display: flex; gap: 0.5rem;">
-                                <button class="btn btn-primary btn-sm mark-sold-btn" data-id="${project.id}" style="flex: 1;">Mark Sold</button>
-                                <button class="btn btn-sm" style="flex: 1; background-color: #e5e7eb; color: var(--dark);" data-id="${project.id}">Edit</button>
-                            </div>
-                        `;
-                        projectsContainer.appendChild(projectCard);
-                    });
-                }
-                
-                if (soldProjects.length === 0) {
-                    soldProjectsContainer.innerHTML = `
-                        <div class="card" style="grid-column: 1 / -1; text-align: center; padding: 2rem; color: var(--gray);">
-                            No sold items yet
-                        </div>
-                    `;
-                } else {
-                    soldProjects.forEach(project => {
-                        const profit = project.sell_price - project.buy_price;
-                        const profitClass = profit >= 0 ? 'profit' : 'loss';
-                        
-                        const projectCard = document.createElement('div');
-                        projectCard.className = 'card project-card sold';
-                        projectCard.innerHTML = `
-                            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">
-                                <h3 style="margin: 0; font-size: 1.125rem; font-weight: 600;">${project.title}</h3>
-                                <span class="badge badge-sold">Sold</span>
-                            </div>
-                            ${project.category ? `<div style="font-size: 0.875rem; color: var(--gray); margin-bottom: 0.5rem;">${formatCategory(project.category)}</div>` : ''}
-                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
-                                <div>
-                                    <div style="font-size: 0.875rem; color: var(--gray);">Cost</div>
-                                    <div style="font-weight: 600;">$${project.buy_price.toFixed(2)}</div>
-                                </div>
-                                <div>
-                                    <div style="font-size: 0.875rem; color: var(--gray);">Sold For</div>
-                                    <div style="font-weight: 600;">$${project.sell_price.toFixed(2)}</div>
-                                </div>
-                            </div>
-                            <div style="margin-bottom: 1rem;">
-                                <div style="font-size: 0.875rem; color: var(--gray);">Profit</div>
-                                <div style="font-weight: 600; font-size: 1.25rem;" class="${profitClass}">$${Math.abs(profit).toFixed(2)} ${profit >= 0 ? 'Profit' : 'Loss'}</div>
-                            </div>
-                            <div style="font-size: 0.875rem; color: var(--gray);">
-                                Sold on ${formatDate(project.sold_at)} ${project.sell_platform ? 'via '+project.sell_platform : ''}
-                            </div>
-                        `;
-                        soldProjectsContainer.appendChild(projectCard);
-                    });
-                }
-                
-                // Add event listeners to buttons
-                document.querySelectorAll('.mark-sold-btn').forEach(btn => {
-                    btn.addEventListener('click', (e) => {
-                        const projectId = e.target.getAttribute('data-id');
-                        document.getElementById('sellProjectId').value = projectId;
-                        sellModal.classList.add('active');
-                    });
+                    projectModal.classList.remove('active');
+                    projectForm.reset();
                 });
                 
-                document.querySelectorAll('.edit-target-btn').forEach(btn => {
-                    btn.addEventListener('click', (e) => {
-                        const projectId = e.target.closest('button').getAttribute('data-id');
-                        const project = projects.find(p => p.id === projectId);
-                        if (project) {
-                            document.getElementById('editProjectId').value = projectId;
-                            document.getElementById('editTargetPrice').value = project.target_price || '';
-                            targetModal.classList.add('active');
-                        }
-                    });
+                targetForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const projectId = document.getElementById('editProjectId').value;
+                    const targetPrice = parseFloat(document.getElementById('editTargetPrice').value) || null;
+                    
+                    const project = projects.find(p => p.id === projectId);
+                    if (project) {
+                        project.target_price = targetPrice;
+                        saveProjects();
+                        renderProjects();
+                        targetModal.classList.remove('active');
+                    }
                 });
-            }
-            
-            function renderGoals() {
-                goalsContainer.innerHTML = '';
                 
-                if (goals.length === 0) {
-                    goalsContainer.innerHTML = `
-                        <div style="text-align: center; padding: 1rem; color: var(--gray);">
-                          <a href="#" id="addGoalBtn" style="color: var(--primary); text-decoration: none; font-weight: 500;">All rights reserved, H@L Custom, 2021. Houghton Lake Michigan</a>
-                        </div>
-                    `;
-                } else {
-                    goals.forEach(goal => {
-                        const goalEl = document.createElement('div');
-                        goalEl.style.display = 'flex';
-                        goalEl.style.alignItems = 'center';
-                        goalEl.style.justifyContent = 'space-between';
-                        goalEl.style.padding = '0.75rem 0';
-                        goalEl.style.borderBottom = '1px solid #e5e7eb';
+                sellForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const projectId = document.getElementById('sellProjectId').value;
+                    const sellPrice = parseFloat(document.getElementById('sellPrice').value);
+                    const buyerNotes = document.getElementById('buyerNotes').value;
+                    const sellDate = document.getElementById('sellDate').value || new Date().toISOString().split('T')[0];
+                    const sellPlatform = document.getElementById('sellPlatform').value;
+                    
+                    const project = projects.find(p => p.id === projectId);
+                    if (project) {
+                        project.sell_price = sellPrice;
+                        project.status = 'sold';
+                        project.sold_at = sellDate;
+                        project.buyer_notes = buyerNotes;
+                        project.sell_platform = sellPlatform;
                         
-                        goalEl.innerHTML = `
-                            <div style="display: flex; align-items: center; gap: 0.75rem;">
-                                <input type="checkbox" ${goal.completed ? 'checked' : ''} class="complete-goal" data-id="${goal.id}" style="width: 1.25rem; height: 1.25rem;">
-                                <div>
-                                    <span style="${goal.completed ? 'text-decoration: line-through; color: var(--gray);' : ''}">${goal.description}</span>
-                                    ${goal.target || goal.due_date ? `
-                                        <div style="font-size: 0.75rem; color: var(--gray); margin-top: 0.25rem;">
-                                            ${goal.target ? `Target: ${goal.target}` : ''}
-                                            ${goal.target && goal.due_date ? ' • ' : ''}
-                                            ${goal.due_date ? `Due: ${formatDate(goal.due_date)}` : ''}
-                                        </div>
-                                    ` : ''}
-                                </div>
+                        saveProjects();
+                        renderProjects();
+                        updateStats();
+                        sellModal.classList.remove('active');
+                        sellForm.reset();
+                    }
+                });
+                
+                goalForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const goalText = document.getElementById('goalText').value;
+                    const goalTarget = document.getElementById('goalTarget').value;
+                    const goalDueDate = document.getElementById('goalDueDate').value;
+                    
+                    const newGoal = {
+                        id: Date.now().toString(),
+                        description: goalText,
+                        target: goalTarget,
+                        due_date: goalDueDate,
+                        completed: false,
+                        created_at: new Date().toISOString()
+                    };
+                    
+                    goals.push(newGoal);
+                    saveGoals();
+                    renderGoals();
+                    goalModal.classList.remove('active');
+                    goalForm.reset();
+                });
+                
+                // Functions
+                function renderProjects() {
+                    projectsContainer.innerHTML = '';
+                    soldProjectsContainer.innerHTML = '';
+                    
+                    const activeProjects = projects.filter(p => p.status === 'active');
+                    const soldProjects = projects.filter(p => p.status === 'sold');
+                    
+                    if (activeProjects.length === 0) {
+                        projectsContainer.innerHTML = `
+                            <div class="card" style="grid-column: 1 / -1; text-align: center; padding: 2rem; color: var(--gray);">
+                                No active projects. Add your first project to get started!
                             </div>
-                            <button class="delete-goal" data-id="${goal.id}" style="background: none; border: none; color: var(--gray); cursor: pointer;">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                </svg>
-                            </button>
                         `;
-                        goalsContainer.appendChild(goalEl);
+                    } else {
+                        activeProjects.forEach(project => {
+                            const projectCard = document.createElement('div');
+                            projectCard.className = 'card project-card';
+                            projectCard.innerHTML = `
+                                <button class="edit-target-btn" data-id="${project.id}" title="Edit target price">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                    </svg>
+                                </button>
+                                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">
+                                    <h3 style="margin: 0; font-size: 1.125rem; font-weight: 600;">${project.title}</h3>
+                                    <span class="badge badge-active">Active</span>
+                                </div>
+                                ${project.category ? `<div style="font-size: 0.875rem; color: var(--gray); margin-bottom: 0.5rem;">${formatCategory(project.category)}</div>` : ''}
+                                <p style="color: var(--gray); margin-bottom: 1rem; font-size: 0.875rem;">${project.description || 'No description'}</p>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
+                                    <div>
+                                        <div style="font-size: 0.875rem; color: var(--gray);">Cost</div>
+                                        <div style="font-weight: 600;">$${project.buy_price.toFixed(2)}</div>
+                                    </div>
+                                    <div>
+                                        <div style="font-size: 0.875rem; color: var(--gray);">Target Price</div>
+                                        <div style="font-weight: 600;">${project.target_price ? '$'+project.target_price.toFixed(2) : '--'}</div>
+                                    </div>
+                                </div>
+                                ${project.tags ? `<div style="margin-bottom: 1rem;">${renderTags(project.tags)}</div>` : ''}
+                                <div style="display: flex; gap: 0.5rem;">
+                                    <button class="btn btn-primary btn-sm mark-sold-btn" data-id="${project.id}" style="flex: 1;">Mark Sold</button>
+                                    <button class="btn btn-sm" style="flex: 1; background-color: #e5e7eb; color: var(--dark);" data-id="${project.id}">Edit</button>
+                                </div>
+                            `;
+                            projectsContainer.appendChild(projectCard);
+                        });
+                    }
+                    
+                    if (soldProjects.length === 0) {
+                        soldProjectsContainer.innerHTML = `
+                            <div class="card" style="grid-column: 1 / -1; text-align: center; padding: 2rem; color: var(--gray);">
+                                No sold items yet
+                            </div>
+                        `;
+                    } else {
+                        soldProjects.forEach(project => {
+                            const profit = project.sell_price - project.buy_price;
+                            const profitClass = profit >= 0 ? 'profit' : 'loss';
+                            
+                            const projectCard = document.createElement('div');
+                            projectCard.className = 'card project-card sold';
+                            projectCard.innerHTML = `
+                                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">
+                                    <h3 style="margin: 0; font-size: 1.125rem; font-weight: 600;">${project.title}</h3>
+                                    <span class="badge badge-sold">Sold</span>
+                                </div>
+                                ${project.category ? `<div style="font-size: 0.875rem; color: var(--gray); margin-bottom: 0.5rem;">${formatCategory(project.category)}</div>` : ''}
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                                    <div>
+                                        <div style="font-size: 0.875rem; color: var(--gray);">Cost</div>
+                                        <div style="font-weight: 600;">$${project.buy_price.toFixed(2)}</div>
+                                    </div>
+                                    <div>
+                                        <div style="font-size: 0.875rem; color: var(--gray);">Sold For</div>
+                                        <div style="font-weight: 600;">$${project.sell_price.toFixed(2)}</div>
+                                    </div>
+                                </div>
+                                <div style="margin-bottom: 1rem;">
+                                    <div style="font-size: 0.875rem; color: var(--gray);">Profit</div>
+                                    <div style="font-weight: 600; font-size: 1.25rem;" class="${profitClass}">$${Math.abs(profit).toFixed(2)} ${profit >= 0 ? 'Profit' : 'Loss'}</div>
+                                </div>
+                                <div style="font-size: 0.875rem; color: var(--gray);">
+                                    Sold on ${formatDate(project.sold_at)} ${project.sell_platform ? 'via '+project.sell_platform : ''}
+                                </div>
+                            `;
+                            soldProjectsContainer.appendChild(projectCard);
+                        });
+                    }
+                    
+                    // Add event listeners to buttons
+                    document.querySelectorAll('.mark-sold-btn').forEach(btn => {
+                        btn.addEventListener('click', (e) => {
+                            const projectId = e.target.getAttribute('data-id');
+                            document.getElementById('sellProjectId').value = projectId;
+                            sellModal.classList.add('active');
+                        });
                     });
                     
-                    // Add "Add Goal" button at bottom
-                    const addGoalDiv = document.createElement('div');
-                    addGoalDiv.style.padding = '0.75rem 0';
-                    addGoalDiv.style.textAlign = 'center';
-                    addGoalDiv.innerHTML = `
-                        <a href="#" id="addGoalBtn" style="color: var(--primary); text-decoration: none; font-weight: 500; display: inline-flex; align-items: center; gap: 0.5rem;">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                            </svg>
-                            Add Goal
-                        </a>
-                    `;
-                    goalsContainer.appendChild(addGoalDiv);
+                    document.querySelectorAll('.edit-target-btn').forEach(btn => {
+                        btn.addEventListener('click', (e) => {
+                            const projectId = e.target.closest('button').getAttribute('data-id');
+                            const project = projects.find(p => p.id === projectId);
+                            if (project) {
+                                document.getElementById('editProjectId').value = projectId;
+                                document.getElementById('editTargetPrice').value = project.target_price || '';
+                                targetModal.classList.add('active');
+                            }
+                        });
+                    });
                 }
                 
-                // Add event listeners to goal buttons
-                document.querySelectorAll('.complete-goal').forEach(checkbox => {
-                    checkbox.addEventListener('change', (e) => {
-                        const goalId = e.target.getAttribute('data-id');
-                        const goal = goals.find(g => g.id === goalId);
-                        if (goal) {
-                            goal.completed = e.target.checked;
-                            saveGoals();
-                            renderGoals();
-                        }
+                function renderGoals() {
+                    goalsContainer.innerHTML = '';
+                    
+                    if (goals.length === 0) {
+                        goalsContainer.innerHTML = `
+                            <div style="text-align: center; padding: 1rem; color: var(--gray);">
+                              <a href="#" id="addGoalBtn" style="color: var(--primary); text-decoration: none; font-weight: 500;">All rights reserved, H@L Custom, 2021. Houghton Lake Michigan</a>
+                            </div>
+                        `;
+                    } else {
+                        goals.forEach(goal => {
+                            const goalEl = document.createElement('div');
+                            goalEl.style.display = 'flex';
+                            goalEl.style.alignItems = 'center';
+                            goalEl.style.justifyContent = 'space-between';
+                            goalEl.style.padding = '0.75rem 0';
+                            goalEl.style.borderBottom = '1px solid #e5e7eb';
+                            
+                            goalEl.innerHTML = `
+                                <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                    <input type="checkbox" ${goal.completed ? 'checked' : ''} class="complete-goal" data-id="${goal.id}" style="width: 1.25rem; height: 1.25rem;">
+                                    <div>
+                                        <span style="${goal.completed ? 'text-decoration: line-through; color: var(--gray);' : ''}">${goal.description}</span>
+                                        ${goal.target || goal.due_date ? `
+                                            <div style="font-size: 0.75rem; color: var(--gray); margin-top: 0.25rem;">
+                                                ${goal.target ? `Target: ${goal.target}` : ''}
+                                                ${goal.target && goal.due_date ? ' • ' : ''}
+                                                ${goal.due_date ? `Due: ${formatDate(goal.due_date)}` : ''}
+                                            </div>
+                                        ` : ''}
+                                    </div>
+                                </div>
+                                <button class="delete-goal" data-id="${goal.id}" style="background: none; border: none; color: var(--gray); cursor: pointer;">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                    </svg>
+                                </button>
+                            `;
+                            goalsContainer.appendChild(goalEl);
+                        });
+                        
+                        // Add "Add Goal" button at bottom
+                        const addGoalDiv = document.createElement('div');
+                        addGoalDiv.style.padding = '0.75rem 0';
+                        addGoalDiv.style.textAlign = 'center';
+                        addGoalDiv.innerHTML = `
+                            <a href="#" id="addGoalBtn" style="color: var(--primary); text-decoration: none; font-weight: 500; display: inline-flex; align-items: center; gap: 0.5rem;">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                                </svg>
+                                Add Goal
+                            </a>
+                        `;
+                        goalsContainer.appendChild(addGoalDiv);
+                    }
+                    
+                    // Add event listeners to goal buttons
+                    document.querySelectorAll('.complete-goal').forEach(checkbox => {
+                        checkbox.addEventListener('change', (e) => {
+                            const goalId = e.target.getAttribute('data-id');
+                            const goal = goals.find(g => g.id === goalId);
+                            if (goal) {
+                                goal.completed = e.target.checked;
+                                saveGoals();
+                                renderGoals();
+                            }
+                        });
                     });
-                });
-                
-                document.querySelectorAll('.delete-goal').forEach(btn => {
-                    btn.addEventListener('click', (e) => {
-                        const goalId = e.target.getAttribute('data-id');
-                        if (confirm('Are you sure you want to delete this goal?')) {
-                            goals = goals.filter(g => g.id !== goalId);
-                            saveGoals();
-                            renderGoals();
-                        }
+                    
+                    document.querySelectorAll('.delete-goal').forEach(btn => {
+                        btn.addEventListener('click', (e) => {
+                            const goalId = e.target.getAttribute('data-id');
+                            if (confirm('Are you sure you want to delete this goal?')) {
+                                goals = goals.filter(g => g.id !== goalId);
+                                saveGoals();
+                                renderGoals();
+                            }
+                        });
                     });
-                });
-            }
-            
-            function updateStats() {
-                const invested = projects.reduce((sum, p) => sum + p.buy_price, 0);
-                const revenue = projects
-                    .filter(p => p.status === 'sold')
-                    .reduce((sum, p) => sum + p.sell_price, 0);
-                const profit = revenue - invested;
-                
-                totalInvestedEl.textContent = `$${invested.toFixed(2)}`;
-                totalRevenueEl.textContent = `$${revenue.toFixed(2)}`;
-                totalProfitEl.textContent = `$${profit.toFixed(2)}`;
-                
-                // Set profit color
-                if (profit >= 0) {
-                    totalProfitEl.className = 'stat-value profit';
-                } else {
-                    totalProfitEl.className = 'stat-value loss';
                 }
-            }
-            
-            function saveProjects() {
-                localStorage.setItem('projects', JSON.stringify(projects));
-            }
-            
-            function saveGoals() {
-                localStorage.setItem('goals', JSON.stringify(goals));
-            }
-            
-            function formatCategory(category) {
-                const categories = {
-                    'lawnmower': 'Lawn Mower',
-                    'bike': 'Bike',
-                    'tool': 'Tool',
-                    'furniture': 'Furniture',
-                    'electronics': 'Electronics',
-                    'other': 'Other'
-                };
-                return categories[category] || category;
-            }
-            
-            function renderTags(tags) {
-                if (!tags) return '';
-                return tags.split(',').map(tag => 
-                    `<span class="project-tag">${tag.replace('-', ' ')}</span>`
-                ).join('');
-            }
-            
-            function formatDate(dateStr) {
-                if (!dateStr) return '';
-                const date = new Date(dateStr);
-                return date.toLocaleDateString();
+                
+                function updateStats() {
+                    const invested = projects.reduce((sum, p) => sum + p.buy_price, 0);
+                    const revenue = projects
+                        .filter(p => p.status === 'sold')
+                        .reduce((sum, p) => sum + p.sell_price, 0);
+                    const profit = revenue - invested;
+                    
+                    totalInvestedEl.textContent = `$${invested.toFixed(2)}`;
+                    totalRevenueEl.textContent = `$${revenue.toFixed(2)}`;
+                    totalProfitEl.textContent = `$${profit.toFixed(2)}`;
+                    
+                    // Set profit color
+                    if (profit >= 0) {
+                        totalProfitEl.className = 'stat-value profit';
+                    } else {
+                        totalProfitEl.className = 'stat-value loss';
+                    }
+                }
+                
+                function saveProjects() {
+                    localStorage.setItem('projects', JSON.stringify(projects));
+                }
+                
+                function saveGoals() {
+                    localStorage.setItem('goals', JSON.stringify(goals));
+                }
+                
+                function formatCategory(category) {
+                    const categories = {
+                        'lawnmower': 'Lawn Mower',
+                        'bike': 'Bike',
+                        'tool': 'Tool',
+                        'furniture': 'Furniture',
+                        'electronics': 'Electronics',
+                        'other': 'Other'
+                    };
+                    return categories[category] || category;
+                }
+                
+                function renderTags(tags) {
+                    if (!tags) return '';
+                    return tags.split(',').map(tag => 
+                        `<span class="project-tag">${tag.replace('-', ' ')}</span>`
+                    ).join('');
+                }
+                
+                function formatDate(dateStr) {
+                    if (!dateStr) return '';
+                    const date = new Date(dateStr);
+                    return date.toLocaleDateString();
+                }
             }
         });
-
-
-        
     </script>
 </body>
 </html>
