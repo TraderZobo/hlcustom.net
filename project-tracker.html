@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <script>
-  const correctPin = "12345"; // Change this to your PIN
+  const correctPin = "12345"; // change this to your PIN
   const enteredPin = prompt("Enter 5-digit staff PIN:");
-  
+
   if (enteredPin !== correctPin) {
-    // Completely clear the page
-    document.open();
-    document.write("<h1 style='text-align:center;margin-top:20%;color:red;'>ACCESS DENIED</h1>");
-    document.close();
-    throw new Error("Blocked by incorrect PIN");
+    const overlay = document.getElementById("lockOverlay");
+    overlay.style.display = "flex";
+    document.body.innerHTML = ""; // Optional: clear rest of body
+    document.body.appendChild(overlay); // Re-add the overlay
+    throw new Error("Blocked by PIN");
   }
 </script>
 
@@ -19,6 +19,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>H@L Custom - Garage Project Dashboard</title>
     <style>
+  
+<style>
+  #lockOverlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: black;
+    color: red;
+    font-size: 3rem;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999999;
+  }
+</style>
+<div id="lockOverlay">ACCESS DENIED</div>
+
+
+      
         :root {
             --primary: #2443f0;
             --secondary: #f59e0b;
