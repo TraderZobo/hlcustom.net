@@ -569,62 +569,6 @@
                         <h1>Small Engine Tracker</h1>
                     </div>
 
-<div id="receiptForm">
-  <input type="email" id="customerEmail" placeholder="Customer Email*" required>
-  <input type="text" id="customerName" placeholder="Name*" required>
-  <input type="text" id="equipment" placeholder="Equipment (Make/Model)*" required>
-  <div id="partsContainer">
-    <div class="part-row">
-      <input type="text" placeholder="Part description" class="part-desc">
-      <input type="number" placeholder="Price $" step="0.01" class="part-price">
-    </div>
-  </div>
-  <button onclick="addPart()">+ Add Part</button>
-  <input type="number" id="labor" placeholder="Labor Cost ($)*" required>
-  <button onclick="sendReceipt()" class="btn">Send Receipt</button>
-</div>
-
-<script>
-  function addPart() {
-    const div = document.createElement('div');
-    div.className = 'part-row';
-    div.innerHTML = `
-      <input type="text" placeholder="Part description" class="part-desc">
-      <input type="number" placeholder="Price $" step="0.01" class="part-price">
-    `;
-    document.getElementById('partsContainer').appendChild(div);
-  }
-
-  function sendReceipt() {
-    const parts = [];
-    document.querySelectorAll('.part-row').forEach(row => {
-      const desc = row.querySelector('.part-desc').value;
-      const price = row.querySelector('.part-price').value;
-      if (desc && price) parts.push(`${desc} $${price}`);
-    });
-
-    const data = {
-      email: document.getElementById('customerEmail').value,
-      name: document.getElementById('customerName').value,
-      equipment: document.getElementById('equipment').value,
-      parts: parts,
-      labor: document.getElementById('labor').value
-    };
-
-    fetch('https://script.google.com/macros/s/AKfycbxEx3mNUEm8elJS7uyyyWqO0t_Thns3hJVQV3lMXG9Cu14e5Xodv_Sa7Ec62aGOiX6m/exec', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data)
-    })
-    .then(res => res.json())
-    .then(data => {
-      if (data.success) alert("✅ Receipt sent!");
-      else alert(`❌ Error: ${data.error}`);
-    })
-    .catch(err => alert("Network error - try again"));
-  }
-</script>
-
                     
                     <div class="stats">
                         <div class="stat-item">
