@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Project Tracker | Profit Analysis</title>
+    <title>Project Tracker | Small Engine Repair</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -106,15 +106,16 @@
         
         .stat-item {
             text-align: center;
+            min-width: 80px;
         }
         
         .stat-value {
-            font-size: 1.4rem;
+            font-size: 1.2rem;
             font-weight: 700;
         }
         
         .stat-label {
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             opacity: 0.9;
         }
         
@@ -192,6 +193,10 @@
         
         .filter-option.active .count {
             background: rgba(255, 255, 255, 0.3);
+        }
+        
+        .service-option {
+            padding-left: 20px;
         }
         
         .add-project-btn {
@@ -373,6 +378,11 @@
             color: white;
         }
         
+        .btn-sm {
+            padding: 8px 12px;
+            font-size: 0.85rem;
+        }
+        
         .btn:hover {
             opacity: 0.9;
         }
@@ -549,6 +559,7 @@
             .stats {
                 width: 100%;
                 justify-content: space-around;
+                flex-wrap: wrap;
             }
             
             .content-header {
@@ -568,13 +579,13 @@
         <div class="container">
             <div class="header-content">
                 <div class="logo">
-                    <i class="fas fa-chart-line"></i>
-                    <h1>Project Profit Tracker</h1>
+                    <i class="fas fa-tools"></i>
+                    <h1>Small Engine Tracker</h1>
                 </div>
                 <div class="stats">
                     <div class="stat-item">
                         <div class="stat-value" id="total-projects">0</div>
-                        <div class="stat-label">Total Projects</div>
+                        <div class="stat-label">Total</div>
                     </div>
                     <div class="stat-item">
                         <div class="stat-value" id="active-projects">0</div>
@@ -584,6 +595,14 @@
                         <div class="stat-value" id="sold-projects">0</div>
                         <div class="stat-label">Sold</div>
                     </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="total-spent">$0</div>
+                        <div class="stat-label">Spent</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="total-profit">$0</div>
+                        <div class="stat-label">Profit</div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -592,7 +611,7 @@
     <div class="container">
         <div class="dashboard">
             <div class="sidebar">
-                <h2>Project Dashboard</h2>
+                <h2>Service Dashboard</h2>
                 
                 <div class="filter-section">
                     <h3>Status Filters</h3>
@@ -621,23 +640,80 @@
                 </div>
                 
                 <div class="filter-section">
-                    <h3>Project Types</h3>
+                    <h3>Our Services</h3>
                     <div class="filter-options">
-                        <div class="filter-option active" data-type="all">
+                        <div class="filter-option active" data-service="all">
                             <i class="fas fa-star"></i>
-                            <span>All Types</span>
+                            <span>All Services</span>
                         </div>
-                        <div class="filter-option" data-type="lawn_mower">
+                        
+                        <div class="filter-option" data-service="lawn_mower">
                             <i class="fas fa-leaf"></i>
                             <span>Lawn Mowers</span>
                         </div>
-                        <div class="filter-option" data-type="power_tool">
-                            <i class="fas fa-toolbox"></i>
-                            <span>Power Tools</span>
+                        <div class="service-option" data-service="push_mower">
+                            <i class="fas fa-chevron-right"></i>
+                            <span>Push Mowers</span>
                         </div>
-                        <div class="filter-option" data-type="vehicle">
-                            <i class="fas fa-car"></i>
-                            <span>Vehicles</span>
+                        <div class="service-option" data-service="riding_mower">
+                            <i class="fas fa-chevron-right"></i>
+                            <span>Riding Mowers</span>
+                        </div>
+                        <div class="service-option" data-service="zero_turn">
+                            <i class="fas fa-chevron-right"></i>
+                            <span>Zero-Turn</span>
+                        </div>
+                        
+                        <div class="filter-option" data-service="dirtbike_quad">
+                            <i class="fas fa-motorcycle"></i>
+                            <span>Dirtbike/Quad</span>
+                        </div>
+                        <div class="service-option" data-service="two_stroke">
+                            <i class="fas fa-chevron-right"></i>
+                            <span>2-Stroke Engines</span>
+                        </div>
+                        <div class="service-option" data-service="four_stroke">
+                            <i class="fas fa-chevron-right"></i>
+                            <span>4-Stroke Engines</span>
+                        </div>
+                        
+                        <div class="filter-option" data-service="trimmer_blower">
+                            <i class="fas fa-fan"></i>
+                            <span>Trimmers/Blowers</span>
+                        </div>
+                        <div class="service-option" data-service="gas_trimmer">
+                            <i class="fas fa-chevron-right"></i>
+                            <span>Gas Trimmers</span>
+                        </div>
+                        <div class="service-option" data-service="edger">
+                            <i class="fas fa-chevron-right"></i>
+                            <span>Edgers</span>
+                        </div>
+                        <div class="service-option" data-service="brush_cutter">
+                            <i class="fas fa-chevron-right"></i>
+                            <span>Brush Cutters</span>
+                        </div>
+                        
+                        <div class="filter-option" data-service="diagnostics">
+                            <i class="fas fa-search"></i>
+                            <span>Diagnostics</span>
+                        </div>
+                        <div class="service-option" data-service="compression_test">
+                            <i class="fas fa-chevron-right"></i>
+                            <span>Compression Testing</span>
+                        </div>
+                        <div class="service-option" data-service="electrical_diag">
+                            <i class="fas fa-chevron-right"></i>
+                            <span>Electrical Diag</span>
+                        </div>
+                        <div class="service-option" data-service="fuel_analysis">
+                            <i class="fas fa-chevron-right"></i>
+                            <span>Fuel Analysis</span>
+                        </div>
+                        
+                        <div class="filter-option" data-service="other">
+                            <i class="fas fa-cog"></i>
+                            <span>Other Services</span>
                         </div>
                     </div>
                 </div>
@@ -680,13 +756,29 @@
                     
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="project-type">Project Type</label>
-                            <select id="project-type" required>
-                                <option value="">Select Type</option>
-                                <option value="lawn_mower">Lawn Mower</option>
-                                <option value="power_tool">Power Tool</option>
-                                <option value="vehicle">Vehicle</option>
-                                <option value="other">Other</option>
+                            <label for="project-service">Service Category</label>
+                            <select id="project-service" required>
+                                <option value="">Select Service</option>
+                                <optgroup label="Lawn Mowers">
+                                    <option value="push_mower">Push Mower</option>
+                                    <option value="riding_mower">Riding Mower</option>
+                                    <option value="zero_turn">Zero-Turn Mower</option>
+                                </optgroup>
+                                <optgroup label="Dirtbike/Quad">
+                                    <option value="two_stroke">2-Stroke Engine</option>
+                                    <option value="four_stroke">4-Stroke Engine</option>
+                                </optgroup>
+                                <optgroup label="Trimmers/Blowers">
+                                    <option value="gas_trimmer">Gas Trimmer</option>
+                                    <option value="edger">Edger</option>
+                                    <option value="brush_cutter">Brush Cutter</option>
+                                </optgroup>
+                                <optgroup label="Diagnostics">
+                                    <option value="compression_test">Compression Test</option>
+                                    <option value="electrical_diag">Electrical Diagnostics</option>
+                                    <option value="fuel_analysis">Fuel System Analysis</option>
+                                </optgroup>
+                                <option value="other">Other Service</option>
                             </select>
                         </div>
                         <div class="form-group">
@@ -795,20 +887,6 @@
     </button>
 
     <script>
-        // Sample data structure for a project
-        const sampleProject = {
-            id: Date.now(),
-            name: "Honda Lawn Mower",
-            type: "lawn_mower",
-            engineType: "4_stroke",
-            status: "not_running",
-            purchasePrice: 85.00,
-            purchaseDate: "2023-06-15",
-            soldPrice: null,
-            soldDate: null,
-            createdAt: new Date().toISOString()
-        };
-
         // DOM Elements
         const projectGrid = document.getElementById('project-grid');
         const addProjectBtn = document.getElementById('add-project-btn');
@@ -821,7 +899,7 @@
         const sellForm = document.getElementById('sell-form');
         const confirmSellBtn = document.getElementById('confirm-sell');
         const confirmDeleteBtn = document.getElementById('confirm-delete');
-        const filterOptions = document.querySelectorAll('.filter-option');
+        const filterOptions = document.querySelectorAll('.filter-option, .service-option');
         const searchInput = document.getElementById('search-input');
         const profitMessage = document.getElementById('profit-message');
         const profitText = document.getElementById('profit-text');
@@ -832,7 +910,7 @@
         // State variables
         let projects = [];
         let currentFilter = 'all';
-        let currentTypeFilter = 'all';
+        let currentServiceFilter = 'all';
         let currentSellProjectId = null;
         let currentDeleteProjectId = null;
         let darkMode = false;
@@ -868,18 +946,46 @@
         function loadProjects() {
             const savedProjects = localStorage.getItem('projects');
             projects = savedProjects ? JSON.parse(savedProjects) : [];
-            
-            // Add sample project if no projects exist
-            if (projects.length === 0) {
-                projects.push(sampleProject);
-                saveProjects();
-            }
         }
         
         // Save projects to localStorage
         function saveProjects() {
             localStorage.setItem('projects', JSON.stringify(projects));
             updateStats();
+        }
+        
+        // Calculate total spent
+        function calculateTotalSpent() {
+            return projects.reduce((total, project) => total + project.purchasePrice, 0);
+        }
+        
+        // Calculate total profit
+        function calculateTotalProfit() {
+            return projects.reduce((total, project) => {
+                if (project.soldPrice) {
+                    return total + (project.soldPrice - project.purchasePrice);
+                }
+                return total;
+            }, 0);
+        }
+        
+        // Update statistics
+        function updateStats() {
+            document.getElementById('total-projects').textContent = projects.length;
+            document.getElementById('active-projects').textContent = projects.filter(p => p.status !== 'sold').length;
+            document.getElementById('sold-projects').textContent = projects.filter(p => p.status === 'sold').length;
+            
+            const totalSpent = calculateTotalSpent();
+            const totalProfit = calculateTotalProfit();
+            
+            document.getElementById('total-spent').textContent = `$${totalSpent.toFixed(2)}`;
+            document.getElementById('total-profit').textContent = `$${totalProfit.toFixed(2)}`;
+            
+            // Update filter counts
+            document.getElementById('count-all').textContent = projects.length;
+            document.getElementById('count-not-running').textContent = projects.filter(p => p.status === 'not_running').length;
+            document.getElementById('count-running').textContent = projects.filter(p => p.status === 'running').length;
+            document.getElementById('count-sold').textContent = projects.filter(p => p.status === 'sold').length;
         }
         
         // Set up event listeners
@@ -901,18 +1007,19 @@
             filterOptions.forEach(option => {
                 option.addEventListener('click', () => {
                     const status = option.dataset.status;
-                    const type = option.dataset.type;
+                    const service = option.dataset.service;
                     
                     if (status) {
                         currentFilter = status;
                         document.querySelectorAll('.filter-option[data-status]').forEach(opt => {
                             opt.classList.toggle('active', opt.dataset.status === status);
                         });
-                    } else if (type) {
-                        currentTypeFilter = type;
-                        document.querySelectorAll('.filter-option[data-type]').forEach(opt => {
-                            opt.classList.toggle('active', opt.dataset.type === type);
+                    } else if (service) {
+                        currentServiceFilter = service;
+                        document.querySelectorAll('.filter-option[data-service], .service-option').forEach(opt => {
+                            opt.classList.remove('active');
                         });
+                        option.classList.add('active');
                     }
                     
                     renderProjects();
@@ -949,13 +1056,13 @@
         // Add a new project
         function addNewProject() {
             const name = document.getElementById('project-name').value;
-            const type = document.getElementById('project-type').value;
+            const service = document.getElementById('project-service').value;
             const engineType = document.getElementById('engine-type').value;
             const status = document.getElementById('initial-status').value;
             const purchasePrice = parseFloat(document.getElementById('purchase-price').value);
             const purchaseDate = document.getElementById('purchase-date').value;
             
-            if (!name || !type || !purchasePrice || !purchaseDate) {
+            if (!name || !service || !purchasePrice || !purchaseDate) {
                 alert('Please fill in all required fields');
                 return;
             }
@@ -963,7 +1070,7 @@
             const newProject = {
                 id: Date.now(),
                 name,
-                type,
+                service,
                 engineType,
                 status,
                 purchasePrice,
@@ -1071,19 +1178,6 @@
             toggleModal(deleteProjectModal, false);
         }
         
-        // Update statistics
-        function updateStats() {
-            document.getElementById('total-projects').textContent = projects.length;
-            document.getElementById('active-projects').textContent = projects.filter(p => p.status !== 'sold').length;
-            document.getElementById('sold-projects').textContent = projects.filter(p => p.status === 'sold').length;
-            
-            // Update filter counts
-            document.getElementById('count-all').textContent = projects.length;
-            document.getElementById('count-not-running').textContent = projects.filter(p => p.status === 'not_running').length;
-            document.getElementById('count-running').textContent = projects.filter(p => p.status === 'running').length;
-            document.getElementById('count-sold').textContent = projects.filter(p => p.status === 'sold').length;
-        }
-        
         // Render projects based on filter and search
         function renderProjects() {
             const searchTerm = searchInput.value.toLowerCase();
@@ -1091,8 +1185,8 @@
             let filteredProjects = projects.filter(project => {
                 const matchesSearch = project.name.toLowerCase().includes(searchTerm);
                 const matchesStatus = currentFilter === 'all' || project.status === currentFilter;
-                const matchesType = currentTypeFilter === 'all' || project.type === currentTypeFilter;
-                return matchesSearch && matchesStatus && matchesType;
+                const matchesService = currentServiceFilter === 'all' || project.service === currentServiceFilter;
+                return matchesSearch && matchesStatus && matchesService;
             });
             
             projectGrid.innerHTML = '';
@@ -1151,6 +1245,9 @@
                 }
             }
             
+            // Get service name
+            const serviceName = getServiceName(project.service);
+            
             card.innerHTML = `
                 <div class="card-header" style="background: ${getCardHeaderColor(project)}">
                     <div class="status-badge">${statusText}</div>
@@ -1160,8 +1257,8 @@
                     <div class="project-details">
                         <div class="detail-item">
                             <i class="fas fa-tag"></i>
-                            <span>Type:</span>
-                            <span class="value">${getTypeText(project.type)}</span>
+                            <span>Service:</span>
+                            <span class="value">${serviceName}</span>
                         </div>
                         ${engineText ? `<div class="detail-item">
                             <i class="fas fa-cog"></i>
@@ -1194,15 +1291,15 @@
                     <div class="action-buttons">
                         ${project.status !== 'sold' ? `
                             ${project.status === 'not_running' ? `
-                                <button class="btn btn-primary mark-running" data-id="${project.id}">
+                                <button class="btn btn-primary btn-sm mark-running" data-id="${project.id}">
                                     <i class="fas fa-play"></i> Mark Running
                                 </button>
                             ` : ''}
-                            <button class="btn btn-success sell-project" data-id="${project.id}">
-                                <i class="fas fa-dollar-sign"></i> Mark Sold
+                            <button class="btn btn-success btn-sm sell-project" data-id="${project.id}">
+                                <i class="fas fa-dollar-sign"></i> Sell
                             </button>
                         ` : ''}
-                        <button class="btn btn-danger delete-project" data-id="${project.id}">
+                        <button class="btn btn-danger btn-sm delete-project" data-id="${project.id}">
                             <i class="fas fa-trash"></i> Delete
                         </button>
                     </div>
@@ -1242,13 +1339,21 @@
             }
         }
         
-        // Helper function to get type text
-        function getTypeText(type) {
-            switch (type) {
-                case 'lawn_mower': return 'Lawn Mower';
-                case 'power_tool': return 'Power Tool';
-                case 'vehicle': return 'Vehicle';
-                default: return 'Other';
+        // Helper function to get service name
+        function getServiceName(service) {
+            switch (service) {
+                case 'push_mower': return 'Push Mower';
+                case 'riding_mower': return 'Riding Mower';
+                case 'zero_turn': return 'Zero-Turn Mower';
+                case 'two_stroke': return '2-Stroke Engine';
+                case 'four_stroke': return '4-Stroke Engine';
+                case 'gas_trimmer': return 'Gas Trimmer';
+                case 'edger': return 'Edger';
+                case 'brush_cutter': return 'Brush Cutter';
+                case 'compression_test': return 'Compression Test';
+                case 'electrical_diag': return 'Electrical Diagnostics';
+                case 'fuel_analysis': return 'Fuel System Analysis';
+                default: return 'Other Service';
             }
         }
         
