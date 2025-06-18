@@ -623,6 +623,22 @@
                     <h3>Add New Project</h3>
                     <button class="close-modal">&times;</button>
                 </div>
+<button onclick="sendReceipt()" class="btn">
+  <i class="fas fa-receipt"></i> Email Receipt
+</button>
+
+<script>
+  function sendReceipt() {
+    const customerEmail = prompt("Enter customer email:");
+    if (customerEmail) {
+      fetch('YOUR_SCRIPT_URL', {
+        method: 'POST',
+        body: JSON.stringify({ email: customerEmail })
+      }).then(() => alert("Receipt sent!"));
+    }
+  }
+</script>
+
                 <div class="modal-body">
                     <form id="project-form">
                         <div class="form-group">
