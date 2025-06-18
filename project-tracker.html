@@ -651,15 +651,15 @@
                             <i class="fas fa-leaf"></i>
                             <span>Lawn Mowers</span>
                         </div>
-                        <div class="service-option" data-service="push_mower">
+                        <div class="filter-option" data-service="push_mower">
                             <i class="fas fa-chevron-right"></i>
                             <span>Push Mowers</span>
                         </div>
-                        <div class="service-option" data-service="riding_mower">
+                        <div class="filter-option" data-service="riding_mower">
                             <i class="fas fa-chevron-right"></i>
                             <span>Riding Mowers</span>
                         </div>
-                        <div class="service-option" data-service="zero_turn">
+                        <div class="filter-option" data-service="zero_turn">
                             <i class="fas fa-chevron-right"></i>
                             <span>Zero-Turn</span>
                         </div>
@@ -668,11 +668,11 @@
                             <i class="fas fa-motorcycle"></i>
                             <span>Dirtbike/Quad</span>
                         </div>
-                        <div class="service-option" data-service="two_stroke">
+                        <div class="filter-option" data-service="two_stroke">
                             <i class="fas fa-chevron-right"></i>
                             <span>2-Stroke Engines</span>
                         </div>
-                        <div class="service-option" data-service="four_stroke">
+                        <div class="filter-option" data-service="four_stroke">
                             <i class="fas fa-chevron-right"></i>
                             <span>4-Stroke Engines</span>
                         </div>
@@ -681,34 +681,17 @@
                             <i class="fas fa-fan"></i>
                             <span>Trimmers/Blowers</span>
                         </div>
-                        <div class="service-option" data-service="gas_trimmer">
+                        <div class="filter-option" data-service="gas_trimmer">
                             <i class="fas fa-chevron-right"></i>
                             <span>Gas Trimmers</span>
                         </div>
-                        <div class="service-option" data-service="edger">
+                        <div class="filter-option" data-service="edger">
                             <i class="fas fa-chevron-right"></i>
                             <span>Edgers</span>
                         </div>
-                        <div class="service-option" data-service="brush_cutter">
+                        <div class="filter-option" data-service="brush_cutter">
                             <i class="fas fa-chevron-right"></i>
                             <span>Brush Cutters</span>
-                        </div>
-                        
-                        <div class="filter-option" data-service="diagnostics">
-                            <i class="fas fa-search"></i>
-                            <span>Diagnostics</span>
-                        </div>
-                        <div class="service-option" data-service="compression_test">
-                            <i class="fas fa-chevron-right"></i>
-                            <span>Compression Testing</span>
-                        </div>
-                        <div class="service-option" data-service="electrical_diag">
-                            <i class="fas fa-chevron-right"></i>
-                            <span>Electrical Diag</span>
-                        </div>
-                        <div class="service-option" data-service="fuel_analysis">
-                            <i class="fas fa-chevron-right"></i>
-                            <span>Fuel Analysis</span>
                         </div>
                         
                         <div class="filter-option" data-service="other">
@@ -773,11 +756,6 @@
                                     <option value="edger">Edger</option>
                                     <option value="brush_cutter">Brush Cutter</option>
                                 </optgroup>
-                                <optgroup label="Diagnostics">
-                                    <option value="compression_test">Compression Test</option>
-                                    <option value="electrical_diag">Electrical Diagnostics</option>
-                                    <option value="fuel_analysis">Fuel System Analysis</option>
-                                </optgroup>
                                 <option value="other">Other Service</option>
                             </select>
                         </div>
@@ -810,11 +788,6 @@
                             <label for="purchase-date">Purchase Date</label>
                             <input type="date" id="purchase-date" required>
                         </div>
-                    </div>
-                    
-                    <div class="profit-message" id="profit-message">
-                        <h4>Profit Summary</h4>
-                        <p id="profit-text"></p>
                     </div>
                 </form>
             </div>
@@ -899,10 +872,8 @@
         const sellForm = document.getElementById('sell-form');
         const confirmSellBtn = document.getElementById('confirm-sell');
         const confirmDeleteBtn = document.getElementById('confirm-delete');
-        const filterOptions = document.querySelectorAll('.filter-option, .service-option');
+        const filterOptions = document.querySelectorAll('.filter-option');
         const searchInput = document.getElementById('search-input');
-        const profitMessage = document.getElementById('profit-message');
-        const profitText = document.getElementById('profit-text');
         const sellProfitText = document.getElementById('sell-profit-text');
         const projectToDelete = document.getElementById('project-to-delete');
         const themeToggle = document.getElementById('theme-toggle');
@@ -1016,10 +987,9 @@
                         });
                     } else if (service) {
                         currentServiceFilter = service;
-                        document.querySelectorAll('.filter-option[data-service], .service-option').forEach(opt => {
-                            opt.classList.remove('active');
+                        document.querySelectorAll('.filter-option[data-service]').forEach(opt => {
+                            opt.classList.toggle('active', opt.dataset.service === service);
                         });
-                        option.classList.add('active');
                     }
                     
                     renderProjects();
@@ -1048,7 +1018,6 @@
             if (!show) {
                 if (modal === addProjectModal) {
                     projectForm.reset();
-                    profitMessage.style.display = 'none';
                 }
             }
         }
@@ -1350,9 +1319,6 @@
                 case 'gas_trimmer': return 'Gas Trimmer';
                 case 'edger': return 'Edger';
                 case 'brush_cutter': return 'Brush Cutter';
-                case 'compression_test': return 'Compression Test';
-                case 'electrical_diag': return 'Electrical Diagnostics';
-                case 'fuel_analysis': return 'Fuel System Analysis';
                 default: return 'Other Service';
             }
         }
