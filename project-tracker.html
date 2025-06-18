@@ -1,81 +1,1123 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Project Tracker</title>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Tracker | Profit Analysis</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --success: #27ae60;
+            --warning: #f39c12;
+            --danger: #e74c3c;
+            --light: #ecf0f1;
+            --dark: #34495e;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 1.5rem 0;
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .logo i {
+            font-size: 2.2rem;
+            background: rgba(255, 255, 255, 0.2);
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .logo h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+        
+        .stats {
+            display: flex;
+            gap: 20px;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 10px 20px;
+            border-radius: 30px;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 1.4rem;
+            font-weight: 700;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        
+        .dashboard {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 25px;
+        }
+        
+        .sidebar {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: var(--shadow);
+            height: fit-content;
+        }
+        
+        .sidebar h2 {
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--light);
+            color: var(--primary);
+        }
+        
+        .filter-section {
+            margin-bottom: 25px;
+        }
+        
+        .filter-section h3 {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
+        
+        .filter-options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .filter-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            padding: 8px 12px;
+            border-radius: 6px;
+            transition: var(--transition);
+        }
+        
+        .filter-option:hover {
+            background-color: var(--light);
+        }
+        
+        .filter-option.active {
+            background-color: var(--secondary);
+            color: white;
+        }
+        
+        .filter-option i {
+            width: 20px;
+            text-align: center;
+        }
+        
+        .filter-option .count {
+            margin-left: auto;
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            padding: 2px 8px;
+            font-size: 0.85rem;
+        }
+        
+        .filter-option.active .count {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        .add-project-btn {
+            background: linear-gradient(to right, var(--success), #2ecc71);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            transition: var(--transition);
+            box-shadow: 0 4px 6px rgba(46, 204, 113, 0.3);
+        }
+        
+        .add-project-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(46, 204, 113, 0.4);
+        }
+        
+        .main-content {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: var(--shadow);
+        }
+        
+        .content-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+        
+        .content-header h2 {
+            color: var(--primary);
+        }
+        
+        .search-bar {
+            display: flex;
+            align-items: center;
+            background: var(--light);
+            border-radius: 30px;
+            padding: 8px 15px;
+            width: 300px;
+        }
+        
+        .search-bar input {
+            background: transparent;
+            border: none;
+            outline: none;
+            flex: 1;
+            padding: 5px 10px;
+        }
+        
+        .project-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+        }
+        
+        .project-card {
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            background: white;
+            position: relative;
+        }
+        
+        .project-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
+        }
+        
+        .card-header {
+            padding: 20px;
+            color: white;
+        }
+        
+        .status-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .card-body {
+            padding: 20px;
+        }
+        
+        .project-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+        
+        .project-details {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .detail-item {
+            display: flex;
+            gap: 10px;
+            font-size: 0.95rem;
+        }
+        
+        .detail-item i {
+            color: var(--secondary);
+            width: 20px;
+        }
+        
+        .detail-item .value {
+            font-weight: 600;
+        }
+        
+        .card-footer {
+            padding: 0 20px 20px;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .btn {
+            flex: 1;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .btn-primary {
+            background-color: var(--secondary);
+            color: white;
+        }
+        
+        .btn-success {
+            background-color: var(--success);
+            color: white;
+        }
+        
+        .btn-warning {
+            background-color: var(--warning);
+            color: white;
+        }
+        
+        .btn:hover {
+            opacity: 0.9;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal.active {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 500px;
+            overflow: hidden;
+        }
+        
+        .modal-header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 20px;
+            position: relative;
+        }
+        
+        .modal-header h3 {
+            font-size: 1.5rem;
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        .modal-body {
+            padding: 25px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .form-row .form-group {
+            flex: 1;
+        }
+        
+        .modal-footer {
+            padding: 15px 25px;
+            background: var(--light);
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+        
+        .btn-cancel {
+            background: #95a5a6;
+            color: white;
+        }
+        
+        .profit-message {
+            background: rgba(39, 174, 96, 0.1);
+            border-left: 4px solid var(--success);
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 6px 6px 0;
+            display: none;
+        }
+        
+        .profit-message h4 {
+            color: var(--success);
+            margin-bottom: 5px;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #7f8c8d;
+        }
+        
+        .empty-state i {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            color: #bdc3c7;
+        }
+        
+        .empty-state h3 {
+            margin-bottom: 10px;
+            color: var(--dark);
+        }
+        
+        @media (max-width: 768px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .stats {
+                width: 100%;
+                justify-content: space-around;
+            }
+            
+            .content-header {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
+            
+            .search-bar {
+                width: 100%;
+            }
+        }
+    </style>
 </head>
 <body>
-  <h1>Small Engine Shop Project Tracker</h1>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-chart-line"></i>
+                    <h1>Project Profit Tracker</h1>
+                </div>
+                <div class="stats">
+                    <div class="stat-item">
+                        <div class="stat-value" id="total-projects">0</div>
+                        <div class="stat-label">Total Projects</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="active-projects">0</div>
+                        <div class="stat-label">Active</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="sold-projects">0</div>
+                        <div class="stat-label">Sold</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
 
-  <form id="addForm">
-    <input type="text" name="name" placeholder="Project Name" required />
-    <input type="number" step="0.01" name="cost" placeholder="Cost ($)" required />
-    <input type="number" step="0.01" name="sale" placeholder="Sale Price ($)" />
-    <textarea name="notes" placeholder="Notes..."></textarea>
-    <button type="submit">Add Project</button>
-  </form>
+    <div class="container">
+        <div class="dashboard">
+            <div class="sidebar">
+                <h2>Project Dashboard</h2>
+                
+                <div class="filter-section">
+                    <h3>Status Filters</h3>
+                    <div class="filter-options">
+                        <div class="filter-option active" data-status="all">
+                            <i class="fas fa-layer-group"></i>
+                            <span>All Projects</span>
+                            <span class="count" id="count-all">0</span>
+                        </div>
+                        <div class="filter-option" data-status="not_running">
+                            <i class="fas fa-tools"></i>
+                            <span>Needs Work</span>
+                            <span class="count" id="count-not-running">0</span>
+                        </div>
+                        <div class="filter-option" data-status="running">
+                            <i class="fas fa-cogs"></i>
+                            <span>Running</span>
+                            <span class="count" id="count-running">0</span>
+                        </div>
+                        <div class="filter-option" data-status="sold">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Sold</span>
+                            <span class="count" id="count-sold">0</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="filter-section">
+                    <h3>Project Types</h3>
+                    <div class="filter-options">
+                        <div class="filter-option" data-type="all">
+                            <i class="fas fa-star"></i>
+                            <span>All Types</span>
+                        </div>
+                        <div class="filter-option" data-type="lawn_mower">
+                            <i class="fas fa-leaf"></i>
+                            <span>Lawn Mowers</span>
+                        </div>
+                        <div class="filter-option" data-type="power_tool">
+                            <i class="fas fa-toolbox"></i>
+                            <span>Power Tools</span>
+                        </div>
+                        <div class="filter-option" data-type="vehicle">
+                            <i class="fas fa-car"></i>
+                            <span>Vehicles</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="add-project-btn" id="add-project-btn">
+                    <i class="fas fa-plus"></i>
+                    Add New Project
+                </button>
+            </div>
+            
+            <div class="main-content">
+                <div class="content-header">
+                    <h2>All Projects</h2>
+                    <div class="search-bar">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="search-input" placeholder="Search projects...">
+                    </div>
+                </div>
+                
+                <div class="project-grid" id="project-grid">
+                    <!-- Projects will be dynamically inserted here -->
+                </div>
+            </div>
+        </div>
+    </div>
 
-  <ul id="projectList"></ul>
+    <!-- Add Project Modal -->
+    <div class="modal" id="add-project-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add New Project</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="project-form">
+                    <div class="form-group">
+                        <label for="project-name">Project Name</label>
+                        <input type="text" id="project-name" placeholder="e.g., Honda Lawn Mower" required>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="project-type">Project Type</label>
+                            <select id="project-type" required>
+                                <option value="">Select Type</option>
+                                <option value="lawn_mower">Lawn Mower</option>
+                                <option value="power_tool">Power Tool</option>
+                                <option value="vehicle">Vehicle</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="engine-type">Engine Type</label>
+                            <select id="engine-type">
+                                <option value="">Select Engine Type</option>
+                                <option value="2_stroke">2-Stroke</option>
+                                <option value="4_stroke">4-Stroke</option>
+                                <option value="electric">Electric</option>
+                                <option value="none">None</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="initial-status">Initial Status</label>
+                        <select id="initial-status" required>
+                            <option value="not_running">Needs Work</option>
+                            <option value="running">Running</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="purchase-price">Purchase Price ($)</label>
+                            <input type="number" id="purchase-price" placeholder="0.00" min="0" step="0.01" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="purchase-date">Purchase Date</label>
+                            <input type="date" id="purchase-date" required>
+                        </div>
+                    </div>
+                    
+                    <div class="profit-message" id="profit-message">
+                        <h4>Profit Summary</h4>
+                        <p id="profit-text"></p>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-cancel">Cancel</button>
+                <button class="btn btn-success" id="save-project">Save Project</button>
+            </div>
+        </div>
+    </div>
 
-  <script>
-    // Initialize Supabase client
-    const supabaseUrl = 'https://rhtdosclzqnfiiqcsdkk.supabase.co';
-    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJodGRvc2NsenFuZmlpcWNzZGtrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTAyMTU4NjcsImV4cCI6MjA2NTc5MTg2N30.zsmR31FZVNQtqW1wqYZC3CImtPvPAZxhWnlGXKFadMU';
-    const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+    <!-- Sell Project Modal -->
+    <div class="modal" id="sell-project-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Sell Project</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="sell-form">
+                    <div class="form-group">
+                        <label for="project-name-sell">Project Name</label>
+                        <input type="text" id="project-name-sell" disabled>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="sold-price">Sold Price ($)</label>
+                            <input type="number" id="sold-price" placeholder="0.00" min="0" step="0.01" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="sold-date">Sold Date</label>
+                            <input type="date" id="sold-date" required>
+                        </div>
+                    </div>
+                    
+                    <div class="profit-message">
+                        <h4>Profit Summary</h4>
+                        <p id="sell-profit-text"></p>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-cancel">Cancel</button>
+                <button class="btn btn-success" id="confirm-sell">Confirm Sale</button>
+            </div>
+        </div>
+    </div>
 
-    const projectList = document.getElementById('projectList');
-    const addForm = document.getElementById('addForm');
-
-    // Fetch and display projects
-    async function fetchProjects() {
-      const { data, error } = await supabase
-        .from('projects')
-        .select('*')
-        .order('id', { ascending: true });
-
-      if (error) {
-        projectList.innerHTML = `<li>Error loading projects: ${error.message}</li>`;
-        return;
-      }
-
-      projectList.innerHTML = '';
-      data.forEach(proj => {
-        const li = document.createElement('li');
-        li.textContent = `${proj.name} | Cost: $${proj.cost} | Sale: $${proj.sale ?? '—'} | Notes: ${proj.notes ?? ''}`;
-
-        const delBtn = document.createElement('button');
-        delBtn.textContent = 'Delete';
-        delBtn.style.marginLeft = '10px';
-        delBtn.onclick = async () => {
-          await supabase.from('projects').delete().eq('id', proj.id);
-          fetchProjects();
+    <script>
+        // Sample data structure for a project
+        const sampleProject = {
+            id: Date.now(),
+            name: "Honda Lawn Mower",
+            type: "lawn_mower",
+            engineType: "4_stroke",
+            status: "not_running",
+            purchasePrice: 85.00,
+            purchaseDate: "2023-06-15",
+            soldPrice: null,
+            soldDate: null,
+            createdAt: new Date().toISOString()
         };
 
-        li.appendChild(delBtn);
-        projectList.appendChild(li);
-      });
-    }
-
-    // Handle form submission
-    addForm.onsubmit = async e => {
-      e.preventDefault();
-      const formData = new FormData(addForm);
-      const newProject = {
-        name: formData.get('name'),
-        cost: parseFloat(formData.get('cost')),
-        sale: formData.get('sale') ? parseFloat(formData.get('sale')) : null,
-        notes: formData.get('notes') || null,
-      };
-
-      const { error } = await supabase.from('projects').insert(newProject);
-      if (error) alert('Error adding project: ' + error.message);
-      else addForm.reset();
-
-      fetchProjects();
-    };
-
-    fetchProjects();
-  </script>
+        // DOM Elements
+        const projectGrid = document.getElementById('project-grid');
+        const addProjectBtn = document.getElementById('add-project-btn');
+        const addProjectModal = document.getElementById('add-project-modal');
+        const sellProjectModal = document.getElementById('sell-project-modal');
+        const closeModalButtons = document.querySelectorAll('.close-modal, .btn-cancel');
+        const saveProjectBtn = document.getElementById('save-project');
+        const projectForm = document.getElementById('project-form');
+        const sellForm = document.getElementById('sell-form');
+        const confirmSellBtn = document.getElementById('confirm-sell');
+        const filterOptions = document.querySelectorAll('.filter-option');
+        const searchInput = document.getElementById('search-input');
+        const profitMessage = document.getElementById('profit-message');
+        const profitText = document.getElementById('profit-text');
+        const sellProfitText = document.getElementById('sell-profit-text');
+        
+        // State variables
+        let projects = [];
+        let currentFilter = 'all';
+        let currentSellProjectId = null;
+        
+        // Initialize the application
+        function init() {
+            loadProjects();
+            setupEventListeners();
+            updateStats();
+            renderProjects();
+        }
+        
+        // Load projects from localStorage
+        function loadProjects() {
+            const savedProjects = localStorage.getItem('projects');
+            projects = savedProjects ? JSON.parse(savedProjects) : [];
+            
+            // Add sample project if no projects exist
+            if (projects.length === 0) {
+                projects.push(sampleProject);
+                saveProjects();
+            }
+        }
+        
+        // Save projects to localStorage
+        function saveProjects() {
+            localStorage.setItem('projects', JSON.stringify(projects));
+            updateStats();
+        }
+        
+        // Set up event listeners
+        function setupEventListeners() {
+            addProjectBtn.addEventListener('click', () => toggleModal(addProjectModal, true));
+            
+            closeModalButtons.forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const modal = e.target.closest('.modal');
+                    toggleModal(modal, false);
+                });
+            });
+            
+            saveProjectBtn.addEventListener('click', addNewProject);
+            confirmSellBtn.addEventListener('click', sellProject);
+            
+            filterOptions.forEach(option => {
+                option.addEventListener('click', () => {
+                    const status = option.dataset.status;
+                    const type = option.dataset.type;
+                    
+                    if (status) {
+                        currentFilter = status;
+                        document.querySelectorAll('.filter-option[data-status]').forEach(opt => {
+                            opt.classList.toggle('active', opt.dataset.status === status);
+                        });
+                    } else if (type) {
+                        // For type filtering - implement as needed
+                    }
+                    
+                    renderProjects();
+                });
+            });
+            
+            searchInput.addEventListener('input', renderProjects);
+            
+            // Close modal when clicking outside
+            document.addEventListener('click', (e) => {
+                if (e.target.classList.contains('modal')) {
+                    toggleModal(addProjectModal, false);
+                    toggleModal(sellProjectModal, false);
+                }
+            });
+            
+            // Set today as default date
+            document.getElementById('purchase-date').valueAsDate = new Date();
+            document.getElementById('sold-date').valueAsDate = new Date();
+        }
+        
+        // Toggle modal visibility
+        function toggleModal(modal, show) {
+            modal.style.display = show ? 'flex' : 'none';
+            if (!show) {
+                projectForm.reset();
+                profitMessage.style.display = 'none';
+            }
+        }
+        
+        // Add a new project
+        function addNewProject() {
+            const name = document.getElementById('project-name').value;
+            const type = document.getElementById('project-type').value;
+            const engineType = document.getElementById('engine-type').value;
+            const status = document.getElementById('initial-status').value;
+            const purchasePrice = parseFloat(document.getElementById('purchase-price').value);
+            const purchaseDate = document.getElementById('purchase-date').value;
+            
+            if (!name || !type || !purchasePrice || !purchaseDate) {
+                alert('Please fill in all required fields');
+                return;
+            }
+            
+            const newProject = {
+                id: Date.now(),
+                name,
+                type,
+                engineType,
+                status,
+                purchasePrice,
+                purchaseDate,
+                soldPrice: null,
+                soldDate: null,
+                createdAt: new Date().toISOString()
+            };
+            
+            projects.push(newProject);
+            saveProjects();
+            renderProjects();
+            toggleModal(addProjectModal, false);
+            
+            // Show success message
+            alert('Project added successfully!');
+        }
+        
+        // Update project status
+        function updateProjectStatus(projectId, newStatus) {
+            const project = projects.find(p => p.id === projectId);
+            if (project) {
+                project.status = newStatus;
+                saveProjects();
+                renderProjects();
+                
+                // Show message if project is now running
+                if (newStatus === 'running') {
+                    alert('Great job! Project is now running!');
+                }
+            }
+        }
+        
+        // Open sell project modal
+        function openSellModal(projectId) {
+            const project = projects.find(p => p.id === projectId);
+            if (project) {
+                currentSellProjectId = projectId;
+                document.getElementById('project-name-sell').value = project.name;
+                document.getElementById('sold-price').value = '';
+                document.getElementById('sold-date').valueAsDate = new Date();
+                toggleModal(sellProjectModal, true);
+                
+                // Update profit calculation when inputs change
+                document.getElementById('sold-price').addEventListener('input', updateProfitCalculation);
+                document.getElementById('sold-date').addEventListener('input', updateProfitCalculation);
+            }
+        }
+        
+        // Update profit calculation for selling
+        function updateProfitCalculation() {
+            const project = projects.find(p => p.id === currentSellProjectId);
+            if (!project) return;
+            
+            const soldPrice = parseFloat(document.getElementById('sold-price').value) || 0;
+            const soldDate = document.getElementById('sold-date').value;
+            
+            if (!soldDate) return;
+            
+            const purchaseDate = new Date(project.purchaseDate);
+            const saleDate = new Date(soldDate);
+            const daysHeld = Math.ceil((saleDate - purchaseDate) / (1000 * 60 * 60 * 24));
+            const profit = soldPrice - project.purchasePrice;
+            
+            let profitMessage = '';
+            if (profit > 0) {
+                profitMessage = `Nice! You've made $${profit.toFixed(2)} profit in ${daysHeld} days!`;
+            } else if (profit < 0) {
+                profitMessage = `You had a loss of $${Math.abs(profit).toFixed(2)} after ${daysHeld} days.`;
+            } else {
+                profitMessage = `You broke even after ${daysHeld} days.`;
+            }
+            
+            sellProfitText.textContent = profitMessage;
+        }
+        
+        // Sell project
+        function sellProject() {
+            const soldPrice = parseFloat(document.getElementById('sold-price').value);
+            const soldDate = document.getElementById('sold-date').value;
+            
+            if (!soldPrice || !soldDate) {
+                alert('Please fill in all required fields');
+                return;
+            }
+            
+            const project = projects.find(p => p.id === currentSellProjectId);
+            if (project) {
+                project.status = 'sold';
+                project.soldPrice = soldPrice;
+                project.soldDate = soldDate;
+                saveProjects();
+                renderProjects();
+                toggleModal(sellProjectModal, false);
+                
+                // Calculate and show profit message
+                const purchaseDate = new Date(project.purchaseDate);
+                const saleDate = new Date(soldDate);
+                const daysHeld = Math.ceil((saleDate - purchaseDate) / (1000 * 60 * 60 * 24));
+                const profit = soldPrice - project.purchasePrice;
+                
+                let message = '';
+                if (profit > 0) {
+                    message = `Congratulations! You made a profit of $${profit.toFixed(2)} in ${daysHeld} days!`;
+                } else if (profit < 0) {
+                    message = `You had a loss of $${Math.abs(profit).toFixed(2)} after ${daysHeld} days.`;
+                } else {
+                    message = `You broke even after ${daysHeld} days.`;
+                }
+                
+                alert(message);
+            }
+        }
+        
+        // Update statistics
+        function updateStats() {
+            document.getElementById('total-projects').textContent = projects.length;
+            document.getElementById('active-projects').textContent = projects.filter(p => p.status !== 'sold').length;
+            document.getElementById('sold-projects').textContent = projects.filter(p => p.status === 'sold').length;
+            
+            // Update filter counts
+            document.getElementById('count-all').textContent = projects.length;
+            document.getElementById('count-not-running').textContent = projects.filter(p => p.status === 'not_running').length;
+            document.getElementById('count-running').textContent = projects.filter(p => p.status === 'running').length;
+            document.getElementById('count-sold').textContent = projects.filter(p => p.status === 'sold').length;
+        }
+        
+        // Render projects based on filter and search
+        function renderProjects() {
+            const searchTerm = searchInput.value.toLowerCase();
+            
+            let filteredProjects = projects.filter(project => {
+                const matchesSearch = project.name.toLowerCase().includes(searchTerm);
+                const matchesStatus = currentFilter === 'all' || project.status === currentFilter;
+                return matchesSearch && matchesStatus;
+            });
+            
+            projectGrid.innerHTML = '';
+            
+            if (filteredProjects.length === 0) {
+                projectGrid.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-box-open"></i>
+                        <h3>No Projects Found</h3>
+                        <p>Try changing your filters or add a new project.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            filteredProjects.forEach(project => {
+                const projectCard = createProjectCard(project);
+                projectGrid.appendChild(projectCard);
+            });
+        }
+        
+        // Create project card element
+        function createProjectCard(project) {
+            const card = document.createElement('div');
+            card.className = 'project-card';
+            
+            // Get status info
+            let statusText, statusClass;
+            switch (project.status) {
+                case 'not_running':
+                    statusText = 'Needs Work';
+                    statusClass = 'status-not-running';
+                    break;
+                case 'running':
+                    statusText = 'Running';
+                    statusClass = 'status-running';
+                    break;
+                case 'sold':
+                    statusText = 'Sold';
+                    statusClass = 'status-sold';
+                    break;
+            }
+            
+            // Format dates
+            const purchaseDate = new Date(project.purchaseDate).toLocaleDateString();
+            const soldDate = project.soldDate ? new Date(project.soldDate).toLocaleDateString() : 'Not sold';
+            
+            // Format engine type
+            let engineText = '';
+            if (project.engineType) {
+                switch (project.engineType) {
+                    case '2_stroke': engineText = '2-Stroke'; break;
+                    case '4_stroke': engineText = '4-Stroke'; break;
+                    case 'electric': engineText = 'Electric'; break;
+                    default: engineText = project.engineType;
+                }
+            }
+            
+            card.innerHTML = `
+                <div class="card-header" style="background: ${getCardHeaderColor(project)}">
+                    <div class="status-badge">${statusText}</div>
+                    <div class="project-title">${project.name}</div>
+                </div>
+                <div class="card-body">
+                    <div class="project-details">
+                        <div class="detail-item">
+                            <i class="fas fa-tag"></i>
+                            <span>Type:</span>
+                            <span class="value">${getTypeText(project.type)}</span>
+                        </div>
+                        ${engineText ? `<div class="detail-item">
+                            <i class="fas fa-cog"></i>
+                            <span>Engine:</span>
+                            <span class="value">${engineText}</span>
+                        </div>` : ''}
+                        <div class="detail-item">
+                            <i class="fas fa-dollar-sign"></i>
+                            <span>Purchase Price:</span>
+                            <span class="value">$${project.purchasePrice.toFixed(2)}</span>
+                        </div>
+                        <div class="detail-item">
+                            <i class="fas fa-calendar-alt"></i>
+                            <span>Purchase Date:</span>
+                            <span class="value">${purchaseDate}</span>
+                        </div>
+                        ${project.soldPrice ? `<div class="detail-item">
+                            <i class="fas fa-money-bill-wave"></i>
+                            <span>Sold Price:</span>
+                            <span class="value">$${project.soldPrice.toFixed(2)}</span>
+                        </div>` : ''}
+                        ${project.soldDate ? `<div class="detail-item">
+                            <i class="fas fa-calendar-check"></i>
+                            <span>Sold Date:</span>
+                            <span class="value">${soldDate}</span>
+                        </div>` : ''}
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="action-buttons">
+                        ${project.status !== 'sold' ? `
+                            ${project.status === 'not_running' ? `
+                                <button class="btn btn-primary mark-running" data-id="${project.id}">
+                                    <i class="fas fa-play"></i> Mark Running
+                                </button>
+                            ` : ''}
+                            <button class="btn btn-success sell-project" data-id="${project.id}">
+                                <i class="fas fa-dollar-sign"></i> Mark Sold
+                            </button>
+                        ` : ''}
+                    </div>
+                </div>
+            `;
+            
+            // Add event listeners to buttons
+            if (project.status !== 'sold') {
+                if (project.status === 'not_running') {
+                    card.querySelector('.mark-running').addEventListener('click', (e) => {
+                        const projectId = parseInt(e.target.closest('button').dataset.id);
+                        updateProjectStatus(projectId, 'running');
+                    });
+                }
+                
+                card.querySelector('.sell-project').addEventListener('click', (e) => {
+                    const projectId = parseInt(e.target.closest('button').dataset.id);
+                    openSellModal(projectId);
+                });
+            }
+            
+            return card;
+        }
+        
+        // Helper function to get card header color
+        function getCardHeaderColor(project) {
+            switch (project.status) {
+                case 'not_running': return '#e74c3c'; // Red
+                case 'running': return '#27ae60'; // Green
+                case 'sold': return '#3498db'; // Blue
+                default: return '#2c3e50'; // Dark blue
+            }
+        }
+        
+        // Helper function to get type text
+        function getTypeText(type) {
+            switch (type) {
+                case 'lawn_mower': return 'Lawn Mower';
+                case 'power_tool': return 'Power Tool';
+                case 'vehicle': return 'Vehicle';
+                default: return 'Other';
+            }
+        }
+        
+        // Initialize the app when DOM is loaded
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
 </body>
 </html>
