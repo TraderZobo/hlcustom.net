@@ -16,6 +16,26 @@
             --dark: #34495e;
             --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             --transition: all 0.3s ease;
+            
+            /* Light mode colors */
+            --bg-color: #f8f9fa;
+            --text-color: #333;
+            --card-bg: white;
+            --sidebar-bg: white;
+            --header-bg: linear-gradient(135deg, var(--primary), var(--secondary));
+            --search-bg: var(--light);
+            --stat-bg: rgba(255, 255, 255, 0.15);
+        }
+        
+        .dark-mode {
+            /* Dark mode colors */
+            --bg-color: #1a1a1a;
+            --text-color: #f0f0f0;
+            --card-bg: #2d2d2d;
+            --sidebar-bg: #252525;
+            --header-bg: linear-gradient(135deg, #1a2b3c, #1e3a5f);
+            --search-bg: #3d3d3d;
+            --stat-bg: rgba(0, 0, 0, 0.2);
         }
         
         * {
@@ -26,9 +46,10 @@
         }
         
         body {
-            background-color: #f8f9fa;
-            color: #333;
+            background-color: var(--bg-color);
+            color: var(--text-color);
             line-height: 1.6;
+            transition: var(--transition);
         }
         
         .container {
@@ -38,11 +59,12 @@
         }
         
         header {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            background: var(--header-bg);
             color: white;
             padding: 1.5rem 0;
             box-shadow: var(--shadow);
             margin-bottom: 2rem;
+            transition: var(--transition);
         }
         
         .header-content {
@@ -76,9 +98,10 @@
         .stats {
             display: flex;
             gap: 20px;
-            background: rgba(255, 255, 255, 0.15);
+            background: var(--stat-bg);
             padding: 10px 20px;
             border-radius: 30px;
+            transition: var(--transition);
         }
         
         .stat-item {
@@ -102,18 +125,20 @@
         }
         
         .sidebar {
-            background: white;
+            background: var(--sidebar-bg);
             border-radius: 10px;
             padding: 25px;
             box-shadow: var(--shadow);
             height: fit-content;
+            transition: var(--transition);
         }
         
         .sidebar h2 {
             margin-bottom: 20px;
             padding-bottom: 10px;
             border-bottom: 2px solid var(--light);
-            color: var(--primary);
+            color: var(--secondary);
+            transition: var(--transition);
         }
         
         .filter-section {
@@ -123,7 +148,8 @@
         .filter-section h3 {
             font-size: 1.1rem;
             margin-bottom: 15px;
-            color: var(--dark);
+            color: var(--text-color);
+            transition: var(--transition);
         }
         
         .filter-options {
@@ -143,7 +169,7 @@
         }
         
         .filter-option:hover {
-            background-color: var(--light);
+            background-color: rgba(52, 152, 219, 0.1);
         }
         
         .filter-option.active {
@@ -191,10 +217,11 @@
         }
         
         .main-content {
-            background: white;
+            background: var(--card-bg);
             border-radius: 10px;
             padding: 25px;
             box-shadow: var(--shadow);
+            transition: var(--transition);
         }
         
         .content-header {
@@ -205,16 +232,18 @@
         }
         
         .content-header h2 {
-            color: var(--primary);
+            color: var(--secondary);
+            transition: var(--transition);
         }
         
         .search-bar {
             display: flex;
             align-items: center;
-            background: var(--light);
+            background: var(--search-bg);
             border-radius: 30px;
             padding: 8px 15px;
             width: 300px;
+            transition: var(--transition);
         }
         
         .search-bar input {
@@ -223,6 +252,12 @@
             outline: none;
             flex: 1;
             padding: 5px 10px;
+            color: var(--text-color);
+        }
+        
+        .search-bar input::placeholder {
+            color: var(--text-color);
+            opacity: 0.7;
         }
         
         .project-grid {
@@ -236,7 +271,7 @@
             overflow: hidden;
             box-shadow: var(--shadow);
             transition: var(--transition);
-            background: white;
+            background: var(--card-bg);
             position: relative;
         }
         
@@ -269,7 +304,8 @@
             font-size: 1.3rem;
             font-weight: 700;
             margin-bottom: 10px;
-            color: var(--primary);
+            color: var(--text-color);
+            transition: var(--transition);
         }
         
         .project-details {
@@ -332,6 +368,11 @@
             color: white;
         }
         
+        .btn-danger {
+            background-color: var(--danger);
+            color: white;
+        }
+        
         .btn:hover {
             opacity: 0.9;
         }
@@ -354,11 +395,12 @@
         }
         
         .modal-content {
-            background: white;
+            background: var(--card-bg);
             border-radius: 10px;
             width: 90%;
             max-width: 500px;
             overflow: hidden;
+            transition: var(--transition);
         }
         
         .modal-header {
@@ -395,7 +437,8 @@
             display: block;
             margin-bottom: 8px;
             font-weight: 600;
-            color: var(--dark);
+            color: var(--text-color);
+            transition: var(--transition);
         }
         
         .form-group input, .form-group select {
@@ -404,6 +447,9 @@
             border: 1px solid #ddd;
             border-radius: 6px;
             font-size: 1rem;
+            background: var(--card-bg);
+            color: var(--text-color);
+            transition: var(--transition);
         }
         
         .form-row {
@@ -417,10 +463,11 @@
         
         .modal-footer {
             padding: 15px 25px;
-            background: var(--light);
+            background: var(--sidebar-bg);
             display: flex;
             justify-content: flex-end;
             gap: 10px;
+            transition: var(--transition);
         }
         
         .btn-cancel {
@@ -445,18 +492,48 @@
         .empty-state {
             text-align: center;
             padding: 40px 20px;
-            color: #7f8c8d;
+            color: var(--text-color);
+            opacity: 0.7;
+            transition: var(--transition);
         }
         
         .empty-state i {
             font-size: 4rem;
             margin-bottom: 20px;
-            color: #bdc3c7;
+            color: var(--secondary);
+            opacity: 0.5;
         }
         
         .empty-state h3 {
             margin-bottom: 10px;
-            color: var(--dark);
+            color: var(--text-color);
+        }
+        
+        .theme-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--secondary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: var(--shadow);
+            z-index: 100;
+            border: none;
+            transition: var(--transition);
+        }
+        
+        .theme-toggle:hover {
+            transform: scale(1.1);
+        }
+        
+        .confirm-delete-modal .modal-footer {
+            justify-content: space-between;
         }
         
         @media (max-width: 768px) {
@@ -546,7 +623,7 @@
                 <div class="filter-section">
                     <h3>Project Types</h3>
                     <div class="filter-options">
-                        <div class="filter-option" data-type="all">
+                        <div class="filter-option active" data-type="all">
                             <i class="fas fa-star"></i>
                             <span>All Types</span>
                         </div>
@@ -694,6 +771,29 @@
         </div>
     </div>
 
+    <!-- Delete Project Modal -->
+    <div class="modal" id="delete-project-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Delete Project</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete this project? This action cannot be undone.</p>
+                <p><strong id="project-to-delete"></strong></p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-cancel">Cancel</button>
+                <button class="btn btn-danger" id="confirm-delete">Delete Project</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Theme Toggle Button -->
+    <button class="theme-toggle" id="theme-toggle">
+        <i class="fas fa-moon"></i>
+    </button>
+
     <script>
         // Sample data structure for a project
         const sampleProject = {
@@ -714,28 +814,54 @@
         const addProjectBtn = document.getElementById('add-project-btn');
         const addProjectModal = document.getElementById('add-project-modal');
         const sellProjectModal = document.getElementById('sell-project-modal');
+        const deleteProjectModal = document.getElementById('delete-project-modal');
         const closeModalButtons = document.querySelectorAll('.close-modal, .btn-cancel');
         const saveProjectBtn = document.getElementById('save-project');
         const projectForm = document.getElementById('project-form');
         const sellForm = document.getElementById('sell-form');
         const confirmSellBtn = document.getElementById('confirm-sell');
+        const confirmDeleteBtn = document.getElementById('confirm-delete');
         const filterOptions = document.querySelectorAll('.filter-option');
         const searchInput = document.getElementById('search-input');
         const profitMessage = document.getElementById('profit-message');
         const profitText = document.getElementById('profit-text');
         const sellProfitText = document.getElementById('sell-profit-text');
+        const projectToDelete = document.getElementById('project-to-delete');
+        const themeToggle = document.getElementById('theme-toggle');
         
         // State variables
         let projects = [];
         let currentFilter = 'all';
+        let currentTypeFilter = 'all';
         let currentSellProjectId = null;
+        let currentDeleteProjectId = null;
+        let darkMode = false;
         
         // Initialize the application
         function init() {
+            loadThemePreference();
             loadProjects();
             setupEventListeners();
             updateStats();
             renderProjects();
+        }
+        
+        // Load theme preference from localStorage
+        function loadThemePreference() {
+            const savedTheme = localStorage.getItem('darkMode');
+            if (savedTheme === 'true') {
+                darkMode = true;
+                document.body.classList.add('dark-mode');
+                themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+            }
+        }
+        
+        // Toggle dark/light mode
+        function toggleTheme() {
+            darkMode = !darkMode;
+            document.body.classList.toggle('dark-mode', darkMode);
+            localStorage.setItem('darkMode', darkMode);
+            themeToggle.innerHTML = darkMode ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
         }
         
         // Load projects from localStorage
@@ -769,6 +895,8 @@
             
             saveProjectBtn.addEventListener('click', addNewProject);
             confirmSellBtn.addEventListener('click', sellProject);
+            confirmDeleteBtn.addEventListener('click', deleteProject);
+            themeToggle.addEventListener('click', toggleTheme);
             
             filterOptions.forEach(option => {
                 option.addEventListener('click', () => {
@@ -781,7 +909,10 @@
                             opt.classList.toggle('active', opt.dataset.status === status);
                         });
                     } else if (type) {
-                        // For type filtering - implement as needed
+                        currentTypeFilter = type;
+                        document.querySelectorAll('.filter-option[data-type]').forEach(opt => {
+                            opt.classList.toggle('active', opt.dataset.type === type);
+                        });
                     }
                     
                     renderProjects();
@@ -795,6 +926,7 @@
                 if (e.target.classList.contains('modal')) {
                     toggleModal(addProjectModal, false);
                     toggleModal(sellProjectModal, false);
+                    toggleModal(deleteProjectModal, false);
                 }
             });
             
@@ -807,8 +939,10 @@
         function toggleModal(modal, show) {
             modal.style.display = show ? 'flex' : 'none';
             if (!show) {
-                projectForm.reset();
-                profitMessage.style.display = 'none';
+                if (modal === addProjectModal) {
+                    projectForm.reset();
+                    profitMessage.style.display = 'none';
+                }
             }
         }
         
@@ -843,9 +977,6 @@
             saveProjects();
             renderProjects();
             toggleModal(addProjectModal, false);
-            
-            // Show success message
-            alert('Project added successfully!');
         }
         
         // Update project status
@@ -855,11 +986,6 @@
                 project.status = newStatus;
                 saveProjects();
                 renderProjects();
-                
-                // Show message if project is now running
-                if (newStatus === 'running') {
-                    alert('Great job! Project is now running!');
-                }
             }
         }
         
@@ -924,24 +1050,25 @@
                 saveProjects();
                 renderProjects();
                 toggleModal(sellProjectModal, false);
-                
-                // Calculate and show profit message
-                const purchaseDate = new Date(project.purchaseDate);
-                const saleDate = new Date(soldDate);
-                const daysHeld = Math.ceil((saleDate - purchaseDate) / (1000 * 60 * 60 * 24));
-                const profit = soldPrice - project.purchasePrice;
-                
-                let message = '';
-                if (profit > 0) {
-                    message = `Congratulations! You made a profit of $${profit.toFixed(2)} in ${daysHeld} days!`;
-                } else if (profit < 0) {
-                    message = `You had a loss of $${Math.abs(profit).toFixed(2)} after ${daysHeld} days.`;
-                } else {
-                    message = `You broke even after ${daysHeld} days.`;
-                }
-                
-                alert(message);
             }
+        }
+        
+        // Open delete confirmation modal
+        function openDeleteModal(projectId) {
+            const project = projects.find(p => p.id === projectId);
+            if (project) {
+                currentDeleteProjectId = projectId;
+                projectToDelete.textContent = project.name;
+                toggleModal(deleteProjectModal, true);
+            }
+        }
+        
+        // Delete project
+        function deleteProject() {
+            projects = projects.filter(p => p.id !== currentDeleteProjectId);
+            saveProjects();
+            renderProjects();
+            toggleModal(deleteProjectModal, false);
         }
         
         // Update statistics
@@ -964,7 +1091,8 @@
             let filteredProjects = projects.filter(project => {
                 const matchesSearch = project.name.toLowerCase().includes(searchTerm);
                 const matchesStatus = currentFilter === 'all' || project.status === currentFilter;
-                return matchesSearch && matchesStatus;
+                const matchesType = currentTypeFilter === 'all' || project.type === currentTypeFilter;
+                return matchesSearch && matchesStatus && matchesType;
             });
             
             projectGrid.innerHTML = '';
@@ -1074,6 +1202,9 @@
                                 <i class="fas fa-dollar-sign"></i> Mark Sold
                             </button>
                         ` : ''}
+                        <button class="btn btn-danger delete-project" data-id="${project.id}">
+                            <i class="fas fa-trash"></i> Delete
+                        </button>
                     </div>
                 </div>
             `;
@@ -1092,6 +1223,11 @@
                     openSellModal(projectId);
                 });
             }
+            
+            card.querySelector('.delete-project').addEventListener('click', (e) => {
+                const projectId = parseInt(e.target.closest('button').dataset.id);
+                openDeleteModal(projectId);
+            });
             
             return card;
         }
