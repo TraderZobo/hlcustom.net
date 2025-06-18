@@ -21,9 +21,7 @@
             --bg-color: #f8f9fa;
             --text-color: #333;
             --card-bg: white;
-            --sidebar-bg: white;
             --header-bg: linear-gradient(135deg, var(--primary), var(--secondary));
-            --search-bg: var(--light);
             --stat-bg: rgba(255, 255, 255, 0.15);
         }
         
@@ -32,9 +30,7 @@
             --bg-color: #1a1a1a;
             --text-color: #f0f0f0;
             --card-bg: #2d2d2d;
-            --sidebar-bg: #252525;
             --header-bg: linear-gradient(135deg, #1a2b3c, #1e3a5f);
-            --search-bg: #3d3d3d;
             --stat-bg: rgba(0, 0, 0, 0.2);
         }
         
@@ -119,108 +115,6 @@
             opacity: 0.9;
         }
         
-        .dashboard {
-            display: grid;
-            grid-template-columns: 300px 1fr;
-            gap: 25px;
-        }
-        
-        .sidebar {
-            background: var(--sidebar-bg);
-            border-radius: 10px;
-            padding: 25px;
-            box-shadow: var(--shadow);
-            height: fit-content;
-            transition: var(--transition);
-        }
-        
-        .sidebar h2 {
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid var(--light);
-            color: var(--secondary);
-            transition: var(--transition);
-        }
-        
-        .filter-section {
-            margin-bottom: 25px;
-        }
-        
-        .filter-section h3 {
-            font-size: 1.1rem;
-            margin-bottom: 15px;
-            color: var(--text-color);
-            transition: var(--transition);
-        }
-        
-        .filter-options {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-        
-        .filter-option {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            cursor: pointer;
-            padding: 8px 12px;
-            border-radius: 6px;
-            transition: var(--transition);
-        }
-        
-        .filter-option:hover {
-            background-color: rgba(52, 152, 219, 0.1);
-        }
-        
-        .filter-option.active {
-            background-color: var(--secondary);
-            color: white;
-        }
-        
-        .filter-option i {
-            width: 20px;
-            text-align: center;
-        }
-        
-        .filter-option .count {
-            margin-left: auto;
-            background: rgba(0, 0, 0, 0.1);
-            border-radius: 10px;
-            padding: 2px 8px;
-            font-size: 0.85rem;
-        }
-        
-        .filter-option.active .count {
-            background: rgba(255, 255, 255, 0.3);
-        }
-        
-        .service-option {
-            padding-left: 20px;
-        }
-        
-        .add-project-btn {
-            background: linear-gradient(to right, var(--success), #2ecc71);
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            width: 100%;
-            transition: var(--transition);
-            box-shadow: 0 4px 6px rgba(46, 204, 113, 0.3);
-        }
-        
-        .add-project-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 8px rgba(46, 204, 113, 0.4);
-        }
-        
         .main-content {
             background: var(--card-bg);
             border-radius: 10px;
@@ -244,11 +138,10 @@
         .search-bar {
             display: flex;
             align-items: center;
-            background: var(--search-bg);
+            background: var(--light);
             border-radius: 30px;
             padding: 8px 15px;
             width: 300px;
-            transition: var(--transition);
         }
         
         .search-bar input {
@@ -258,11 +151,6 @@
             flex: 1;
             padding: 5px 10px;
             color: var(--text-color);
-        }
-        
-        .search-bar input::placeholder {
-            color: var(--text-color);
-            opacity: 0.7;
         }
         
         .project-grid {
@@ -473,7 +361,7 @@
         
         .modal-footer {
             padding: 15px 25px;
-            background: var(--sidebar-bg);
+            background: var(--light);
             display: flex;
             justify-content: flex-end;
             gap: 10px;
@@ -542,15 +430,28 @@
             transform: scale(1.1);
         }
         
-        .confirm-delete-modal .modal-footer {
-            justify-content: space-between;
+        .add-project-btn {
+            background: linear-gradient(to right, var(--success), #2ecc71);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: var(--transition);
+            box-shadow: 0 4px 6px rgba(46, 204, 113, 0.3);
+        }
+        
+        .add-project-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(46, 204, 113, 0.4);
         }
         
         @media (max-width: 768px) {
-            .dashboard {
-                grid-template-columns: 1fr;
-            }
-            
             .header-content {
                 flex-direction: column;
                 gap: 20px;
@@ -609,116 +510,23 @@
     </header>
 
     <div class="container">
-        <div class="dashboard">
-            <div class="sidebar">
-                <h2>Service Dashboard</h2>
-                
-                <div class="filter-section">
-                    <h3>Status Filters</h3>
-                    <div class="filter-options">
-                        <div class="filter-option active" data-status="all">
-                            <i class="fas fa-layer-group"></i>
-                            <span>All Projects</span>
-                            <span class="count" id="count-all">0</span>
-                        </div>
-                        <div class="filter-option" data-status="not_running">
-                            <i class="fas fa-tools"></i>
-                            <span>Needs Work</span>
-                            <span class="count" id="count-not-running">0</span>
-                        </div>
-                        <div class="filter-option" data-status="running">
-                            <i class="fas fa-cogs"></i>
-                            <span>Running</span>
-                            <span class="count" id="count-running">0</span>
-                        </div>
-                        <div class="filter-option" data-status="sold">
-                            <i class="fas fa-check-circle"></i>
-                            <span>Sold</span>
-                            <span class="count" id="count-sold">0</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="filter-section">
-                    <h3>Our Services</h3>
-                    <div class="filter-options">
-                        <div class="filter-option active" data-service="all">
-                            <i class="fas fa-star"></i>
-                            <span>All Services</span>
-                        </div>
-                        
-                        <div class="filter-option" data-service="lawn_mower">
-                            <i class="fas fa-leaf"></i>
-                            <span>Lawn Mowers</span>
-                        </div>
-                        <div class="filter-option" data-service="push_mower">
-                            <i class="fas fa-chevron-right"></i>
-                            <span>Push Mowers</span>
-                        </div>
-                        <div class="filter-option" data-service="riding_mower">
-                            <i class="fas fa-chevron-right"></i>
-                            <span>Riding Mowers</span>
-                        </div>
-                        <div class="filter-option" data-service="zero_turn">
-                            <i class="fas fa-chevron-right"></i>
-                            <span>Zero-Turn</span>
-                        </div>
-                        
-                        <div class="filter-option" data-service="dirtbike_quad">
-                            <i class="fas fa-motorcycle"></i>
-                            <span>Dirtbike/Quad</span>
-                        </div>
-                        <div class="filter-option" data-service="two_stroke">
-                            <i class="fas fa-chevron-right"></i>
-                            <span>2-Stroke Engines</span>
-                        </div>
-                        <div class="filter-option" data-service="four_stroke">
-                            <i class="fas fa-chevron-right"></i>
-                            <span>4-Stroke Engines</span>
-                        </div>
-                        
-                        <div class="filter-option" data-service="trimmer_blower">
-                            <i class="fas fa-fan"></i>
-                            <span>Trimmers/Blowers</span>
-                        </div>
-                        <div class="filter-option" data-service="gas_trimmer">
-                            <i class="fas fa-chevron-right"></i>
-                            <span>Gas Trimmers</span>
-                        </div>
-                        <div class="filter-option" data-service="edger">
-                            <i class="fas fa-chevron-right"></i>
-                            <span>Edgers</span>
-                        </div>
-                        <div class="filter-option" data-service="brush_cutter">
-                            <i class="fas fa-chevron-right"></i>
-                            <span>Brush Cutters</span>
-                        </div>
-                        
-                        <div class="filter-option" data-service="other">
-                            <i class="fas fa-cog"></i>
-                            <span>Other Services</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <button class="add-project-btn" id="add-project-btn">
-                    <i class="fas fa-plus"></i>
-                    Add New Project
-                </button>
-            </div>
-            
-            <div class="main-content">
-                <div class="content-header">
-                    <h2>All Projects</h2>
+        <div class="main-content">
+            <div class="content-header">
+                <h2>All Projects</h2>
+                <div style="display: flex; gap: 15px;">
                     <div class="search-bar">
                         <i class="fas fa-search"></i>
                         <input type="text" id="search-input" placeholder="Search projects...">
                     </div>
+                    <button class="add-project-btn" id="add-project-btn">
+                        <i class="fas fa-plus"></i>
+                        Add Project
+                    </button>
                 </div>
-                
-                <div class="project-grid" id="project-grid">
-                    <!-- Projects will be dynamically inserted here -->
-                </div>
+            </div>
+            
+            <div class="project-grid" id="project-grid">
+                <!-- Projects will be dynamically inserted here -->
             </div>
         </div>
     </div>
@@ -739,24 +547,13 @@
                     
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="project-service">Service Category</label>
+                            <label for="project-service">Service Type</label>
                             <select id="project-service" required>
                                 <option value="">Select Service</option>
-                                <optgroup label="Lawn Mowers">
-                                    <option value="push_mower">Push Mower</option>
-                                    <option value="riding_mower">Riding Mower</option>
-                                    <option value="zero_turn">Zero-Turn Mower</option>
-                                </optgroup>
-                                <optgroup label="Dirtbike/Quad">
-                                    <option value="two_stroke">2-Stroke Engine</option>
-                                    <option value="four_stroke">4-Stroke Engine</option>
-                                </optgroup>
-                                <optgroup label="Trimmers/Blowers">
-                                    <option value="gas_trimmer">Gas Trimmer</option>
-                                    <option value="edger">Edger</option>
-                                    <option value="brush_cutter">Brush Cutter</option>
-                                </optgroup>
-                                <option value="other">Other Service</option>
+                                <option value="lawn_mower">Lawn Mower</option>
+                                <option value="dirtbike_quad">Dirtbike/Quad</option>
+                                <option value="trimmer_blower">Trimmer/Blower</option>
+                                <option value="other">Other</option>
                             </select>
                         </div>
                         <div class="form-group">
@@ -872,7 +669,6 @@
         const sellForm = document.getElementById('sell-form');
         const confirmSellBtn = document.getElementById('confirm-sell');
         const confirmDeleteBtn = document.getElementById('confirm-delete');
-        const filterOptions = document.querySelectorAll('.filter-option');
         const searchInput = document.getElementById('search-input');
         const sellProfitText = document.getElementById('sell-profit-text');
         const projectToDelete = document.getElementById('project-to-delete');
@@ -880,8 +676,6 @@
         
         // State variables
         let projects = [];
-        let currentFilter = 'all';
-        let currentServiceFilter = 'all';
         let currentSellProjectId = null;
         let currentDeleteProjectId = null;
         let darkMode = false;
@@ -951,12 +745,6 @@
             
             document.getElementById('total-spent').textContent = `$${totalSpent.toFixed(2)}`;
             document.getElementById('total-profit').textContent = `$${totalProfit.toFixed(2)}`;
-            
-            // Update filter counts
-            document.getElementById('count-all').textContent = projects.length;
-            document.getElementById('count-not-running').textContent = projects.filter(p => p.status === 'not_running').length;
-            document.getElementById('count-running').textContent = projects.filter(p => p.status === 'running').length;
-            document.getElementById('count-sold').textContent = projects.filter(p => p.status === 'sold').length;
         }
         
         // Set up event listeners
@@ -974,27 +762,6 @@
             confirmSellBtn.addEventListener('click', sellProject);
             confirmDeleteBtn.addEventListener('click', deleteProject);
             themeToggle.addEventListener('click', toggleTheme);
-            
-            filterOptions.forEach(option => {
-                option.addEventListener('click', () => {
-                    const status = option.dataset.status;
-                    const service = option.dataset.service;
-                    
-                    if (status) {
-                        currentFilter = status;
-                        document.querySelectorAll('.filter-option[data-status]').forEach(opt => {
-                            opt.classList.toggle('active', opt.dataset.status === status);
-                        });
-                    } else if (service) {
-                        currentServiceFilter = service;
-                        document.querySelectorAll('.filter-option[data-service]').forEach(opt => {
-                            opt.classList.toggle('active', opt.dataset.service === service);
-                        });
-                    }
-                    
-                    renderProjects();
-                });
-            });
             
             searchInput.addEventListener('input', renderProjects);
             
@@ -1147,15 +914,12 @@
             toggleModal(deleteProjectModal, false);
         }
         
-        // Render projects based on filter and search
+        // Render projects based on search
         function renderProjects() {
             const searchTerm = searchInput.value.toLowerCase();
             
             let filteredProjects = projects.filter(project => {
-                const matchesSearch = project.name.toLowerCase().includes(searchTerm);
-                const matchesStatus = currentFilter === 'all' || project.status === currentFilter;
-                const matchesService = currentServiceFilter === 'all' || project.service === currentServiceFilter;
-                return matchesSearch && matchesStatus && matchesService;
+                return project.name.toLowerCase().includes(searchTerm);
             });
             
             projectGrid.innerHTML = '';
@@ -1165,7 +929,7 @@
                     <div class="empty-state">
                         <i class="fas fa-box-open"></i>
                         <h3>No Projects Found</h3>
-                        <p>Try changing your filters or add a new project.</p>
+                        <p>${projects.length === 0 ? 'Add your first project to get started!' : 'Try changing your search term'}</p>
                     </div>
                 `;
                 return;
@@ -1311,14 +1075,9 @@
         // Helper function to get service name
         function getServiceName(service) {
             switch (service) {
-                case 'push_mower': return 'Push Mower';
-                case 'riding_mower': return 'Riding Mower';
-                case 'zero_turn': return 'Zero-Turn Mower';
-                case 'two_stroke': return '2-Stroke Engine';
-                case 'four_stroke': return '4-Stroke Engine';
-                case 'gas_trimmer': return 'Gas Trimmer';
-                case 'edger': return 'Edger';
-                case 'brush_cutter': return 'Brush Cutter';
+                case 'lawn_mower': return 'Lawn Mower';
+                case 'dirtbike_quad': return 'Dirtbike/Quad';
+                case 'trimmer_blower': return 'Trimmer/Blower';
                 default: return 'Other Service';
             }
         }
