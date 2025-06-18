@@ -568,6 +568,23 @@
                         <i class="fas fa-tools"></i>
                         <h1>Small Engine Tracker</h1>
                     </div>
+<button onclick="sendReceipt()" class="btn">
+  <i class="fas fa-receipt"></i> Email Receipt
+</button>
+
+<script>
+  function sendReceipt() {
+    const customerEmail = prompt("Enter customer email:");
+    if (customerEmail) {
+      fetch('YOUR_SCRIPT_URL', {
+        method: 'POST',
+        body: JSON.stringify({ email: customerEmail })
+      }).then(() => alert("Receipt sent!"));
+    }
+  }
+</script>
+
+                    
                     <div class="stats">
                         <div class="stat-item">
                             <div class="stat-value" id="total-projects">0</div>
@@ -623,21 +640,6 @@
                     <h3>Add New Project</h3>
                     <button class="close-modal">&times;</button>
                 </div>
-<button onclick="sendReceipt()" class="btn">
-  <i class="fas fa-receipt"></i> Email Receipt
-</button>
-
-<script>
-  function sendReceipt() {
-    const customerEmail = prompt("Enter customer email:");
-    if (customerEmail) {
-      fetch('YOUR_SCRIPT_URL', {
-        method: 'POST',
-        body: JSON.stringify({ email: customerEmail })
-      }).then(() => alert("Receipt sent!"));
-    }
-  }
-</script>
 
                 <div class="modal-body">
                     <form id="project-form">
