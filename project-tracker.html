@@ -451,6 +451,71 @@
             box-shadow: 0 6px 8px rgba(46, 204, 113, 0.4);
         }
         
+        .pin-modal {
+            display: flex;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-color);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .pin-container {
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+        }
+        
+        .pin-container h2 {
+            margin-bottom: 20px;
+            color: var(--secondary);
+        }
+        
+        .pin-input {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .pin-input input {
+            width: 40px;
+            height: 50px;
+            text-align: center;
+            font-size: 1.5rem;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+        }
+        
+        .pin-error {
+            color: var(--danger);
+            margin-bottom: 20px;
+            min-height: 20px;
+        }
+        
+        .pin-submit {
+            background: var(--secondary);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .pin-submit:hover {
+            background: var(--primary);
+        }
+        
         @media (max-width: 768px) {
             .header-content {
                 flex-direction: column;
@@ -476,188 +541,226 @@
     </style>
 </head>
 <body>
-    <header>
+    <!-- PIN Entry Modal -->
+    <div class="pin-modal" id="pin-modal">
+        <div class="pin-container">
+            <h2>Staff Login</h2>
+            <p>Enter your 6-digit PIN to access the system</p>
+            <div class="pin-input">
+                <input type="password" maxlength="1" id="pin1" autofocus>
+                <input type="password" maxlength="1" id="pin2">
+                <input type="password" maxlength="1" id="pin3">
+                <input type="password" maxlength="1" id="pin4">
+                <input type="password" maxlength="1" id="pin5">
+                <input type="password" maxlength="1" id="pin6">
+            </div>
+            <div class="pin-error" id="pin-error"></div>
+            <button class="pin-submit" id="pin-submit">Submit</button>
+        </div>
+    </div>
+
+    <!-- Main Application (hidden until PIN is entered) -->
+    <div id="app-content" style="display: none;">
+        <header>
+            <div class="container">
+                <div class="header-content">
+                    <div class="logo">
+                        <i class="fas fa-tools"></i>
+                        <h1>Small Engine Tracker</h1>
+                    </div>
+                    <div class="stats">
+                        <div class="stat-item">
+                            <div class="stat-value" id="total-projects">0</div>
+                            <div class="stat-label">Total</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="active-projects">0</div>
+                            <div class="stat-label">Active</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="sold-projects">0</div>
+                            <div class="stat-label">Sold</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="total-spent">$0</div>
+                            <div class="stat-label">Spent</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="total-profit">$0</div>
+                            <div class="stat-label">Profit</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
         <div class="container">
-            <div class="header-content">
-                <div class="logo">
-                    <i class="fas fa-tools"></i>
-                    <h1>Small Engine Tracker</h1>
+            <div class="main-content">
+                <div class="content-header">
+                    <h2>All Projects</h2>
+                    <div style="display: flex; gap: 15px;">
+                        <div class="search-bar">
+                            <i class="fas fa-search"></i>
+                            <input type="text" id="search-input" placeholder="Search projects...">
+                        </div>
+                        <button class="add-project-btn" id="add-project-btn">
+                            <i class="fas fa-plus"></i>
+                            Add Project
+                        </button>
+                    </div>
                 </div>
-                <div class="stats">
-                    <div class="stat-item">
-                        <div class="stat-value" id="total-projects">0</div>
-                        <div class="stat-label">Total</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value" id="active-projects">0</div>
-                        <div class="stat-label">Active</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value" id="sold-projects">0</div>
-                        <div class="stat-label">Sold</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value" id="total-spent">$0</div>
-                        <div class="stat-label">Spent</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value" id="total-profit">$0</div>
-                        <div class="stat-label">Profit</div>
-                    </div>
+                
+                <div class="project-grid" id="project-grid">
+                    <!-- Projects will be dynamically inserted here -->
                 </div>
             </div>
         </div>
-    </header>
 
-    <div class="container">
-        <div class="main-content">
-            <div class="content-header">
-                <h2>All Projects</h2>
-                <div style="display: flex; gap: 15px;">
-                    <div class="search-bar">
-                        <i class="fas fa-search"></i>
-                        <input type="text" id="search-input" placeholder="Search projects...">
-                    </div>
-                    <button class="add-project-btn" id="add-project-btn">
-                        <i class="fas fa-plus"></i>
-                        Add Project
-                    </button>
+        <!-- Add Project Modal -->
+        <div class="modal" id="add-project-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Add New Project</h3>
+                    <button class="close-modal">&times;</button>
                 </div>
-            </div>
-            
-            <div class="project-grid" id="project-grid">
-                <!-- Projects will be dynamically inserted here -->
-            </div>
-        </div>
-    </div>
-
-    <!-- Add Project Modal -->
-    <div class="modal" id="add-project-modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>Add New Project</h3>
-                <button class="close-modal">&times;</button>
-            </div>
-            <div class="modal-body">
-                <form id="project-form">
-                    <div class="form-group">
-                        <label for="project-name">Project Name</label>
-                        <input type="text" id="project-name" placeholder="e.g., Honda Lawn Mower" required>
-                    </div>
-                    
-                    <div class="form-row">
+                <div class="modal-body">
+                    <form id="project-form">
                         <div class="form-group">
-                            <label for="project-service">Service Type</label>
-                            <select id="project-service" required>
-                                <option value="">Select Service</option>
-                                <option value="lawn_mower">Lawn Mower</option>
-                                <option value="dirtbike_quad">Dirtbike/Quad</option>
-                                <option value="trimmer_blower">Trimmer/Blower</option>
-                                <option value="other">Other</option>
+                            <label for="project-name">Project Name</label>
+                            <input type="text" id="project-name" placeholder="e.g., Honda Lawn Mower" required>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="project-service">Service Type</label>
+                                <select id="project-service" required>
+                                    <option value="">Select Service</option>
+                                    <option value="lawn_mower">Lawn Mower</option>
+                                    <option value="dirtbike_quad">Dirtbike/Quad</option>
+                                    <option value="trimmer_blower">Trimmer/Blower</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="engine-type">Engine Type</label>
+                                <select id="engine-type">
+                                    <option value="">Select Engine Type</option>
+                                    <option value="2_stroke">2-Stroke</option>
+                                    <option value="4_stroke">4-Stroke</option>
+                                    <option value="electric">Electric</option>
+                                    <option value="none">None</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="initial-status">Initial Status</label>
+                            <select id="initial-status" required>
+                                <option value="not_running">Needs Work</option>
+                                <option value="running">Running</option>
                             </select>
                         </div>
-                        <div class="form-group">
-                            <label for="engine-type">Engine Type</label>
-                            <select id="engine-type">
-                                <option value="">Select Engine Type</option>
-                                <option value="2_stroke">2-Stroke</option>
-                                <option value="4_stroke">4-Stroke</option>
-                                <option value="electric">Electric</option>
-                                <option value="none">None</option>
-                            </select>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="purchase-price">Purchase Price ($)</label>
+                                <input type="number" id="purchase-price" placeholder="0.00" min="0" step="0.01" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="purchase-date">Purchase Date</label>
+                                <input type="date" id="purchase-date" required>
+                            </div>
                         </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="initial-status">Initial Status</label>
-                        <select id="initial-status" required>
-                            <option value="not_running">Needs Work</option>
-                            <option value="running">Running</option>
-                        </select>
-                    </div>
-                    
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="purchase-price">Purchase Price ($)</label>
-                            <input type="number" id="purchase-price" placeholder="0.00" min="0" step="0.01" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="purchase-date">Purchase Date</label>
-                            <input type="date" id="purchase-date" required>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-cancel">Cancel</button>
-                <button class="btn btn-success" id="save-project">Save Project</button>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-cancel">Cancel</button>
+                    <button class="btn btn-success" id="save-project">Save Project</button>
+                </div>
             </div>
         </div>
-    </div>
 
-    <!-- Sell Project Modal -->
-    <div class="modal" id="sell-project-modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>Sell Project</h3>
-                <button class="close-modal">&times;</button>
-            </div>
-            <div class="modal-body">
-                <form id="sell-form">
-                    <div class="form-group">
-                        <label for="project-name-sell">Project Name</label>
-                        <input type="text" id="project-name-sell" disabled>
-                    </div>
-                    
-                    <div class="form-row">
+        <!-- Sell Project Modal -->
+        <div class="modal" id="sell-project-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Sell Project</h3>
+                    <button class="close-modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form id="sell-form">
                         <div class="form-group">
-                            <label for="sold-price">Sold Price ($)</label>
-                            <input type="number" id="sold-price" placeholder="0.00" min="0" step="0.01" required>
+                            <label for="project-name-sell">Project Name</label>
+                            <input type="text" id="project-name-sell" disabled>
                         </div>
-                        <div class="form-group">
-                            <label for="sold-date">Sold Date</label>
-                            <input type="date" id="sold-date" required>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="sold-price">Sold Price ($)</label>
+                                <input type="number" id="sold-price" placeholder="0.00" min="0" step="0.01" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="sold-date">Sold Date</label>
+                                <input type="date" id="sold-date" required>
+                            </div>
                         </div>
-                    </div>
-                    
-                    <div class="profit-message">
-                        <h4>Profit Summary</h4>
-                        <p id="sell-profit-text"></p>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-cancel">Cancel</button>
-                <button class="btn btn-success" id="confirm-sell">Confirm Sale</button>
+                        
+                        <div class="profit-message">
+                            <h4>Profit Summary</h4>
+                            <p id="sell-profit-text"></p>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-cancel">Cancel</button>
+                    <button class="btn btn-success" id="confirm-sell">Confirm Sale</button>
+                </div>
             </div>
         </div>
-    </div>
 
-    <!-- Delete Project Modal -->
-    <div class="modal" id="delete-project-modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>Delete Project</h3>
-                <button class="close-modal">&times;</button>
-            </div>
-            <div class="modal-body">
-                <p>Are you sure you want to delete this project? This action cannot be undone.</p>
-                <p><strong id="project-to-delete"></strong></p>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-cancel">Cancel</button>
-                <button class="btn btn-danger" id="confirm-delete">Delete Project</button>
+        <!-- Delete Project Modal -->
+        <div class="modal" id="delete-project-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Delete Project</h3>
+                    <button class="close-modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete this project? This action cannot be undone.</p>
+                    <p><strong id="project-to-delete"></strong></p>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-cancel">Cancel</button>
+                    <button class="btn btn-danger" id="confirm-delete">Delete Project</button>
+                </div>
             </div>
         </div>
-    </div>
 
-    <!-- Theme Toggle Button -->
-    <button class="theme-toggle" id="theme-toggle">
-        <i class="fas fa-moon"></i>
-    </button>
+        <!-- Theme Toggle Button -->
+        <button class="theme-toggle" id="theme-toggle">
+            <i class="fas fa-moon"></i>
+        </button>
+    </div>
 
     <script>
+        // PIN Configuration
+        const STAFF_PIN = "101369";
+        
         // DOM Elements
+        const pinModal = document.getElementById('pin-modal');
+        const pinInputs = [
+            document.getElementById('pin1'),
+            document.getElementById('pin2'),
+            document.getElementById('pin3'),
+            document.getElementById('pin4'),
+            document.getElementById('pin5'),
+            document.getElementById('pin6')
+        ];
+        const pinError = document.getElementById('pin-error');
+        const pinSubmit = document.getElementById('pin-submit');
+        const appContent = document.getElementById('app-content');
+        
+        // Main App DOM Elements
         const projectGrid = document.getElementById('project-grid');
         const addProjectBtn = document.getElementById('add-project-btn');
         const addProjectModal = document.getElementById('add-project-modal');
@@ -680,8 +783,68 @@
         let currentDeleteProjectId = null;
         let darkMode = false;
         
-        // Initialize the application
-        function init() {
+        // PIN Entry Logic
+        function setupPinEntry() {
+            // Auto-focus first input
+            pinInputs[0].focus();
+            
+            // Handle input to move between fields
+            pinInputs.forEach((input, index) => {
+                input.addEventListener('input', () => {
+                    if (input.value.length === 1 && index < pinInputs.length - 1) {
+                        pinInputs[index + 1].focus();
+                    }
+                });
+                
+                input.addEventListener('keydown', (e) => {
+                    if (e.key === 'Backspace' && input.value.length === 0 && index > 0) {
+                        pinInputs[index - 1].focus();
+                    }
+                });
+            });
+            
+            // Handle form submission
+            pinSubmit.addEventListener('click', checkPin);
+            
+            // Allow Enter key to submit
+            pinInputs.forEach(input => {
+                input.addEventListener('keyup', (e) => {
+                    if (e.key === 'Enter') {
+                        checkPin();
+                    }
+                });
+            });
+        }
+        
+        function checkPin() {
+            const enteredPin = pinInputs.map(input => input.value).join('');
+            
+            if (enteredPin === STAFF_PIN) {
+                // Correct PIN - show app
+                pinModal.style.display = 'none';
+                appContent.style.display = 'block';
+                initApp();
+            } else {
+                // Incorrect PIN - show error
+                pinError.textContent = 'Incorrect PIN. Please try again.';
+                pinInputs.forEach(input => {
+                    input.value = '';
+                    input.style.borderColor = 'var(--danger)';
+                });
+                pinInputs[0].focus();
+                
+                // Reset error after 2 seconds
+                setTimeout(() => {
+                    pinError.textContent = '';
+                    pinInputs.forEach(input => {
+                        input.style.borderColor = '#ddd';
+                    });
+                }, 2000);
+            }
+        }
+        
+        // Initialize the application after PIN is entered
+        function initApp() {
             loadThemePreference();
             loadProjects();
             setupEventListeners();
@@ -1082,8 +1245,8 @@
             }
         }
         
-        // Initialize the app when DOM is loaded
-        document.addEventListener('DOMContentLoaded', init);
+        // Initialize the PIN entry when DOM is loaded
+        document.addEventListener('DOMContentLoaded', setupPinEntry);
     </script>
 </body>
 </html>
