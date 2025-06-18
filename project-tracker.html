@@ -1,54 +1,77 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Project Tracker</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
-  <h1>Garage Project Tracker</h1>
+  <h1>Small Engine Shop Project Tracker</h1>
 
   <form id="addForm">
-    <input type="text" name="name" placeholder="Project Name" required>
-    <input type="number" name="cost" placeholder="Cost ($)" required>
-    <input type="number" name="sale" placeholder="Sale Price ($)">
+    <input type="text" name="name" placeholder="Project Name" required />
+    <input type="number" step="0.01" name="cost" placeholder="Cost ($)" required />
+    <input type="number" step="0.01" name="sale" placeholder="Sale Price ($)" />
     <textarea name="notes" placeholder="Notes..."></textarea>
-    <button type="submit">Add</button>
+    <button type="submit">Add Project</button>
   </form>
 
   <ul id="projectList"></ul>
 
   <script>
+    // Initialize Supabase client
+    const supabaseUrl = 'https://rhtdosclzqnfiiqcsdkk.supabase.co';
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJodGRvc2NsenFuZmlpcWNzZGtrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTAyMTU4NjcsImV4cCI6MjA2NTc5MTg2N30.zsmR31FZVNQtqW1wqYZC3CImtPvPAZxhWnlGXKFadMU';
+    const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
+    const projectList = document.getElementById('projectList');
+    const addForm = document.getElementById('addForm');
+
+    // Fetch and display projects
     async function fetchProjects() {
-      const res = await fetch('/api/projects');
-      const data = await res.json();
-      const list = document.getElementById('projectList');
-      list.innerHTML = '';
-      data.forEach((proj, i) => {
+      const { data, error } = await supabase
+        .from('projects')
+        .select('*')
+        .order('id', { ascending: true });
+
+      if (error) {
+        projectList.innerHTML = `<li>Error loading projects: ${error.message}</li>`;
+        return;
+      }
+
+      projectList.innerHTML = '';
+      data.forEach(proj => {
         const li = document.createElement('li');
-        li.textContent = `${proj.name} | Cost: $${proj.cost} | Sale: $${proj.sale ?? '—'} | Notes: ${proj.notes}`;
-        const btn = document.createElement('button');
-        btn.textContent = 'Delete';
-        btn.onclick = async () => {
-          await fetch(`/api/projects/${i}`, { method: 'DELETE' });
+        li.textContent = `${proj.name} | Cost: $${proj.cost} | Sale: $${proj.sale ?? '—'} | Notes: ${proj.notes ?? ''}`;
+
+        const delBtn = document.createElement('button');
+        delBtn.textContent = 'Delete';
+        delBtn.style.marginLeft = '10px';
+        delBtn.onclick = async () => {
+          await supabase.from('projects').delete().eq('id', proj.id);
           fetchProjects();
         };
-        li.appendChild(btn);
-        list.appendChild(li);
+
+        li.appendChild(delBtn);
+        projectList.appendChild(li);
       });
     }
 
-    document.getElementById('addForm').onsubmit = async (e) => {
+    // Handle form submission
+    addForm.onsubmit = async e => {
       e.preventDefault();
-      const formData = new FormData(e.target);
-      const body = Object.fromEntries(formData.entries());
-      body.cost = parseFloat(body.cost);
-      body.sale = parseFloat(body.sale || 0);
-      await fetch('/api/projects', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body)
-      });
-      e.target.reset();
+      const formData = new FormData(addForm);
+      const newProject = {
+        name: formData.get('name'),
+        cost: parseFloat(formData.get('cost')),
+        sale: formData.get('sale') ? parseFloat(formData.get('sale')) : null,
+        notes: formData.get('notes') || null,
+      };
+
+      const { error } = await supabase.from('projects').insert(newProject);
+      if (error) alert('Error adding project: ' + error.message);
+      else addForm.reset();
+
       fetchProjects();
     };
 
