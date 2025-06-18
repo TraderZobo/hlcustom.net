@@ -2,51 +2,197 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Terms of Service - H&L Custom</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Terms of Service - H&L Custom | Small Engine Specialists</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --primary: #1A1A1A;
+      --secondary: #FF5E14;
+      --accent: #FF5E14;
+      --dark: #121212;
+      --light: #F5F5F5;
+      --gray: #333333;
+      --light-gray: #E0E0E0;
+      --card-bg: #252525;
+    }
+    
     body {
-      font-family: Arial, sans-serif;
-      margin: 40px;
-      max-width: 800px;
+      font-family: 'Roboto', sans-serif;
+      line-height: 1.7;
+      color: var(--light);
+      background-color: var(--dark);
+      margin: 0;
+      padding: 0;
     }
-    h1, h2 {
-      color: #333;
+    
+    .tos-container {
+      max-width: 900px;
+      margin: 4rem auto;
+      padding: 2.5rem;
+      background-color: var(--card-bg);
+      border-radius: 8px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      border: 1px solid var(--gray);
     }
+    
+    .tos-header {
+      text-align: center;
+      margin-bottom: 3rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 3px solid var(--secondary);
+    }
+    
+    h1 {
+      font-family: 'Kanit', sans-serif;
+      font-weight: 700;
+      font-size: 2.8rem;
+      color: var(--text-light);
+      margin-bottom: 0.5rem;
+      letter-spacing: 1px;
+    }
+    
+    h2 {
+      font-family: 'Kanit', sans-serif;
+      font-weight: 600;
+      color: var(--secondary);
+      margin: 2.5rem 0 1.2rem;
+      font-size: 1.6rem;
+      position: relative;
+      padding-left: 1rem;
+    }
+    
+    h2:before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0.3em;
+      height: 1em;
+      width: 4px;
+      background: var(--secondary);
+    }
+    
     p {
-      line-height: 1.6;
+      margin-bottom: 1.2rem;
+      color: var(--light-gray);
+    }
+    
+    strong {
+      color: var(--light);
+      font-weight: 500;
+    }
+    
+    ul {
+      margin: 1.5rem 0;
+      padding-left: 1.8rem;
+    }
+    
+    li {
+      margin-bottom: 0.8rem;
+      position: relative;
+      color: var(--light-gray);
+    }
+    
+    li:before {
+      content: "•";
+      color: var(--secondary);
+      font-weight: bold;
+      display: inline-block;
+      width: 1em;
+      margin-left: -1em;
+    }
+    
+    .last-updated {
+      font-size: 0.9rem;
+      color: var(--secondary);
+      text-align: center;
+      margin-top: -1rem;
+      margin-bottom: 2rem;
+    }
+    
+    .signature {
+      font-family: 'Kanit', sans-serif;
+      text-align: right;
+      font-size: 1.2rem;
+      margin-top: 3rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--gray);
+      color: var(--secondary);
+    }
+    
+    .warning-note {
+      background-color: rgba(255, 94, 20, 0.1);
+      border-left: 4px solid var(--secondary);
+      padding: 1rem;
+      margin: 1.5rem 0;
+      border-radius: 0 4px 4px 0;
+    }
+    
+    @media (max-width: 768px) {
+      .tos-container {
+        margin: 2rem 1rem;
+        padding: 1.5rem;
+      }
+      
+      h1 {
+        font-size: 2.2rem;
+      }
     }
   </style>
 </head>
 <body>
-  <h1>Terms of Service</h1>
-  <p>Last updated: June 18, 2025</p>
-
-  <p>Welcome to H&L Custom. By using our services, you agree to the following terms and conditions. If you do not agree, please do not use our services.</p>
-
-  <h2>1. Services Provided</h2>
-  <p>H&L Custom offers small engine repair and related services. We aim to deliver reliable repairs, diagnostics, and maintenance to the best of our ability.</p>
-
-  <h2>2. Liability Disclaimer</h2>
-  <p>H&L Custom, including its owners <strong>Hayden Holton</strong> and <strong>Logan Dowland</strong>, are not liable for:</p>
-  <ul>
-    <li>Damage caused by pre-existing issues with your equipment</li>
-    <li>Failure due to misuse, lack of maintenance, or owner negligence</li>
-    <li>Loss of income or productivity due to repair delays</li>
-    <li>Damage or failure after pickup or third-party modifications</li>
-  </ul>
-  <p>All repairs are performed using reasonable care, but we make no guarantees beyond the agreed service terms.</p>
-
-  <h2>3. Payment & Estimates</h2>
-  <p>Payment is due upon completion unless agreed otherwise. Estimates are based on initial inspections and may change if additional issues are discovered.</p>
-
-  <h2>4. Abandoned Equipment</h2>
-  <p>Equipment left for more than 30 days after completion of service may be considered abandoned and disposed of at our discretion unless prior arrangements are made.</p>
-
-  <h2>5. Changes to Terms</h2>
-  <p>We reserve the right to update these Terms of Service at any time. Updates will be posted on this page with a new effective date.</p>
-
-  <p>If you have any questions about these terms, please contact us directly.</p>
-
-  <p>— H&L Custom Team</p>
+  <div class="tos-container">
+    <div class="tos-header">
+      <h1>TERMS OF SERVICE</h1>
+      <p class="last-updated">Last Updated: <strong>June 18, 2025</strong></p>
+    </div>
+    
+    <div class="warning-note">
+      <p><strong>NOTICE:</strong> By using our services, you agree to be bound by these Terms. If you disagree with any part, please discontinue use immediately.</p>
+    </div>
+    
+    <h2>1. Services Provided</h2>
+    <p>H&L Custom ("we", "us", or "our") provides small engine repair, diagnostics, and maintenance services for residential and commercial equipment in the Houghton Lake area. Services are performed by certified technicians <strong>Hayden Holton</strong> and <strong>Logan Dowland</strong>.</p>
+    
+    <h2>2. Liability Disclaimer</h2>
+    <p>To the maximum extent permitted by law, H&L Custom and its owners shall not be liable for:</p>
+    <ul>
+      <li>Pre-existing conditions or concealed damage discovered during service</li>
+      <li>Equipment failure due to improper use, neglect, or unauthorized modifications</li>
+      <li>Consequential damages including lost profits or business interruption</li>
+      <li>Issures arising after equipment leaves our possession</li>
+      <li>Acts of God, environmental factors, or improper storage</li>
+    </ul>
+    <p>All repairs come with a <strong>30-day limited warranty</strong> covering only the specific parts replaced.</p>
+    
+    <h2>3. Payment Terms</h2>
+    <p>All services require payment in full upon completion unless prior arrangements are made in writing. We accept:</p>
+    <ul>
+      <li>Cash</li>
+      <li>Major credit/debit cards</li>
+      <li>Electronic payments (Zelle, Venmo)</li>
+    </ul>
+    <p><strong>Estimates:</strong> Initial quotes are based on visible diagnostics. Additional charges may apply if hidden issues are discovered during repair.</p>
+    
+    <h2>4. Abandoned Property</h2>
+    <p>Equipment unclaimed for <strong>30 days</strong> after service completion will be considered abandoned. We reserve the right to:</p>
+    <ul>
+      <li>Charge storage fees of $5/day after 10-day grace period</li>
+      <li>Sell or dispose of equipment to recover costs</li>
+      <li>Pursue legal action for unpaid balances</li>
+    </ul>
+    
+    <h2>5. Changes to Terms</h2>
+    <p>We may modify these Terms at any time. Continued use after changes constitutes acceptance. The "Last Updated" date indicates when revisions were made.</p>
+    
+    <h2>6. Governing Law</h2>
+    <p>These Terms shall be governed by Michigan law. Any disputes shall be resolved in Roscommon County courts.</p>
+    
+    <div class="signature">
+      — H&L Custom Team<br>
+      <small>Small Engine Specialists</small>
+    </div>
+  </div>
 </body>
 </html>
