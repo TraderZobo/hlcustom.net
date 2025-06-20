@@ -783,6 +783,12 @@
         }
     </style>
 </head>
+
+<!-- Firebase App + Firestore SDK -->
+<script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-firestore-compat.js"></script>
+
+    
 <body>
     <!-- PIN Entry Modal -->
     <div class="pin-modal" id="pin-modal">
@@ -1278,16 +1284,17 @@
         }
         
         // Load projects from localStorage
-        function loadProjects() {
-            const savedProjects = localStorage.getItem('projects');
-            projects = savedProjects ? JSON.parse(savedProjects) : [];
-        }
-        
-        // Save projects to localStorage
-        function saveProjects() {
-            localStorage.setItem('projects', JSON.stringify(projects));
-            updateStats();
-        }
+       // ---- ADD YOUR FIREBASE CONFIG ----
+const firebaseConfig = {
+  apiKey: "AIzaSyAXlu3gw2PZpiLSfOlgyHd6pJprm4mOQZU",
+  authDomain: "hlcustom.firebaseapp.com",
+  projectId: "hlcustom",
+  storageBucket: "hlcustom.firebasestorage.app",
+  messagingSenderId: "756719653798",
+  appId: "1:756719653798:web:64e67631cd49a284c73567",
+  measurementId: "G-LTMR28YJ21"
+};
+
         
         // Calculate total spent
         function calculateTotalSpent() {
@@ -1430,6 +1437,8 @@
         // Add a new project
         function addNewProject() {
             const name = document.getElementById('project-name').value;
+            const app = initializeApp(firebaseConfig);
+            const analytics = getAnalytics(app);
             const type = document.getElementById('project-type').value;
             const service = document.getElementById('project-service').value;
             const engineType = document.getElementById('engine-type').value;
