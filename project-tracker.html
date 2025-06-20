@@ -1541,17 +1541,7 @@ document.getElementById('confirm-delete').addEventListener('click', deleteProjec
             }
         }
         
-        // Delete project
-        function deleteProject() {
-            deleteProject(currentDeleteProjectId)
-                .then(() => {
-                    toggleModal(deleteProjectModal, false);
-                })
-                .catch((error) => {
-                    console.error("Error deleting project: ", error);
-                    alert("Error deleting project. Please try again.");
-                });
-        }
+  
         
         // Open project detail view
         function openProjectDetail(projectId) {
