@@ -339,7 +339,7 @@
             transition: var(--transition);
         }
         
-        .form-group input, .form-group select {
+        .form-group input, .form-group select, .form-group textarea {
             width: 100%;
             padding: 12px 15px;
             border: 1px solid #ddd;
@@ -516,6 +516,161 @@
             background: var(--primary);
         }
         
+        /* Project Type Tabs */
+        .project-tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #ddd;
+        }
+        
+        .project-tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            font-weight: 600;
+            border-bottom: 3px solid transparent;
+            transition: var(--transition);
+        }
+        
+        .project-tab.active {
+            border-bottom-color: var(--secondary);
+            color: var(--secondary);
+        }
+        
+        /* Project Detail View */
+        .project-detail-container {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-color);
+            z-index: 1000;
+            overflow-y: auto;
+            padding: 20px;
+        }
+        
+        .project-detail-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .project-detail-content {
+            margin-bottom: 30px;
+        }
+        
+        .project-detail-section {
+            margin-bottom: 25px;
+        }
+        
+        .project-detail-section h3 {
+            margin-bottom: 15px;
+            color: var(--secondary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .project-detail-images {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .project-image {
+            border-radius: 8px;
+            overflow: hidden;
+            height: 150px;
+            position: relative;
+        }
+        
+        .project-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .project-image-remove {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: var(--danger);
+            color: white;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        
+        .add-image-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 2px dashed #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .add-image-btn:hover {
+            border-color: var(--secondary);
+        }
+        
+        .notes-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .note-item {
+            background: var(--card-bg);
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+        }
+        
+        .note-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+            color: #777;
+        }
+        
+        .add-note-form {
+            margin-top: 20px;
+        }
+        
+        .repair-log-item {
+            background: var(--card-bg);
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            margin-bottom: 15px;
+        }
+        
+        .repair-log-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        
+        .repair-log-date {
+            color: #777;
+            font-size: 0.9rem;
+        }
+        
+        /* Mobile-specific styles */
         @media (max-width: 768px) {
             .header-content {
                 flex-direction: column;
@@ -536,6 +691,94 @@
             
             .search-bar {
                 width: 100%;
+            }
+            
+            /* Simplified mobile layout */
+            .project-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            
+            .project-card {
+                border-radius: 8px;
+            }
+            
+            .card-header {
+                padding: 15px;
+            }
+            
+            .card-body {
+                padding: 15px;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+            
+            /* Mobile menu */
+            .mobile-menu {
+                display: flex;
+                justify-content: space-around;
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                background: var(--card-bg);
+                padding: 10px 0;
+                box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+                z-index: 100;
+            }
+            
+            .mobile-menu-item {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                text-decoration: none;
+                color: var(--text-color);
+                font-size: 0.8rem;
+            }
+            
+            .mobile-menu-item i {
+                font-size: 1.2rem;
+                margin-bottom: 5px;
+            }
+            
+            /* Hide desktop elements on mobile */
+            .desktop-only {
+                display: none;
+            }
+            
+            /* Show mobile elements */
+            .mobile-only {
+                display: block;
+            }
+            
+            /* Adjust modal for mobile */
+            .modal-content {
+                width: 95%;
+                max-height: 90vh;
+                overflow-y: auto;
+            }
+            
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+        }
+        
+        @media (min-width: 769px) {
+            /* Hide mobile elements on desktop */
+            .mobile-only {
+                display: none;
+            }
+            
+            /* Show desktop elements */
+            .desktop-only {
+                display: block;
             }
         }
     </style>
@@ -569,8 +812,7 @@
                         <h1>Small Engine Tracker</h1>
                     </div>
 
-                    
-                    <div class="stats">
+                    <div class="stats desktop-only">
                         <div class="stat-item">
                             <div class="stat-value" id="total-projects">0</div>
                             <div class="stat-label">Total</div>
@@ -599,7 +841,7 @@
         <div class="container">
             <div class="main-content">
                 <div class="content-header">
-                    <h2>All Projects</h2>
+                    <h2 id="project-type-title">All Projects</h2>
                     <div style="display: flex; gap: 15px;">
                         <div class="search-bar">
                             <i class="fas fa-search"></i>
@@ -607,13 +849,71 @@
                         </div>
                         <button class="add-project-btn" id="add-project-btn">
                             <i class="fas fa-plus"></i>
-                            Add Project
+                            <span class="desktop-only">Add Project</span>
                         </button>
                     </div>
                 </div>
                 
+                <!-- Project Type Tabs -->
+                <div class="project-tabs">
+                    <div class="project-tab active" data-type="all">All</div>
+                    <div class="project-tab" data-type="flip">Flips</div>
+                    <div class="project-tab" data-type="repair">Repairs</div>
+                </div>
+                
                 <div class="project-grid" id="project-grid">
                     <!-- Projects will be dynamically inserted here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Project Detail View -->
+        <div class="project-detail-container" id="project-detail-view">
+            <div class="project-detail-header">
+                <h2 id="detail-project-name"></h2>
+                <button id="close-detail-view" class="btn btn-cancel">
+                    <i class="fas fa-times"></i> Close
+                </button>
+            </div>
+            
+            <div class="project-detail-content">
+                <div class="project-detail-section">
+                    <h3><i class="fas fa-info-circle"></i> Project Details</h3>
+                    <div id="detail-project-info"></div>
+                </div>
+                
+                <div class="project-detail-section">
+                    <h3><i class="fas fa-images"></i> Images</h3>
+                    <div class="project-detail-images" id="project-images-container">
+                        <!-- Images will be added here -->
+                        <div class="project-image add-image-btn" id="add-image-btn">
+                            <i class="fas fa-plus" style="font-size: 2rem; color: #777;"></i>
+                            <span>Add Image</span>
+                        </div>
+                    </div>
+                    <input type="file" id="image-upload" accept="image/*" style="display: none;">
+                </div>
+                
+                <div class="project-detail-section">
+                    <h3><i class="fas fa-sticky-note"></i> Notes</h3>
+                    <div class="notes-list" id="project-notes-container">
+                        <!-- Notes will be added here -->
+                    </div>
+                    <div class="add-note-form">
+                        <textarea id="new-note-text" placeholder="Add a new note..." rows="3" style="width: 100%;"></textarea>
+                        <button class="btn btn-primary" id="add-note-btn" style="margin-top: 10px;">Add Note</button>
+                    </div>
+                </div>
+                
+                <div class="project-detail-section" id="repair-log-section">
+                    <h3><i class="fas fa-clipboard-list"></i> Repair Log</h3>
+                    <div id="repair-log-container">
+                        <!-- Repair log items will be added here -->
+                    </div>
+                    <div class="add-note-form">
+                        <textarea id="new-repair-log-text" placeholder="Add repair log entry..." rows="3" style="width: 100%;"></textarea>
+                        <button class="btn btn-primary" id="add-repair-log-btn" style="margin-top: 10px;">Add Log Entry</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -631,6 +931,15 @@
                         <div class="form-group">
                             <label for="project-name">Project Name</label>
                             <input type="text" id="project-name" placeholder="e.g., Honda Lawn Mower" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="project-type">Project Type</label>
+                            <select id="project-type" required>
+                                <option value="">Select Type</option>
+                                <option value="flip">For Flip</option>
+                                <option value="repair">For Repair</option>
+                            </select>
                         </div>
                         
                         <div class="form-row">
@@ -721,6 +1030,49 @@
             </div>
         </div>
 
+        <!-- Complete Repair Modal -->
+        <div class="modal" id="complete-repair-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Complete Repair</h3>
+                    <button class="close-modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form id="complete-repair-form">
+                        <div class="form-group">
+                            <label for="repair-project-name">Project Name</label>
+                            <input type="text" id="repair-project-name" disabled>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="job-price">Job Price ($)</label>
+                                <input type="number" id="job-price" placeholder="0.00" min="0" step="0.01" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="parts-cost">Parts Cost ($)</label>
+                                <input type="number" id="parts-cost" placeholder="0.00" min="0" step="0.01" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="completion-date">Completion Date</label>
+                            <input type="date" id="completion-date" required>
+                        </div>
+                        
+                        <div class="profit-message">
+                            <h4>Profit Summary</h4>
+                            <p id="repair-profit-text"></p>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-cancel">Cancel</button>
+                    <button class="btn btn-success" id="confirm-complete-repair">Complete Repair</button>
+                </div>
+            </div>
+        </div>
+
         <!-- Delete Project Modal -->
         <div class="modal" id="delete-project-modal">
             <div class="modal-content">
@@ -743,6 +1095,26 @@
         <button class="theme-toggle" id="theme-toggle">
             <i class="fas fa-moon"></i>
         </button>
+
+        <!-- Mobile Menu -->
+        <div class="mobile-menu mobile-only">
+            <a href="#" class="mobile-menu-item" id="mobile-all">
+                <i class="fas fa-list"></i>
+                <span>All</span>
+            </a>
+            <a href="#" class="mobile-menu-item" id="mobile-flips">
+                <i class="fas fa-exchange-alt"></i>
+                <span>Flips</span>
+            </a>
+            <a href="#" class="mobile-menu-item" id="mobile-repairs">
+                <i class="fas fa-tools"></i>
+                <span>Repairs</span>
+            </a>
+            <a href="#" class="mobile-menu-item" id="mobile-add">
+                <i class="fas fa-plus"></i>
+                <span>Add</span>
+            </a>
+        </div>
     </div>
 
     <script>
@@ -768,23 +1140,55 @@
         const addProjectBtn = document.getElementById('add-project-btn');
         const addProjectModal = document.getElementById('add-project-modal');
         const sellProjectModal = document.getElementById('sell-project-modal');
+        const completeRepairModal = document.getElementById('complete-repair-modal');
         const deleteProjectModal = document.getElementById('delete-project-modal');
         const closeModalButtons = document.querySelectorAll('.close-modal, .btn-cancel');
         const saveProjectBtn = document.getElementById('save-project');
         const projectForm = document.getElementById('project-form');
         const sellForm = document.getElementById('sell-form');
+        const completeRepairForm = document.getElementById('complete-repair-form');
         const confirmSellBtn = document.getElementById('confirm-sell');
+        const confirmCompleteRepairBtn = document.getElementById('confirm-complete-repair');
         const confirmDeleteBtn = document.getElementById('confirm-delete');
         const searchInput = document.getElementById('search-input');
         const sellProfitText = document.getElementById('sell-profit-text');
+        const repairProfitText = document.getElementById('repair-profit-text');
         const projectToDelete = document.getElementById('project-to-delete');
         const themeToggle = document.getElementById('theme-toggle');
+        
+        // Project Detail View Elements
+        const projectDetailView = document.getElementById('project-detail-view');
+        const closeDetailView = document.getElementById('close-detail-view');
+        const detailProjectName = document.getElementById('detail-project-name');
+        const detailProjectInfo = document.getElementById('detail-project-info');
+        const projectImagesContainer = document.getElementById('project-images-container');
+        const addImageBtn = document.getElementById('add-image-btn');
+        const imageUpload = document.getElementById('image-upload');
+        const projectNotesContainer = document.getElementById('project-notes-container');
+        const newNoteText = document.getElementById('new-note-text');
+        const addNoteBtn = document.getElementById('add-note-btn');
+        const repairLogContainer = document.getElementById('repair-log-container');
+        const newRepairLogText = document.getElementById('new-repair-log-text');
+        const addRepairLogBtn = document.getElementById('add-repair-log-btn');
+        
+        // Project Type Tabs
+        const projectTabs = document.querySelectorAll('.project-tab');
+        const projectTypeTitle = document.getElementById('project-type-title');
+        
+        // Mobile Menu
+        const mobileAll = document.getElementById('mobile-all');
+        const mobileFlips = document.getElementById('mobile-flips');
+        const mobileRepairs = document.getElementById('mobile-repairs');
+        const mobileAdd = document.getElementById('mobile-add');
         
         // State variables
         let projects = [];
         let currentSellProjectId = null;
+        let currentCompleteRepairProjectId = null;
         let currentDeleteProjectId = null;
+        let currentDetailProjectId = null;
         let darkMode = false;
+        let currentProjectTypeFilter = 'all';
         
         // PIN Entry Logic
         function setupPinEntry() {
@@ -893,8 +1297,10 @@
         // Calculate total profit
         function calculateTotalProfit() {
             return projects.reduce((total, project) => {
-                if (project.soldPrice) {
+                if (project.type === 'flip' && project.soldPrice) {
                     return total + (project.soldPrice - project.purchasePrice);
+                } else if (project.type === 'repair' && project.jobPrice) {
+                    return total + (project.jobPrice - project.partsCost);
                 }
                 return total;
             }, 0);
@@ -903,8 +1309,8 @@
         // Update statistics
         function updateStats() {
             document.getElementById('total-projects').textContent = projects.length;
-            document.getElementById('active-projects').textContent = projects.filter(p => p.status !== 'sold').length;
-            document.getElementById('sold-projects').textContent = projects.filter(p => p.status === 'sold').length;
+            document.getElementById('active-projects').textContent = projects.filter(p => p.status !== 'sold' && p.status !== 'completed').length;
+            document.getElementById('sold-projects').textContent = projects.filter(p => p.status === 'sold' || p.status === 'completed').length;
             
             const totalSpent = calculateTotalSpent();
             const totalProfit = calculateTotalProfit();
@@ -926,6 +1332,7 @@
             
             saveProjectBtn.addEventListener('click', addNewProject);
             confirmSellBtn.addEventListener('click', sellProject);
+            confirmCompleteRepairBtn.addEventListener('click', completeRepair);
             confirmDeleteBtn.addEventListener('click', deleteProject);
             themeToggle.addEventListener('click', toggleTheme);
             
@@ -936,6 +1343,7 @@
                 if (e.target.classList.contains('modal')) {
                     toggleModal(addProjectModal, false);
                     toggleModal(sellProjectModal, false);
+                    toggleModal(completeRepairModal, false);
                     toggleModal(deleteProjectModal, false);
                 }
             });
@@ -943,6 +1351,70 @@
             // Set today as default date
             document.getElementById('purchase-date').valueAsDate = new Date();
             document.getElementById('sold-date').valueAsDate = new Date();
+            document.getElementById('completion-date').valueAsDate = new Date();
+            
+            // Project type tabs
+            projectTabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    projectTabs.forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    currentProjectTypeFilter = tab.dataset.type;
+                    projectTypeTitle.textContent = tab.textContent + ' Projects';
+                    renderProjects();
+                });
+            });
+            
+            // Mobile menu
+            mobileAll.addEventListener('click', (e) => {
+                e.preventDefault();
+                currentProjectTypeFilter = 'all';
+                projectTypeTitle.textContent = 'All Projects';
+                renderProjects();
+            });
+            
+            mobileFlips.addEventListener('click', (e) => {
+                e.preventDefault();
+                currentProjectTypeFilter = 'flip';
+                projectTypeTitle.textContent = 'Flip Projects';
+                renderProjects();
+            });
+            
+            mobileRepairs.addEventListener('click', (e) => {
+                e.preventDefault();
+                currentProjectTypeFilter = 'repair';
+                projectTypeTitle.textContent = 'Repair Projects';
+                renderProjects();
+            });
+            
+            mobileAdd.addEventListener('click', (e) => {
+                e.preventDefault();
+                toggleModal(addProjectModal, true);
+            });
+            
+            // Project detail view
+            closeDetailView.addEventListener('click', () => {
+                projectDetailView.style.display = 'none';
+            });
+            
+            // Image upload
+            addImageBtn.addEventListener('click', () => {
+                imageUpload.click();
+            });
+            
+            imageUpload.addEventListener('change', handleImageUpload);
+            
+            // Add note
+            addNoteBtn.addEventListener('click', addProjectNote);
+            
+            // Add repair log
+            addRepairLogBtn.addEventListener('click', addRepairLogEntry);
+            
+            // Update profit calculation when inputs change
+            document.getElementById('sold-price').addEventListener('input', updateSellProfitCalculation);
+            document.getElementById('sold-date').addEventListener('input', updateSellProfitCalculation);
+            
+            document.getElementById('job-price').addEventListener('input', updateRepairProfitCalculation);
+            document.getElementById('parts-cost').addEventListener('input', updateRepairProfitCalculation);
         }
         
         // Toggle modal visibility
@@ -958,13 +1430,14 @@
         // Add a new project
         function addNewProject() {
             const name = document.getElementById('project-name').value;
+            const type = document.getElementById('project-type').value;
             const service = document.getElementById('project-service').value;
             const engineType = document.getElementById('engine-type').value;
             const status = document.getElementById('initial-status').value;
             const purchasePrice = parseFloat(document.getElementById('purchase-price').value);
             const purchaseDate = document.getElementById('purchase-date').value;
             
-            if (!name || !service || !purchasePrice || !purchaseDate) {
+            if (!name || !type || !service || !purchasePrice || !purchaseDate) {
                 alert('Please fill in all required fields');
                 return;
             }
@@ -972,6 +1445,7 @@
             const newProject = {
                 id: Date.now(),
                 name,
+                type,
                 service,
                 engineType,
                 status,
@@ -979,6 +1453,12 @@
                 purchaseDate,
                 soldPrice: null,
                 soldDate: null,
+                jobPrice: null,
+                partsCost: null,
+                completionDate: null,
+                images: [],
+                notes: [],
+                repairLogs: [],
                 createdAt: new Date().toISOString()
             };
             
@@ -1007,15 +1487,24 @@
                 document.getElementById('sold-price').value = '';
                 document.getElementById('sold-date').valueAsDate = new Date();
                 toggleModal(sellProjectModal, true);
-                
-                // Update profit calculation when inputs change
-                document.getElementById('sold-price').addEventListener('input', updateProfitCalculation);
-                document.getElementById('sold-date').addEventListener('input', updateProfitCalculation);
+            }
+        }
+        
+        // Open complete repair modal
+        function openCompleteRepairModal(projectId) {
+            const project = projects.find(p => p.id === projectId);
+            if (project) {
+                currentCompleteRepairProjectId = projectId;
+                document.getElementById('repair-project-name').value = project.name;
+                document.getElementById('job-price').value = '';
+                document.getElementById('parts-cost').value = '';
+                document.getElementById('completion-date').valueAsDate = new Date();
+                toggleModal(completeRepairModal, true);
             }
         }
         
         // Update profit calculation for selling
-        function updateProfitCalculation() {
+        function updateSellProfitCalculation() {
             const project = projects.find(p => p.id === currentSellProjectId);
             if (!project) return;
             
@@ -1041,6 +1530,24 @@
             sellProfitText.textContent = profitMessage;
         }
         
+        // Update profit calculation for repair
+        function updateRepairProfitCalculation() {
+            const jobPrice = parseFloat(document.getElementById('job-price').value) || 0;
+            const partsCost = parseFloat(document.getElementById('parts-cost').value) || 0;
+            const profit = jobPrice - partsCost;
+            
+            let profitMessage = '';
+            if (profit > 0) {
+                profitMessage = `Nice! You've made $${profit.toFixed(2)} profit on this job!`;
+            } else if (profit < 0) {
+                profitMessage = `You had a loss of $${Math.abs(profit).toFixed(2)} on this job.`;
+            } else {
+                profitMessage = `You broke even on this job.`;
+            }
+            
+            repairProfitText.textContent = profitMessage;
+        }
+        
         // Sell project
         function sellProject() {
             const soldPrice = parseFloat(document.getElementById('sold-price').value);
@@ -1062,6 +1569,29 @@
             }
         }
         
+        // Complete repair
+        function completeRepair() {
+            const jobPrice = parseFloat(document.getElementById('job-price').value);
+            const partsCost = parseFloat(document.getElementById('parts-cost').value);
+            const completionDate = document.getElementById('completion-date').value;
+            
+            if (!jobPrice || !partsCost || !completionDate) {
+                alert('Please fill in all required fields');
+                return;
+            }
+            
+            const project = projects.find(p => p.id === currentCompleteRepairProjectId);
+            if (project) {
+                project.status = 'completed';
+                project.jobPrice = jobPrice;
+                project.partsCost = partsCost;
+                project.completionDate = completionDate;
+                saveProjects();
+                renderProjects();
+                toggleModal(completeRepairModal, false);
+            }
+        }
+        
         // Open delete confirmation modal
         function openDeleteModal(projectId) {
             const project = projects.find(p => p.id === projectId);
@@ -1080,12 +1610,210 @@
             toggleModal(deleteProjectModal, false);
         }
         
-        // Render projects based on search
+        // Open project detail view
+        function openProjectDetail(projectId) {
+            const project = projects.find(p => p.id === projectId);
+            if (!project) return;
+            
+            currentDetailProjectId = projectId;
+            detailProjectName.textContent = project.name;
+            
+            // Clear previous content
+            detailProjectInfo.innerHTML = '';
+            projectImagesContainer.innerHTML = '';
+            projectNotesContainer.innerHTML = '';
+            repairLogContainer.innerHTML = '';
+            
+            // Add back the add image button
+            projectImagesContainer.appendChild(addImageBtn);
+            
+            // Display project info
+            const infoHtml = `
+                <div class="detail-item">
+                    <span>Type:</span>
+                    <span class="value">${project.type === 'flip' ? 'Flip' : 'Repair'}</span>
+                </div>
+                <div class="detail-item">
+                    <span>Service:</span>
+                    <span class="value">${getServiceName(project.service)}</span>
+                </div>
+                ${project.engineType ? `<div class="detail-item">
+                    <span>Engine:</span>
+                    <span class="value">${getEngineTypeName(project.engineType)}</span>
+                </div>` : ''}
+                <div class="detail-item">
+                    <span>Status:</span>
+                    <span class="value">${getStatusName(project.status)}</span>
+                </div>
+                <div class="detail-item">
+                    <span>Purchase Price:</span>
+                    <span class="value">$${project.purchasePrice.toFixed(2)}</span>
+                </div>
+                <div class="detail-item">
+                    <span>Purchase Date:</span>
+                    <span class="value">${new Date(project.purchaseDate).toLocaleDateString()}</span>
+                </div>
+                ${project.soldPrice ? `<div class="detail-item">
+                    <span>Sold Price:</span>
+                    <span class="value">$${project.soldPrice.toFixed(2)}</span>
+                </div>` : ''}
+                ${project.soldDate ? `<div class="detail-item">
+                    <span>Sold Date:</span>
+                    <span class="value">${new Date(project.soldDate).toLocaleDateString()}</span>
+                </div>` : ''}
+                ${project.jobPrice ? `<div class="detail-item">
+                    <span>Job Price:</span>
+                    <span class="value">$${project.jobPrice.toFixed(2)}</span>
+                </div>` : ''}
+                ${project.partsCost ? `<div class="detail-item">
+                    <span>Parts Cost:</span>
+                    <span class="value">$${project.partsCost.toFixed(2)}</span>
+                </div>` : ''}
+                ${project.completionDate ? `<div class="detail-item">
+                    <span>Completion Date:</span>
+                    <span class="value">${new Date(project.completionDate).toLocaleDateString()}</span>
+                </div>` : ''}
+            `;
+            
+            detailProjectInfo.innerHTML = infoHtml;
+            
+            // Display images
+            if (project.images && project.images.length > 0) {
+                project.images.forEach((image, index) => {
+                    const imageElement = document.createElement('div');
+                    imageElement.className = 'project-image';
+                    imageElement.innerHTML = `
+                        <img src="${image.data}" alt="Project image">
+                        <div class="project-image-remove" data-index="${index}">
+                            <i class="fas fa-times"></i>
+                        </div>
+                    `;
+                    projectImagesContainer.insertBefore(imageElement, addImageBtn);
+                    
+                    // Add event listener to remove button
+                    imageElement.querySelector('.project-image-remove').addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        removeProjectImage(index);
+                    });
+                });
+            }
+            
+            // Display notes
+            if (project.notes && project.notes.length > 0) {
+                project.notes.forEach(note => {
+                    const noteElement = document.createElement('div');
+                    noteElement.className = 'note-item';
+                    noteElement.innerHTML = `
+                        <div class="note-header">
+                            <span>${new Date(note.date).toLocaleString()}</span>
+                        </div>
+                        <div class="note-content">${note.text}</div>
+                    `;
+                    projectNotesContainer.appendChild(noteElement);
+                });
+            }
+            
+            // Display repair logs (only for repair projects)
+            if (project.type === 'repair') {
+                if (project.repairLogs && project.repairLogs.length > 0) {
+                    project.repairLogs.forEach(log => {
+                        const logElement = document.createElement('div');
+                        logElement.className = 'repair-log-item';
+                        logElement.innerHTML = `
+                            <div class="repair-log-header">
+                                <span>${new Date(log.date).toLocaleString()}</span>
+                            </div>
+                            <div class="repair-log-content">${log.text}</div>
+                        `;
+                        repairLogContainer.appendChild(logElement);
+                    });
+                }
+            } else {
+                // Hide repair log section for non-repair projects
+                document.getElementById('repair-log-section').style.display = 'none';
+            }
+            
+            projectDetailView.style.display = 'block';
+        }
+        
+        // Handle image upload
+        function handleImageUpload(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                const project = projects.find(p => p.id === currentDetailProjectId);
+                if (project) {
+                    project.images.push({
+                        name: file.name,
+                        data: event.target.result,
+                        date: new Date().toISOString()
+                    });
+                    saveProjects();
+                    openProjectDetail(currentDetailProjectId); // Refresh the view
+                }
+            };
+            reader.readAsDataURL(file);
+            
+            // Reset the input to allow uploading the same file again
+            e.target.value = '';
+        }
+        
+        // Remove project image
+        function removeProjectImage(index) {
+            const project = projects.find(p => p.id === currentDetailProjectId);
+            if (project) {
+                project.images.splice(index, 1);
+                saveProjects();
+                openProjectDetail(currentDetailProjectId); // Refresh the view
+            }
+        }
+        
+        // Add project note
+        function addProjectNote() {
+            const text = newNoteText.value.trim();
+            if (!text) return;
+            
+            const project = projects.find(p => p.id === currentDetailProjectId);
+            if (project) {
+                project.notes.push({
+                    text,
+                    date: new Date().toISOString()
+                });
+                saveProjects();
+                newNoteText.value = '';
+                openProjectDetail(currentDetailProjectId); // Refresh the view
+            }
+        }
+        
+        // Add repair log entry
+        function addRepairLogEntry() {
+            const text = newRepairLogText.value.trim();
+            if (!text) return;
+            
+            const project = projects.find(p => p.id === currentDetailProjectId);
+            if (project && project.type === 'repair') {
+                project.repairLogs.push({
+                    text,
+                    date: new Date().toISOString()
+                });
+                saveProjects();
+                newRepairLogText.value = '';
+                openProjectDetail(currentDetailProjectId); // Refresh the view
+            }
+        }
+        
+        // Render projects based on search and filter
         function renderProjects() {
             const searchTerm = searchInput.value.toLowerCase();
             
             let filteredProjects = projects.filter(project => {
-                return project.name.toLowerCase().includes(searchTerm);
+                const matchesSearch = project.name.toLowerCase().includes(searchTerm);
+                const matchesType = currentProjectTypeFilter === 'all' || 
+                                    (currentProjectTypeFilter === 'flip' && project.type === 'flip') || 
+                                    (currentProjectTypeFilter === 'repair' && project.type === 'repair');
+                return matchesSearch && matchesType;
             });
             
             projectGrid.innerHTML = '';
@@ -1120,28 +1848,28 @@
                     statusClass = 'status-not-running';
                     break;
                 case 'running':
-                    statusText = 'Running';
+                    statusText = project.type === 'repair' ? 'In Progress' : 'Running';
                     statusClass = 'status-running';
                     break;
                 case 'sold':
                     statusText = 'Sold';
                     statusClass = 'status-sold';
                     break;
+                case 'completed':
+                    statusText = 'Completed';
+                    statusClass = 'status-completed';
+                    break;
             }
             
             // Format dates
             const purchaseDate = new Date(project.purchaseDate).toLocaleDateString();
             const soldDate = project.soldDate ? new Date(project.soldDate).toLocaleDateString() : 'Not sold';
+            const completionDate = project.completionDate ? new Date(project.completionDate).toLocaleDateString() : 'Not completed';
             
             // Format engine type
             let engineText = '';
             if (project.engineType) {
-                switch (project.engineType) {
-                    case '2_stroke': engineText = '2-Stroke'; break;
-                    case '4_stroke': engineText = '4-Stroke'; break;
-                    case 'electric': engineText = 'Electric'; break;
-                    default: engineText = project.engineType;
-                }
+                engineText = getEngineTypeName(project.engineType);
             }
             
             // Get service name
@@ -1156,6 +1884,11 @@
                     <div class="project-details">
                         <div class="detail-item">
                             <i class="fas fa-tag"></i>
+                            <span>Type:</span>
+                            <span class="value">${project.type === 'flip' ? 'Flip' : 'Repair'}</span>
+                        </div>
+                        <div class="detail-item">
+                            <i class="fas fa-tools"></i>
                             <span>Service:</span>
                             <span class="value">${serviceName}</span>
                         </div>
@@ -1184,19 +1917,43 @@
                             <span>Sold Date:</span>
                             <span class="value">${soldDate}</span>
                         </div>` : ''}
+                        ${project.jobPrice ? `<div class="detail-item">
+                            <i class="fas fa-wrench"></i>
+                            <span>Job Price:</span>
+                            <span class="value">$${project.jobPrice.toFixed(2)}</span>
+                        </div>` : ''}
+                        ${project.partsCost ? `<div class="detail-item">
+                            <i class="fas fa-cogs"></i>
+                            <span>Parts Cost:</span>
+                            <span class="value">$${project.partsCost.toFixed(2)}</span>
+                        </div>` : ''}
+                        ${project.completionDate ? `<div class="detail-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Completed:</span>
+                            <span class="value">${completionDate}</span>
+                        </div>` : ''}
                     </div>
                 </div>
                 <div class="card-footer">
                     <div class="action-buttons">
-                        ${project.status !== 'sold' ? `
+                        <button class="btn btn-primary btn-sm view-details" data-id="${project.id}">
+                            <i class="fas fa-eye"></i> Details
+                        </button>
+                        ${project.status !== 'sold' && project.status !== 'completed' ? `
                             ${project.status === 'not_running' ? `
                                 <button class="btn btn-primary btn-sm mark-running" data-id="${project.id}">
-                                    <i class="fas fa-play"></i> Mark Running
+                                    <i class="fas fa-play"></i> ${project.type === 'repair' ? 'Start Work' : 'Mark Running'}
                                 </button>
                             ` : ''}
-                            <button class="btn btn-success btn-sm sell-project" data-id="${project.id}">
-                                <i class="fas fa-dollar-sign"></i> Sell
-                            </button>
+                            ${project.type === 'flip' ? `
+                                <button class="btn btn-success btn-sm sell-project" data-id="${project.id}">
+                                    <i class="fas fa-dollar-sign"></i> Sell
+                                </button>
+                            ` : `
+                                <button class="btn btn-success btn-sm complete-repair" data-id="${project.id}">
+                                    <i class="fas fa-check"></i> Complete
+                                </button>
+                            `}
                         ` : ''}
                         <button class="btn btn-danger btn-sm delete-project" data-id="${project.id}">
                             <i class="fas fa-trash"></i> Delete
@@ -1206,7 +1963,12 @@
             `;
             
             // Add event listeners to buttons
-            if (project.status !== 'sold') {
+            card.querySelector('.view-details').addEventListener('click', (e) => {
+                const projectId = parseInt(e.target.closest('button').dataset.id);
+                openProjectDetail(projectId);
+            });
+            
+            if (project.status !== 'sold' && project.status !== 'completed') {
                 if (project.status === 'not_running') {
                     card.querySelector('.mark-running').addEventListener('click', (e) => {
                         const projectId = parseInt(e.target.closest('button').dataset.id);
@@ -1214,10 +1976,17 @@
                     });
                 }
                 
-                card.querySelector('.sell-project').addEventListener('click', (e) => {
-                    const projectId = parseInt(e.target.closest('button').dataset.id);
-                    openSellModal(projectId);
-                });
+                if (project.type === 'flip') {
+                    card.querySelector('.sell-project').addEventListener('click', (e) => {
+                        const projectId = parseInt(e.target.closest('button').dataset.id);
+                        openSellModal(projectId);
+                    });
+                } else {
+                    card.querySelector('.complete-repair').addEventListener('click', (e) => {
+                        const projectId = parseInt(e.target.closest('button').dataset.id);
+                        openCompleteRepairModal(projectId);
+                    });
+                }
             }
             
             card.querySelector('.delete-project').addEventListener('click', (e) => {
@@ -1234,6 +2003,7 @@
                 case 'not_running': return '#e74c3c'; // Red
                 case 'running': return '#27ae60'; // Green
                 case 'sold': return '#3498db'; // Blue
+                case 'completed': return '#9b59b6'; // Purple
                 default: return '#2c3e50'; // Dark blue
             }
         }
@@ -1245,6 +2015,27 @@
                 case 'dirtbike_quad': return 'Dirtbike/Quad';
                 case 'trimmer_blower': return 'Trimmer/Blower';
                 default: return 'Other Service';
+            }
+        }
+        
+        // Helper function to get engine type name
+        function getEngineTypeName(engineType) {
+            switch (engineType) {
+                case '2_stroke': return '2-Stroke';
+                case '4_stroke': return '4-Stroke';
+                case 'electric': return 'Electric';
+                default: return engineType;
+            }
+        }
+        
+        // Helper function to get status name
+        function getStatusName(status) {
+            switch (status) {
+                case 'not_running': return 'Needs Work';
+                case 'running': return 'Running';
+                case 'sold': return 'Sold';
+                case 'completed': return 'Completed';
+                default: return status;
             }
         }
         
