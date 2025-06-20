@@ -1561,6 +1561,7 @@ document.getElementById('confirm-delete').addEventListener('click', deleteProjec
         
         // Open project detail view
       // Open project detail view
+// Open project detail view
 function openProjectDetail(projectId) {
     const project = projects.find(p => p.id === projectId);
     if (!project) return;
@@ -1595,57 +1596,42 @@ function openProjectDetail(projectId) {
             <span>Status:</span>
             <span class="value">${getStatusName(project.status)}</span>
         </div>
-        ${project.type === 'flip' ? `
-            <div class="detail-item">
-                <span>Purchase Price:</span>
-                <span class="value">$${project.purchasePrice.toFixed(2)}</span>
-            </div>
-        ` : ''}
+        ${project.type === 'flip' ? `<div class="detail-item">
+            <span>Purchase Price:</span>
+            <span class="value">$${project.purchasePrice.toFixed(2)}</span>
+        </div>` : ''}
         <div class="detail-item">
             <span>${project.type === 'flip' ? 'Purchase Date' : 'Booking Date'}:</span>
             <span class="value">${new Date(project.purchaseDate).toLocaleDateString()}</span>
         </div>
-        ${project.type === 'repair' && project.repairReason ? `
-            <div class="detail-item">
-                <span>Repair Reason:</span>
-                <span class="value">${project.repairReason}</span>
-            </div>
-        ` : ''}
-        ${project.soldPrice ? `
-            <div class="detail-item">
-                <span>Sold Price:</span>
-                <span class="value">$${project.soldPrice.toFixed(2)}</span>
-            </div>
-        ` : ''}
-        ${project.soldDate ? `
-            <div class="detail-item">
-                <span>Sold Date:</span>
-                <span class="value">${new Date(project.soldDate).toLocaleDateString()}</span>
-            </div>
-        ` : ''}
-        ${project.jobPrice ? `
-            <div class="detail-item">
-                <span>Job Price:</span>
-                <span class="value">$${project.jobPrice.toFixed(2)}</span>
-            </div>
-        ` : ''}
-        ${project.partsCost ? `
-            <div class="detail-item">
-                <span>Parts Cost:</span>
-                <span class="value">$${project.partsCost.toFixed(2)}</span>
-            </div>
-        ` : ''}
-        ${project.completionDate ? `
-            <div class="detail-item">
-                <span>Completion Date:</span>
-                <span class="value">${new Date(project.completionDate).toLocaleDateString()}</span>
-            </div>
-        ` : ''}
+        ${project.type === 'repair' && project.repairReason ? `<div class="detail-item">
+            <span>Repair Reason:</span>
+            <span class="value">${project.repairReason}</span>
+        </div>` : ''}
+        ${project.soldPrice ? `<div class="detail-item">
+            <span>Sold Price:</span>
+            <span class="value">$${project.soldPrice.toFixed(2)}</span>
+        </div>` : ''}
+        ${project.soldDate ? `<div class="detail-item">
+            <span>Sold Date:</span>
+            <span class="value">${new Date(project.soldDate).toLocaleDateString()}</span>
+        </div>` : ''}
+        ${project.jobPrice ? `<div class="detail-item">
+            <span>Job Price:</span>
+            <span class="value">$${project.jobPrice.toFixed(2)}</span>
+        </div>` : ''}
+        ${project.partsCost ? `<div class="detail-item">
+            <span>Parts Cost:</span>
+            <span class="value">$${project.partsCost.toFixed(2)}</span>
+        </div>` : ''}
+        ${project.completionDate ? `<div class="detail-item">
+            <span>Completion Date:</span>
+            <span class="value">${new Date(project.completionDate).toLocaleDateString()}</span>
+        </div>` : ''}
     `;
     
     detailProjectInfo.innerHTML = infoHtml;
     
-    // Rest of the function remains the same...
     // Display images
     if (project.images && project.images.length > 0) {
         project.images.forEach((image, index) => {
@@ -1684,6 +1670,7 @@ function openProjectDetail(projectId) {
     
     // Display repair logs (only for repair projects)
     if (project.type === 'repair') {
+        document.getElementById('repair-log-section').style.display = 'block';
         if (project.repairLogs && project.repairLogs.length > 0) {
             project.repairLogs.forEach(log => {
                 const logElement = document.createElement('div');
