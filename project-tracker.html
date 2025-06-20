@@ -1470,22 +1470,28 @@ const firebaseConfig = {
                 repairLogs: [],
                 createdAt: new Date().toISOString()
             };
-            
-            projects.push(newProject);
-            saveProjects();
-            renderProjects();
-            toggleModal(addProjectModal, false);
+            db.collection('projects').add(newProject);
+toggleModal(addProjectModal, false);
+
         }
         
-        // Update project status
-        function updateProjectStatus(projectId, newStatus) {
-            const project = projects.find(p => p.id === projectId);
-            if (project) {
-                project.status = newStatus;
-                saveProjects();
-                renderProjects();
-            }
-        }
+       function loadProjects() {
+    db.collection('projects')
+      .onSnapshot(snapshot => {
+        projects = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        updateStats();
+        renderProjects();
+      });
+}
+
+function saveProjectToFirestore(data) {
+    if (data.id) {
+        db.collection('projects').doc(data.id).set(data);
+    } else {
+        db.collection('projects').add(data);
+    }
+}
+
         
         // Open sell project modal
         function openSellModal(projectId) {
@@ -1613,10 +1619,9 @@ const firebaseConfig = {
         
         // Delete project
         function deleteProject() {
-            projects = projects.filter(p => p.id !== currentDeleteProjectId);
-            saveProjects();
-            renderProjects();
-            toggleModal(deleteProjectModal, false);
+           db.collection('projects').doc(currentDeleteProjectId).delete();
+toggleModal(deleteProjectModal, false);
+
         }
         
         // Open project detail view
