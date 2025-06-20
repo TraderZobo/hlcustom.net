@@ -779,115 +779,156 @@
         }
         
         /* Mobile menu */
+      <style>
+    /* Previous CSS remains the same until the mobile menu section */
+
+    /* Mobile Menu Dropdown */
+    .mobile-menu-container {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 100;
+    }
+
+    .mobile-menu-button {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background: var(--secondary);
+        color: white;
+        border: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        box-shadow: var(--shadow);
+        transition: var(--transition);
+        font-size: 1.5rem;
+    }
+
+    .mobile-menu-button:hover {
+        transform: scale(1.1);
+    }
+
+    .mobile-menu-dropdown {
+        position: absolute;
+        bottom: 70px;
+        right: 0;
+        background: var(--card-bg);
+        border-radius: 8px;
+        box-shadow: var(--shadow);
+        width: 200px;
+        overflow: hidden;
+        transform: translateY(20px);
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+        z-index: 101;
+    }
+
+    .mobile-menu-dropdown.active {
+        transform: translateY(0);
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .mobile-menu-item {
+        display: flex;
+        align-items: center;
+        padding: 12px 15px;
+        color: var(--text-color);
+        text-decoration: none;
+        transition: var(--transition);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .mobile-menu-item:last-child {
+        border-bottom: none;
+    }
+
+    .mobile-menu-item:hover {
+        background: rgba(0, 0, 0, 0.05);
+    }
+
+    .mobile-menu-item i {
+        margin-right: 10px;
+        width: 20px;
+        text-align: center;
+    }
+
+    /* Dark Mode Toggle */
+    .theme-toggle {
+        position: fixed;
+        bottom: 90px;
+        right: 20px;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background: var(--secondary);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        box-shadow: var(--shadow);
+        z-index: 100;
+        border: none;
+        transition: var(--transition);
+    }
+
+    .theme-toggle:hover {
+        transform: scale(1.1);
+    }
+
+    /* Dark Mode Styles */
+    .dark-mode {
+        /* Dark mode colors */
+        --bg-color: #1a1a1a;
+        --text-color: #f0f0f0;
+        --card-bg: #2d2d2d;
+        --header-bg: linear-gradient(135deg, #1a2b3c, #1e3a5f);
+        --stat-bg: rgba(0, 0, 0, 0.2);
+        --light: #333;
+    }
+
+    .dark-mode .mobile-menu-dropdown {
+        background: #333;
+        border: 1px solid #444;
+    }
+
+    .dark-mode .mobile-menu-item {
+        border-bottom-color: #444;
+    }
+
+    .dark-mode .mobile-menu-item:hover {
+        background: rgba(255, 255, 255, 0.05);
+    }
+
+    /* Mobile-specific adjustments */
+    @media (max-width: 768px) {
+        /* Remove the old mobile menu */
         .mobile-menu {
-            display: flex;
-            justify-content: space-around;
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background: var(--card-bg);
-            padding: 8px 0;
-            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
-            z-index: 100;
-            border-top: 1px solid rgba(0, 0, 0, 0.1);
+            display: none;
         }
-        
-        .mobile-menu-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-decoration: none;
-            color: var(--text-color);
-            font-size: 0.7rem;
-            padding: 5px;
-            flex: 1;
-        }
-        
-        .mobile-menu-item i {
-            font-size: 1rem;
-            margin-bottom: 3px;
-        }
-        
-        /* Hide desktop elements on mobile */
-        .desktop-only {
-            display: none !important;
-        }
-        
-        /* Show mobile elements */
-        .mobile-only {
-            display: block !important;
-        }
-        
-        /* Adjust modal for mobile */
-        .modal-content {
-            width: 100%;
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-        
-        .form-row {
-            flex-direction: column;
-            gap: 0;
-        }
-        
-        /* Project detail view adjustments */
-        .project-detail-section h3 {
-            font-size: 1rem;
-        }
-        
-        .detail-item {
-            font-size: 0.8rem;
-        }
-        
-        /* Theme toggle position */
+
+        /* Adjust theme toggle position */
         .theme-toggle {
-            bottom: 70px;
-            width: 45px;
-            height: 45px;
-            font-size: 0.9rem;
+            bottom: 90px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+        }
+
+        .mobile-menu-container {
+            display: block;
         }
     }
-    
+
     @media (min-width: 769px) {
-        /* Hide mobile elements on desktop */
-        .mobile-only {
-            display: none !important;
-        }
-        
-        /* Show desktop elements */
-        .desktop-only {
-            display: block !important;
+        .mobile-menu-container {
+            display: none;
         }
     }
-
-    /* Very small screens (e.g., iPhone 5/SE) */
-    @media (max-width: 320px) {
-        .logo h1 {
-            font-size: 1.3rem;
-        }
-        
-        .logo i {
-            width: 40px;
-            height: 40px;
-            font-size: 1.5rem;
-        }
-        
-        .project-tab {
-            padding: 6px 10px;
-            font-size: 0.8rem;
-        }
-        
-        .project-detail-images {
-            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-        }
-        
-        .project-image {
-            height: 100px;
-        }
-    }
-
-
 </style>
 </head>
 
@@ -1234,25 +1275,30 @@
         </button>
 
         <!-- Mobile Menu -->
-        <div class="mobile-menu mobile-only">
-            <a href="#" class="mobile-menu-item" id="mobile-all">
-                <i class="fas fa-list"></i>
-                <span>All</span>
-            </a>
-            <a href="#" class="mobile-menu-item" id="mobile-flips">
-                <i class="fas fa-exchange-alt"></i>
-                <span>Flips</span>
-            </a>
-            <a href="#" class="mobile-menu-item" id="mobile-repairs">
-                <i class="fas fa-tools"></i>
-                <span>Repairs</span>
-            </a>
-            <a href="#" class="mobile-menu-item" id="mobile-add">
-                <i class="fas fa-plus"></i>
-                <span>Add</span>
-            </a>
-        </div>
+     <!-- Mobile Menu Dropdown -->
+<div class="mobile-menu-container mobile-only">
+    <button class="mobile-menu-button" id="mobile-menu-button">
+        <i class="fas fa-bars"></i>
+    </button>
+    <div class="mobile-menu-dropdown" id="mobile-menu-dropdown">
+        <a href="#" class="mobile-menu-item" id="mobile-all">
+            <i class="fas fa-list"></i>
+            <span>All Projects</span>
+        </a>
+        <a href="#" class="mobile-menu-item" id="mobile-flips">
+            <i class="fas fa-exchange-alt"></i>
+            <span>Flips</span>
+        </a>
+        <a href="#" class="mobile-menu-item" id="mobile-repairs">
+            <i class="fas fa-tools"></i>
+            <span>Repairs</span>
+        </a>
+        <a href="#" class="mobile-menu-item" id="mobile-add">
+            <i class="fas fa-plus"></i>
+            <span>Add Project</span>
+        </a>
     </div>
+</div>
 
     <script>
         // Initialize Firebase
