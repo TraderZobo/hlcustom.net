@@ -1325,6 +1325,7 @@
 function deleteProject() {
     if (!currentDeleteProjectId) return;
     
+    // Make sure we're using the Firestore delete method directly
     db.collection("projects").doc(currentDeleteProjectId).delete()
         .then(() => {
             toggleModal(deleteProjectModal, false);
@@ -1332,7 +1333,7 @@ function deleteProject() {
         })
         .catch((error) => {
             console.error("Error deleting project: ", error);
-            alert(`Error deleting project: ${error.message}`);
+            alert("Error deleting project: " + error.message);
         });
 }
         
