@@ -1321,9 +1321,20 @@
         }
         
         // Delete project from Firestore
-        function deleteProject(projectId) {
-            return db.collection("projects").doc(projectId).delete();
-        }
+      // Replace your current deleteProject function with this:
+function deleteProject() {
+    if (!currentDeleteProjectId) return;
+    
+    db.collection("projects").doc(currentDeleteProjectId).delete()
+        .then(() => {
+            toggleModal(deleteProjectModal, false);
+            console.log("Project deleted successfully");
+        })
+        .catch((error) => {
+            console.error("Error deleting project: ", error);
+            alert(`Error deleting project: ${error.message}`);
+        });
+}
         
         // Add a new project
         function addNewProject() {
