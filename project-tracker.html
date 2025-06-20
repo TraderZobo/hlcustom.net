@@ -155,126 +155,169 @@
         
         .project-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 25px;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
         }
         
+        /* Updated Project Card Styles */
         .project-card {
             border-radius: 10px;
             overflow: hidden;
             box-shadow: var(--shadow);
             transition: var(--transition);
             background: var(--card-bg);
-            position: relative;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
         }
         
         .project-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
         }
         
-        .card-header {
-            padding: 20px;
-            color: white;
+        .project-image-container {
+            height: 180px;
+            background-color: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .project-image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+        
+        .project-card:hover .project-image-container img {
+            transform: scale(1.05);
+        }
+        
+        .project-image-container i {
+            font-size: 3rem;
+            color: #999;
         }
         
         .status-badge {
             position: absolute;
-            top: 15px;
-            right: 15px;
-            background: rgba(0, 0, 0, 0.3);
-            padding: 5px 12px;
+            top: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 5px 10px;
             border-radius: 20px;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             font-weight: 600;
+            color: white;
+            text-transform: uppercase;
         }
         
-        .card-body {
-            padding: 20px;
-        }
-        
-        .project-title {
-            font-size: 1.3rem;
-            font-weight: 700;
-            margin-bottom: 10px;
-            color: var(--text-color);
-            transition: var(--transition);
-        }
-        
-        .project-details {
+        .project-card-content {
+            padding: 15px;
+            flex-grow: 1;
             display: flex;
             flex-direction: column;
-            gap: 12px;
-            margin-bottom: 20px;
         }
         
-        .detail-item {
+        .project-card-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--text-color);
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .project-card-meta {
             display: flex;
-            gap: 10px;
-            font-size: 0.95rem;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            font-size: 0.85rem;
         }
         
-        .detail-item i {
-            color: var(--secondary);
-            width: 20px;
-        }
-        
-        .detail-item .value {
+        .project-type {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 0.75rem;
             font-weight: 600;
+            background: var(--secondary);
+            color: white;
         }
         
-        .card-footer {
-            padding: 0 20px 20px;
+        .project-service {
+            color: var(--text-color);
+            opacity: 0.8;
         }
         
-        .action-buttons {
+        .project-card-footer {
+            margin-top: auto;
             display: flex;
-            gap: 10px;
+            gap: 8px;
         }
         
-        .btn {
+        .card-btn {
             flex: 1;
-            padding: 10px 15px;
+            padding: 8px;
             border: none;
             border-radius: 6px;
+            font-size: 0.85rem;
             font-weight: 600;
             cursor: pointer;
             transition: var(--transition);
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
+            gap: 5px;
         }
         
-        .btn-primary {
+        .card-btn-primary {
             background-color: var(--secondary);
             color: white;
         }
         
-        .btn-success {
+        .card-btn-success {
             background-color: var(--success);
             color: white;
         }
         
-        .btn-warning {
-            background-color: var(--warning);
-            color: white;
-        }
-        
-        .btn-danger {
+        .card-btn-danger {
             background-color: var(--danger);
             color: white;
         }
         
-        .btn-sm {
-            padding: 8px 12px;
-            font-size: 0.85rem;
+        .card-btn i {
+            font-size: 0.9rem;
         }
         
-        .btn:hover {
+        .card-btn:hover {
             opacity: 0.9;
         }
         
+        /* Status Colors */
+        .status-not_running {
+            background-color: #e74c3c;
+        }
+        
+        .status-running {
+            background-color: #27ae60;
+        }
+        
+        .status-sold {
+            background-color: #3498db;
+        }
+        
+        .status-completed {
+            background-color: #9b59b6;
+        }
+        
+        /* Modal styles remain the same */
         .modal {
             display: none;
             position: fixed;
@@ -366,6 +409,49 @@
             justify-content: flex-end;
             gap: 10px;
             transition: var(--transition);
+        }
+        
+        .btn {
+            flex: 1;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .btn-primary {
+            background-color: var(--secondary);
+            color: white;
+        }
+        
+        .btn-success {
+            background-color: var(--success);
+            color: white;
+        }
+        
+        .btn-warning {
+            background-color: var(--warning);
+            color: white;
+        }
+        
+        .btn-danger {
+            background-color: var(--danger);
+            color: white;
+        }
+        
+        .btn-sm {
+            padding: 8px 12px;
+            font-size: 0.85rem;
+        }
+        
+        .btn:hover {
+            opacity: 0.9;
         }
         
         .btn-cancel {
@@ -703,20 +789,26 @@
                 border-radius: 8px;
             }
             
-            .card-header {
-                padding: 15px;
+            /* Hide desktop elements on mobile */
+            .desktop-only {
+                display: none;
             }
             
-            .card-body {
-                padding: 15px;
+            /* Show mobile elements */
+            .mobile-only {
+                display: block;
             }
             
-            .action-buttons {
+            /* Adjust modal for mobile */
+            .modal-content {
+                width: 95%;
+                max-height: 90vh;
+                overflow-y: auto;
+            }
+            
+            .form-row {
                 flex-direction: column;
-            }
-            
-            .btn {
-                width: 100%;
+                gap: 0;
             }
             
             /* Mobile menu */
@@ -745,28 +837,6 @@
             .mobile-menu-item i {
                 font-size: 1.2rem;
                 margin-bottom: 5px;
-            }
-            
-            /* Hide desktop elements on mobile */
-            .desktop-only {
-                display: none;
-            }
-            
-            /* Show mobile elements */
-            .mobile-only {
-                display: block;
-            }
-            
-            /* Adjust modal for mobile */
-            .modal-content {
-                width: 95%;
-                max-height: 90vh;
-                overflow-y: auto;
-            }
-            
-            .form-row {
-                flex-direction: column;
-                gap: 0;
             }
         }
         
@@ -1002,6 +1072,12 @@
                                 <label for="booking-date">Booking Date</label>
                                 <input type="date" id="booking-date">
                             </div>
+                        </div>
+                        
+                        <!-- Add image upload field to the form -->
+                        <div class="form-group">
+                            <label for="project-image-upload">Project Image (Required)</label>
+                            <input type="file" id="project-image-upload" accept="image/*" required>
                         </div>
                     </form>
                 </div>
@@ -1365,45 +1441,54 @@
             const service = document.getElementById('project-service').value;
             const engineType = document.getElementById('engine-type').value;
             const status = document.getElementById('initial-status').value;
+            const imageFile = document.getElementById('project-image-upload').files[0];
             
-            let projectData = {
-                name,
-                type,
-                service,
-                engineType,
-                status,
-                images: [],
-                notes: [],
-                repairLogs: [],
-                createdAt: new Date().toISOString()
-            };
-            
-            if (type === 'repair') {
-                // For repair projects
-                projectData.repairReason = document.getElementById('repair-reason').value;
-                projectData.bookingDate = document.getElementById('booking-date').value;
-                projectData.purchasePrice = 0; // Set to 0 for repairs
-                projectData.purchaseDate = projectData.bookingDate; // Use booking date as purchase date
-            } else {
-                // For flip projects
-                projectData.purchasePrice = parseFloat(document.getElementById('purchase-price').value) || 0;
-                projectData.purchaseDate = document.getElementById('purchase-date').value;
-            }
-            
-            if (!name || !type || !service) {
-                alert('Please fill in all required fields');
+            if (!name || !type || !service || !imageFile) {
+                alert('Please fill in all required fields including the project image');
                 return;
             }
             
-            saveProject(projectData)
-                .then(() => {
-                    toggleModal(addProjectModal, false);
-                    projectForm.reset();
-                })
-                .catch((error) => {
-                    console.error("Error adding project: ", error);
-                    alert("Error adding project. Please try again.");
-                });
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                let projectData = {
+                    name,
+                    type,
+                    service,
+                    engineType,
+                    status,
+                    images: [{
+                        name: imageFile.name,
+                        data: event.target.result,
+                        date: new Date().toISOString()
+                    }],
+                    notes: [],
+                    repairLogs: [],
+                    createdAt: new Date().toISOString()
+                };
+                
+                if (type === 'repair') {
+                    // For repair projects
+                    projectData.repairReason = document.getElementById('repair-reason').value;
+                    projectData.bookingDate = document.getElementById('booking-date').value;
+                    projectData.purchasePrice = 0; // Set to 0 for repairs
+                    projectData.purchaseDate = projectData.bookingDate; // Use booking date as purchase date
+                } else {
+                    // For flip projects
+                    projectData.purchasePrice = parseFloat(document.getElementById('purchase-price').value) || 0;
+                    projectData.purchaseDate = document.getElementById('purchase-date').value;
+                }
+                
+                saveProject(projectData)
+                    .then(() => {
+                        toggleModal(addProjectModal, false);
+                        projectForm.reset();
+                    })
+                    .catch((error) => {
+                        console.error("Error adding project: ", error);
+                        alert("Error adding project. Please try again.");
+                    });
+            };
+            reader.readAsDataURL(imageFile);
         }
         
         // Update project status
@@ -1862,122 +1947,47 @@
             card.className = 'project-card';
             
             // Get status info
-            let statusText, statusClass;
-            switch (project.status) {
-                case 'not_running':
-                    statusText = 'Needs Work';
-                    statusClass = 'status-not-running';
-                    break;
-                case 'running':
-                    statusText = project.type === 'repair' ? 'In Progress' : 'Running';
-                    statusClass = 'status-running';
-                    break;
-                case 'sold':
-                    statusText = 'Sold';
-                    statusClass = 'status-sold';
-                    break;
-                case 'completed':
-                    statusText = 'Completed';
-                    statusClass = 'status-completed';
-                    break;
-            }
-            
-            // Format dates
-            const purchaseDate = project.purchaseDate ? new Date(project.purchaseDate).toLocaleDateString() : 'N/A';
-            const soldDate = project.soldDate ? new Date(project.soldDate).toLocaleDateString() : 'Not sold';
-            const completionDate = project.completionDate ? new Date(project.completionDate).toLocaleDateString() : 'Not completed';
-            
-            // Format engine type
-            let engineText = '';
-            if (project.engineType) {
-                engineText = getEngineTypeName(project.engineType);
-            }
+            const statusText = getStatusName(project.status);
+            const statusClass = `status-${project.status}`;
             
             // Get service name
             const serviceName = getServiceName(project.service);
             
+            // Get the first image if available, otherwise use placeholder
+            const hasImage = project.images && project.images.length > 0;
+            const imageSrc = hasImage ? project.images[0].data : '';
+            
             card.innerHTML = `
-                <div class="card-header" style="background: ${getCardHeaderColor(project)}">
-                    <div class="status-badge">${statusText}</div>
-                    <div class="project-title">${project.name}</div>
+                <div class="project-image-container">
+                    ${hasImage ? 
+                        `<img src="${imageSrc}" alt="${project.name}">` : 
+                        `<i class="fas fa-tools"></i>`
+                    }
+                    <div class="status-badge ${statusClass}">${statusText}</div>
                 </div>
-                <div class="card-body">
-                    <div class="project-details">
-                        <div class="detail-item">
-                            <i class="fas fa-tag"></i>
-                            <span>Type:</span>
-                            <span class="value">${project.type === 'flip' ? 'Flip' : 'Repair'}</span>
-                        </div>
-                        <div class="detail-item">
-                            <i class="fas fa-tools"></i>
-                            <span>Service:</span>
-                            <span class="value">${serviceName}</span>
-                        </div>
-                        ${engineText ? `<div class="detail-item">
-                            <i class="fas fa-cog"></i>
-                            <span>Engine:</span>
-                            <span class="value">${engineText}</span>
-                        </div>` : ''}
-                        ${project.type === 'flip' ? `<div class="detail-item">
-                            <i class="fas fa-dollar-sign"></i>
-                            <span>Purchase Price:</span>
-                            <span class="value">$${project.purchasePrice ? project.purchasePrice.toFixed(2) : '0.00'}</span>
-                        </div>` : ''}
-                        <div class="detail-item">
-                            <i class="fas fa-calendar-alt"></i>
-                            <span>${project.type === 'flip' ? 'Purchase Date' : 'Booking Date'}:</span>
-                            <span class="value">${purchaseDate}</span>
-                        </div>
-                        ${project.soldPrice ? `<div class="detail-item">
-                            <i class="fas fa-money-bill-wave"></i>
-                            <span>Sold Price:</span>
-                            <span class="value">$${project.soldPrice.toFixed(2)}</span>
-                        </div>` : ''}
-                        ${project.soldDate ? `<div class="detail-item">
-                            <i class="fas fa-calendar-check"></i>
-                            <span>Sold Date:</span>
-                            <span class="value">${soldDate}</span>
-                        </div>` : ''}
-                        ${project.jobPrice ? `<div class="detail-item">
-                            <i class="fas fa-wrench"></i>
-                            <span>Service Charge:</span>
-                            <span class="value">$${project.jobPrice.toFixed(2)}</span>
-                        </div>` : ''}
-                        ${project.partsCost ? `<div class="detail-item">
-                            <i class="fas fa-cogs"></i>
-                            <span>Parts Cost:</span>
-                            <span class="value">$${project.partsCost.toFixed(2)}</span>
-                        </div>` : ''}
-                        ${project.completionDate ? `<div class="detail-item">
-                            <i class="fas fa-check-circle"></i>
-                            <span>Completed:</span>
-                            <span class="value">${completionDate}</span>
-                        </div>` : ''}
+                <div class="project-card-content">
+                    <h3 class="project-card-title">${project.name}</h3>
+                    <div class="project-card-meta">
+                        <span class="project-type">${project.type === 'flip' ? 'Flip' : 'Repair'}</span>
+                        <span class="project-service">${serviceName}</span>
                     </div>
-                </div>
-                <div class="card-footer">
-                    <div class="action-buttons">
-                        <button class="btn btn-primary btn-sm view-details" data-id="${project.id}">
+                    <div class="project-card-footer">
+                        <button class="card-btn card-btn-primary view-details" data-id="${project.id}">
                             <i class="fas fa-eye"></i> Details
                         </button>
                         ${project.status !== 'sold' && project.status !== 'completed' ? `
-                            ${project.status === 'not_running' ? `
-                                <button class="btn btn-primary btn-sm mark-running" data-id="${project.id}">
-                                    <i class="fas fa-play"></i> ${project.type === 'repair' ? 'Start Work' : 'Mark Running'}
-                                </button>
-                            ` : ''}
                             ${project.type === 'flip' ? `
-                                <button class="btn btn-success btn-sm sell-project" data-id="${project.id}">
+                                <button class="card-btn card-btn-success sell-project" data-id="${project.id}">
                                     <i class="fas fa-dollar-sign"></i> Sell
                                 </button>
                             ` : `
-                                <button class="btn btn-success btn-sm complete-repair" data-id="${project.id}">
+                                <button class="card-btn card-btn-success complete-repair" data-id="${project.id}">
                                     <i class="fas fa-check"></i> Complete
                                 </button>
                             `}
                         ` : ''}
-                        <button class="btn btn-danger btn-sm delete-project" data-id="${project.id}">
-                            <i class="fas fa-trash"></i> Delete
+                        <button class="card-btn card-btn-danger delete-project" data-id="${project.id}">
+                            <i class="fas fa-trash"></i>
                         </button>
                     </div>
                 </div>
@@ -1995,13 +2005,6 @@
             });
             
             if (project.status !== 'sold' && project.status !== 'completed') {
-                if (project.status === 'not_running') {
-                    card.querySelector('.mark-running').addEventListener('click', (e) => {
-                        const projectId = e.target.closest('button').dataset.id;
-                        updateProjectStatus(projectId, 'running');
-                    });
-                }
-                
                 if (project.type === 'flip') {
                     card.querySelector('.sell-project').addEventListener('click', (e) => {
                         const projectId = e.target.closest('button').dataset.id;
@@ -2016,17 +2019,6 @@
             }
             
             return card;
-        }
-        
-        // Helper function to get card header color
-        function getCardHeaderColor(project) {
-            switch (project.status) {
-                case 'not_running': return '#e74c3c'; // Red
-                case 'running': return '#27ae60'; // Green
-                case 'sold': return '#3498db'; // Blue
-                case 'completed': return '#9b59b6'; // Purple
-                default: return '#2c3e50'; // Dark blue
-            }
         }
         
         // Helper function to get service name
@@ -2053,7 +2045,7 @@
         function getStatusName(status) {
             switch (status) {
                 case 'not_running': return 'Needs Work';
-                case 'running': return 'Running';
+                case 'running': return project.type === 'repair' ? 'In Progress' : 'Running';
                 case 'sold': return 'Sold';
                 case 'completed': return 'Completed';
                 default: return status;
