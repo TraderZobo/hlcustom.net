@@ -1340,47 +1340,63 @@ document.getElementById('confirm-delete').addEventListener('click', deleteProjec
         
         // Add a new project
         function addNewProject() {
-            const name = document.getElementById('project-name').value;
-            const type = document.getElementById('project-type').value;
-            const service = document.getElementById('project-service').value;
-            const engineType = document.getElementById('engine-type').value;
-            const status = document.getElementById('initial-status').value;
-            const purchasePrice = parseFloat(document.getElementById('purchase-price').value);
-            const purchaseDate = document.getElementById('purchase-date').value;
-            
-            if (!name || !type || !service || !purchasePrice || !purchaseDate) {
-                alert('Please fill in all required fields');
-                return;
-            }
-            
-            const newProject = {
-                name,
-                type,
-                service,
-                engineType,
-                status,
-                purchasePrice,
-                purchaseDate,
-                soldPrice: null,
-                soldDate: null,
-                jobPrice: null,
-                partsCost: null,
-                completionDate: null,
-                images: [],
-                notes: [],
-                repairLogs: [],
-                createdAt: new Date().toISOString()
-            };
-            
-            saveProject(newProject)
-                .then(() => {
-                    toggleModal(addProjectModal, false);
-                })
-                .catch((error) => {
-                    console.error("Error adding project: ", error);
-                    alert("Error adding project. Please try again.");
-                });
-        }
+    const name = document.getElementById('project-name').value;
+    const type = document.getElementById('project-type').value;
+    const service = document.getElementById('project-service').value;
+    const engineType = document.getElementById('engine-type').value;
+    const status = document.getElementById('initial-status').value;
+    
+    let purchasePrice, purchaseDate, bookingDate, repairReason;
+    
+    if (type === 'repair') {
+        bookingDate = document.getElementById('booking-date').value;
+        repairReason = document.getElementById('repair-reason').value;
+        purchasePrice = 0; // Set to 0 for repairs
+        purchaseDate = bookingDate; // Use booking date as purchase date for repairs
+    } else {
+        purchasePrice = parseFloat(document.getElementById('purchase-price').value);
+        purchaseDate = document.getElementById('purchase-date').value;
+    }
+    
+    if (!name || !type || !service || !purchaseDate) {
+        alert('Please fill in all required fields');
+        return;
+    }
+    
+    const newProject = {
+        name,
+        type,
+        service,
+        engineType,
+        status,
+        purchasePrice,
+        purchaseDate,
+        soldPrice: null,
+        soldDate: null,
+        jobPrice: null,
+        partsCost: null,
+        completionDate: null,
+        images: [],
+        notes: [],
+        repairLogs: [],
+        createdAt: new Date().toISOString()
+    };
+    
+    // Add repair-specific fields if it's a repair
+    if (type === 'repair') {
+        newProject.bookingDate = bookingDate;
+        newProject.repairReason = repairReason;
+    }
+    
+    saveProject(newProject)
+        .then(() => {
+            toggleModal(addProjectModal, false);
+        })
+        .catch((error) => {
+            console.error("Error adding project: ", error);
+            alert("Error adding project. Please try again.");
+        });
+}
         
         // Update project status
         function updateProjectStatus(projectId, newStatus) {
@@ -1577,15 +1593,37 @@ document.getElementById('confirm-delete').addEventListener('click', deleteProjec
                 <div class="detail-item">
                     <span>Status:</span>
                     <span class="value">${getStatusName(project.status)}</span>
-                </div>
-                <div class="detail-item">
-                    <span>Purchase Price:</span>
-                    <span class="value">$${project.purchasePrice.toFixed(2)}</span>
-                </div>
-                <div class="detail-item">
-                    <span>Purchase Date:</span>
-                    <span class="value">${new Date(project.purchaseDate).toLocaleDateString()}</span>
-                </div>
+               <div class="form-row" id="purchase-price-row">
+    <div class="form-group">
+        <label for="purchase-price">Purchase Price ($)</label>
+        <input type="number" id="purchase-price" placeholder="0.00" min="0" step="0.01" required>
+    </div>
+    <div class="form-group">
+        <label for="purchase-date">Purchase Date</label>
+        <input type="date" id="purchase-date" required>
+    </div>
+</div>
+
+<div class="form-row" id="repair-details-row" style="display: none;">
+    <div class="form-group">
+        <label for="booking-date">Customer Booking Date</label>
+        <input type="date" id="booking-date">
+    </div>
+    <div class="form-group">
+        <label for="repair-reason">What it's in for</label>
+        <input type="text" id="repair-reason" placeholder="Repair reason">
+    </div>
+</div>
+// In the openProjectDetail function, add this to the infoHtml:
+${project.type === 'repair' && project.bookingDate ? `<div class="detail-item">
+    <span>Booking Date:</span>
+    <span class="value">${new Date(project.bookingDate).toLocaleDateString()}</span>
+</div>` : ''}
+${project.type === 'repair' && project.repairReason ? `<div class="detail-item">
+    <span>Repair Reason:</span>
+    <span class="value">${project.repairReason}</span>
+</div>` : ''}
+
                 ${project.soldPrice ? `<div class="detail-item">
                     <span>Sold Price:</span>
                     <span class="value">$${project.soldPrice.toFixed(2)}</span>
@@ -2068,6 +2106,17 @@ document.getElementById('confirm-delete').addEventListener('click', deleteProjec
                     renderProjects();
                 });
             });
+
+            // Add this to the setupEventListeners function
+document.getElementById('project-type').addEventListener('change', function() {
+    const isRepair = this.value === 'repair';
+    document.getElementById('purchase-price-row').style.display = isRepair ? 'none' : 'flex';
+    document.getElementById('repair-details-row').style.display = isRepair ? 'flex' : 'none';
+    
+    if (isRepair) {
+        document.getElementById('booking-date').valueAsDate = new Date();
+    }
+});
             
             // Mobile menu
             mobileAll.addEventListener('click', (e) => {
