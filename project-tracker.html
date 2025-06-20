@@ -1955,6 +1955,11 @@ function deleteProject() {
                 const projectId = e.target.closest('button').dataset.id;
                 openProjectDetail(projectId);
             });
+            card.querySelector('.delete-project').addEventListener('click', (e) => {
+    const projectId = e.target.closest('button').dataset.id;
+    currentDeleteProjectId = projectId; // Make sure this line exists
+    openDeleteModal(projectId);
+});
             
             if (project.status !== 'sold' && project.status !== 'completed') {
                 if (project.status === 'not_running') {
