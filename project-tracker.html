@@ -978,14 +978,29 @@
                             </select>
                         </div>
                         
-                        <div class="form-row">
+                        <!-- Flip-specific fields (hidden by default) -->
+                        <div id="flip-details">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="purchase-price">Purchase Price ($)</label>
+                                    <input type="number" id="purchase-price" placeholder="0.00" min="0" step="0.01">
+                                </div>
+                                <div class="form-group">
+                                    <label for="purchase-date">Purchase Date</label>
+                                    <input type="date" id="purchase-date">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Repair-specific fields (hidden by default) -->
+                        <div id="repair-details" style="display: none;">
                             <div class="form-group">
-                                <label for="purchase-price">Purchase Price ($)</label>
-                                <input type="number" id="purchase-price" placeholder="0.00" min="0" step="0.01" required>
+                                <label for="repair-reason">Repair Reason</label>
+                                <textarea id="repair-reason" placeholder="What is the equipment in for?" rows="2"></textarea>
                             </div>
                             <div class="form-group">
-                                <label for="purchase-date">Purchase Date</label>
-                                <input type="date" id="purchase-date" required>
+                                <label for="booking-date">Booking Date</label>
+                                <input type="date" id="booking-date">
                             </div>
                         </div>
                     </form>
@@ -1049,9 +1064,14 @@
                             <input type="text" id="repair-project-name" disabled>
                         </div>
                         
+                        <div class="form-group">
+                            <label for="repair-description">Repair Description</label>
+                            <textarea id="repair-description" placeholder="What was done to fix the equipment?" rows="3"></textarea>
+                        </div>
+                        
                         <div class="form-row">
                             <div class="form-group">
-                                <label for="job-price">Job Price ($)</label>
+                                <label for="job-price">Service Charge ($)</label>
                                 <input type="number" id="job-price" placeholder="0.00" min="0" step="0.01" required>
                             </div>
                             <div class="form-group">
@@ -1061,19 +1081,24 @@
                         </div>
                         
                         <div class="form-group">
+                            <label for="parts-installed">Parts Installed</label>
+                            <textarea id="parts-installed" placeholder="List all parts that were installed" rows="2"></textarea>
+                        </div>
+                        
+                        <div class="form-group">
                             <label for="completion-date">Completion Date</label>
                             <input type="date" id="completion-date" required>
                         </div>
                         
                         <div class="profit-message">
-                            <h4>Profit Summary</h4>
+                            <h4>ROI Summary</h4>
                             <p id="repair-profit-text"></p>
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-cancel">Cancel</button>
-                    <button class="btn btn-success" id="confirm-complete-repair">Complete Repair</button>
+                    <button class="btn btn-success" id="confirm-complete-repair">Return to Customer</button>
                 </div>
             </div>
         </div>
@@ -1128,7 +1153,7 @@
             apiKey: "AIzaSyAXlu3gw2PZpiLSfOlgyHd6pJprm4mOQZU",
             authDomain: "hlcustom.firebaseapp.com",
             projectId: "hlcustom",
-            storageBucket: "hlcustom.firebasestorage.app",
+            storageBucket: "hlcustom.appspot.com",
             messagingSenderId: "756719653798",
             appId: "1:756719653798:web:64e67631cd49a284c73567",
             measurementId: "G-LTMR28YJ21"
@@ -1321,82 +1346,65 @@
         }
         
         // Delete project from Firestore
-      // Replace your current deleteProject function with this:
-// The function that handles deletion
-function deleteProject() {
-    if (!currentDeleteProjectId) return;
-    
-    db.collection("projects").doc(currentDeleteProjectId).delete()
-        .then(() => {
-            toggleModal(deleteProjectModal, false);
-        })
-        .catch((error) => {
-            alert("Delete failed: " + error.message);
-        });
-}
-
-// The click handler for delete confirmation button
-document.getElementById('confirm-delete').addEventListener('click', deleteProject);
+        function deleteProject() {
+            if (!currentDeleteProjectId) return;
+            
+            db.collection("projects").doc(currentDeleteProjectId).delete()
+                .then(() => {
+                    toggleModal(deleteProjectModal, false);
+                })
+                .catch((error) => {
+                    alert("Delete failed: " + error.message);
+                });
+        }
         
         // Add a new project
         function addNewProject() {
-    const name = document.getElementById('project-name').value;
-    const type = document.getElementById('project-type').value;
-    const service = document.getElementById('project-service').value;
-    const engineType = document.getElementById('engine-type').value;
-    const status = document.getElementById('initial-status').value;
-    
-    let purchasePrice, purchaseDate, bookingDate, repairReason;
-    
-    if (type === 'repair') {
-        bookingDate = document.getElementById('booking-date').value;
-        repairReason = document.getElementById('repair-reason').value;
-        purchasePrice = 0; // Set to 0 for repairs
-        purchaseDate = bookingDate; // Use booking date as purchase date for repairs
-    } else {
-        purchasePrice = parseFloat(document.getElementById('purchase-price').value);
-        purchaseDate = document.getElementById('purchase-date').value;
-    }
-    
-    if (!name || !type || !service || !purchaseDate) {
-        alert('Please fill in all required fields');
-        return;
-    }
-    
-    const newProject = {
-        name,
-        type,
-        service,
-        engineType,
-        status,
-        purchasePrice,
-        purchaseDate,
-        soldPrice: null,
-        soldDate: null,
-        jobPrice: null,
-        partsCost: null,
-        completionDate: null,
-        images: [],
-        notes: [],
-        repairLogs: [],
-        createdAt: new Date().toISOString()
-    };
-    
-    // Add repair-specific fields if it's a repair
-    if (type === 'repair') {
-        newProject.bookingDate = bookingDate;
-        newProject.repairReason = repairReason;
-    }
-    
-    saveProject(newProject)
-        .then(() => {
-            toggleModal(addProjectModal, false);
-        })
-        .catch((error) => {
-            console.error("Error adding project: ", error);
-            alert("Error adding project. Please try again.");
-        });
-}
+            const name = document.getElementById('project-name').value;
+            const type = document.getElementById('project-type').value;
+            const service = document.getElementById('project-service').value;
+            const engineType = document.getElementById('engine-type').value;
+            const status = document.getElementById('initial-status').value;
+            
+            let projectData = {
+                name,
+                type,
+                service,
+                engineType,
+                status,
+                images: [],
+                notes: [],
+                repairLogs: [],
+                createdAt: new Date().toISOString()
+            };
+            
+            if (type === 'repair') {
+                // For repair projects
+                projectData.repairReason = document.getElementById('repair-reason').value;
+                projectData.bookingDate = document.getElementById('booking-date').value;
+                projectData.purchasePrice = 0; // Set to 0 for repairs
+                projectData.purchaseDate = projectData.bookingDate; // Use booking date as purchase date
+            } else {
+                // For flip projects
+                projectData.purchasePrice = parseFloat(document.getElementById('purchase-price').value) || 0;
+                projectData.purchaseDate = document.getElementById('purchase-date').value;
+            }
+            
+            if (!name || !type || !service) {
+                alert('Please fill in all required fields');
+                return;
+            }
+            
+            saveProject(projectData)
+                .then(() => {
+                    toggleModal(addProjectModal, false);
+                    projectForm.reset();
+                })
+                .catch((error) => {
+                    console.error("Error adding project: ", error);
+                    alert("Error adding project. Please try again.");
+                });
+        }
         
         // Update project status
         function updateProjectStatus(projectId, newStatus) {
@@ -1435,6 +1443,8 @@ document.getElementById('confirm-delete').addEventListener('click', deleteProjec
                 document.getElementById('repair-project-name').value = project.name;
                 document.getElementById('job-price').value = '';
                 document.getElementById('parts-cost').value = '';
+                document.getElementById('repair-description').value = '';
+                document.getElementById('parts-installed').value = '';
                 document.getElementById('completion-date').valueAsDate = new Date();
                 toggleModal(completeRepairModal, true);
             }
@@ -1475,11 +1485,11 @@ document.getElementById('confirm-delete').addEventListener('click', deleteProjec
             
             let profitMessage = '';
             if (profit > 0) {
-                profitMessage = `Nice! You've made $${profit.toFixed(2)} profit on this job!`;
+                profitMessage = `ROI: $${profit.toFixed(2)} (Service: $${jobPrice.toFixed(2)} - Parts: $${partsCost.toFixed(2)})`;
             } else if (profit < 0) {
-                profitMessage = `You had a loss of $${Math.abs(profit).toFixed(2)} on this job.`;
+                profitMessage = `Loss: $${Math.abs(profit).toFixed(2)} (Service: $${jobPrice.toFixed(2)} - Parts: $${partsCost.toFixed(2)})`;
             } else {
-                profitMessage = `You broke even on this job.`;
+                profitMessage = `Broke even (Service: $${jobPrice.toFixed(2)} - Parts: $${partsCost.toFixed(2)})`;
             }
             
             repairProfitText.textContent = profitMessage;
@@ -1519,9 +1529,11 @@ document.getElementById('confirm-delete').addEventListener('click', deleteProjec
         function completeRepair() {
             const jobPrice = parseFloat(document.getElementById('job-price').value);
             const partsCost = parseFloat(document.getElementById('parts-cost').value);
+            const repairDescription = document.getElementById('repair-description').value;
+            const partsInstalled = document.getElementById('parts-installed').value;
             const completionDate = document.getElementById('completion-date').value;
             
-            if (!jobPrice || !partsCost || !completionDate) {
+            if (!jobPrice || !partsCost || !completionDate || !repairDescription) {
                 alert('Please fill in all required fields');
                 return;
             }
@@ -1533,6 +1545,8 @@ document.getElementById('confirm-delete').addEventListener('click', deleteProjec
                     status: 'completed',
                     jobPrice: jobPrice,
                     partsCost: partsCost,
+                    repairDescription: repairDescription,
+                    partsInstalled: partsInstalled,
                     completionDate: completionDate
                 };
                 
@@ -1557,140 +1571,105 @@ document.getElementById('confirm-delete').addEventListener('click', deleteProjec
             }
         }
         
-  
-        
         // Open project detail view
-      // Open project detail view
-// Open project detail view
-function openProjectDetail(projectId) {
-    const project = projects.find(p => p.id === projectId);
-    if (!project) return;
-    
-    currentDetailProjectId = projectId;
-    detailProjectName.textContent = project.name;
-    
-    // Clear previous content
-    detailProjectInfo.innerHTML = '';
-    projectImagesContainer.innerHTML = '';
-    projectNotesContainer.innerHTML = '';
-    repairLogContainer.innerHTML = '';
-    
-    // Add back the add image button
-    projectImagesContainer.appendChild(addImageBtn);
-    
-    // Display project info
-    const infoHtml = `
-        <div class="detail-item">
-            <span>Type:</span>
-            <span class="value">${project.type === 'flip' ? 'Flip' : 'Repair'}</span>
-        </div>
-        <div class="detail-item">
-            <span>Service:</span>
-            <span class="value">${getServiceName(project.service)}</span>
-        </div>
-        ${project.engineType ? `<div class="detail-item">
-            <span>Engine:</span>
-            <span class="value">${getEngineTypeName(project.engineType)}</span>
-        </div>` : ''}
-        <div class="detail-item">
-            <span>Status:</span>
-            <span class="value">${getStatusName(project.status)}</span>
-        </div>
-        ${project.type === 'flip' ? `<div class="detail-item">
-            <span>Purchase Price:</span>
-            <span class="value">$${project.purchasePrice.toFixed(2)}</span>
-        </div>` : ''}
-        <div class="detail-item">
-            <span>${project.type === 'flip' ? 'Purchase Date' : 'Booking Date'}:</span>
-            <span class="value">${new Date(project.purchaseDate).toLocaleDateString()}</span>
-        </div>
-        ${project.type === 'repair' && project.repairReason ? `<div class="detail-item">
-            <span>Repair Reason:</span>
-            <span class="value">${project.repairReason}</span>
-        </div>` : ''}
-        ${project.soldPrice ? `<div class="detail-item">
-            <span>Sold Price:</span>
-            <span class="value">$${project.soldPrice.toFixed(2)}</span>
-        </div>` : ''}
-        ${project.soldDate ? `<div class="detail-item">
-            <span>Sold Date:</span>
-            <span class="value">${new Date(project.soldDate).toLocaleDateString()}</span>
-        </div>` : ''}
-        ${project.jobPrice ? `<div class="detail-item">
-            <span>Job Price:</span>
-            <span class="value">$${project.jobPrice.toFixed(2)}</span>
-        </div>` : ''}
-        ${project.partsCost ? `<div class="detail-item">
-            <span>Parts Cost:</span>
-            <span class="value">$${project.partsCost.toFixed(2)}</span>
-        </div>` : ''}
-        ${project.completionDate ? `<div class="detail-item">
-            <span>Completion Date:</span>
-            <span class="value">${new Date(project.completionDate).toLocaleDateString()}</span>
-        </div>` : ''}
-    `;
-    
-    detailProjectInfo.innerHTML = infoHtml;
-    
-    // Display images
-    if (project.images && project.images.length > 0) {
-        project.images.forEach((image, index) => {
-            const imageElement = document.createElement('div');
-            imageElement.className = 'project-image';
-            imageElement.innerHTML = `
-                <img src="${image.data}" alt="Project image">
-                <div class="project-image-remove" data-index="${index}">
-                    <i class="fas fa-times"></i>
-                </div>
-            `;
-            projectImagesContainer.insertBefore(imageElement, addImageBtn);
+        function openProjectDetail(projectId) {
+            const project = projects.find(p => p.id === projectId);
+            if (!project) return;
             
-            // Add event listener to remove button
-            imageElement.querySelector('.project-image-remove').addEventListener('click', (e) => {
-                e.stopPropagation();
-                removeProjectImage(index);
-            });
-        });
-    }
-    
-    // Display notes
-    if (project.notes && project.notes.length > 0) {
-        project.notes.forEach(note => {
-            const noteElement = document.createElement('div');
-            noteElement.className = 'note-item';
-            noteElement.innerHTML = `
-                <div class="note-header">
-                    <span>${new Date(note.date).toLocaleString()}</span>
+            currentDetailProjectId = projectId;
+            detailProjectName.textContent = project.name;
+            
+            // Clear previous content
+            detailProjectInfo.innerHTML = '';
+            projectImagesContainer.innerHTML = '';
+            projectNotesContainer.innerHTML = '';
+            repairLogContainer.innerHTML = '';
+            
+            // Add back the add image button
+            projectImagesContainer.appendChild(addImageBtn);
+            
+            // Display project info
+            const infoHtml = `
+                <div class="detail-item">
+                    <span>Type:</span>
+                    <span class="value">${project.type === 'flip' ? 'Flip' : 'Repair'}</span>
                 </div>
-                <div class="note-content">${note.text}</div>
+                <div class="detail-item">
+                    <span>Service:</span>
+                    <span class="value">${getServiceName(project.service)}</span>
+                </div>
+                ${project.engineType ? `<div class="detail-item">
+                    <span>Engine:</span>
+                    <span class="value">${getEngineTypeName(project.engineType)}</span>
+                </div>` : ''}
+                <div class="detail-item">
+                    <span>Status:</span>
+                    <span class="value">${getStatusName(project.status)}</span>
+                </div>
+                ${project.type === 'flip' ? `<div class="detail-item">
+                    <span>Purchase Price:</span>
+                    <span class="value">$${project.purchasePrice ? project.purchasePrice.toFixed(2) : '0.00'}</span>
+                </div>` : ''}
+                <div class="detail-item">
+                    <span>${project.type === 'flip' ? 'Purchase Date' : 'Booking Date'}:</span>
+                    <span class="value">${project.purchaseDate ? new Date(project.purchaseDate).toLocaleDateString() : 'N/A'}</span>
+                </div>
+                ${project.type === 'repair' && project.repairReason ? `<div class="detail-item">
+                    <span>Repair Reason:</span>
+                    <span class="value">${project.repairReason}</span>
+                </div>` : ''}
+                ${project.soldPrice ? `<div class="detail-item">
+                    <span>Sold Price:</span>
+                    <span class="value">$${project.soldPrice.toFixed(2)}</span>
+                </div>` : ''}
+                ${project.soldDate ? `<div class="detail-item">
+                    <span>Sold Date:</span>
+                    <span class="value">${new Date(project.soldDate).toLocaleDateString()}</span>
+                </div>` : ''}
+                ${project.jobPrice ? `<div class="detail-item">
+                    <span>Service Charge:</span>
+                    <span class="value">$${project.jobPrice.toFixed(2)}</span>
+                </div>` : ''}
+                ${project.partsCost ? `<div class="detail-item">
+                    <span>Parts Cost:</span>
+                    <span class="value">$${project.partsCost.toFixed(2)}</span>
+                </div>` : ''}
+                ${project.completionDate ? `<div class="detail-item">
+                    <span>Completion Date:</span>
+                    <span class="value">${new Date(project.completionDate).toLocaleDateString()}</span>
+                </div>` : ''}
+                ${project.repairDescription ? `<div class="detail-item">
+                    <span>Repair Description:</span>
+                    <span class="value">${project.repairDescription}</span>
+                </div>` : ''}
+                ${project.partsInstalled ? `<div class="detail-item">
+                    <span>Parts Installed:</span>
+                    <span class="value">${project.partsInstalled}</span>
+                </div>` : ''}
             `;
-            projectNotesContainer.appendChild(noteElement);
-        });
-    }
-    
-    // Display repair logs (only for repair projects)
-    if (project.type === 'repair') {
-        document.getElementById('repair-log-section').style.display = 'block';
-        if (project.repairLogs && project.repairLogs.length > 0) {
-            project.repairLogs.forEach(log => {
-                const logElement = document.createElement('div');
-                logElement.className = 'repair-log-item';
-                logElement.innerHTML = `
-                    <div class="repair-log-header">
-                        <span>${new Date(log.date).toLocaleString()}</span>
-                    </div>
-                    <div class="repair-log-content">${log.text}</div>
-                `;
-                repairLogContainer.appendChild(logElement);
-            });
-        }
-    } else {
-        // Hide repair log section for non-repair projects
-        document.getElementById('repair-log-section').style.display = 'none';
-    }
-    
-    projectDetailView.style.display = 'block';
-}
+            
+            detailProjectInfo.innerHTML = infoHtml;
+            
+            // Display images
+            if (project.images && project.images.length > 0) {
+                project.images.forEach((image, index) => {
+                    const imageElement = document.createElement('div');
+                    imageElement.className = 'project-image';
+                    imageElement.innerHTML = `
+                        <img src="${image.data}" alt="Project image">
+                        <div class="project-image-remove" data-index="${index}">
+                            <i class="fas fa-times"></i>
+                        </div>
+                    `;
+                    projectImagesContainer.insertBefore(imageElement, addImageBtn);
+                    
+                    // Add event listener to remove button
+                    imageElement.querySelector('.project-image-remove').addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        removeProjectImage(index);
+                    });
+                });
+            }
             
             // Display notes
             if (project.notes && project.notes.length > 0) {
@@ -1709,6 +1688,7 @@ function openProjectDetail(projectId) {
             
             // Display repair logs (only for repair projects)
             if (project.type === 'repair') {
+                document.getElementById('repair-log-section').style.display = 'block';
                 if (project.repairLogs && project.repairLogs.length > 0) {
                     project.repairLogs.forEach(log => {
                         const logElement = document.createElement('div');
@@ -1903,7 +1883,7 @@ function openProjectDetail(projectId) {
             }
             
             // Format dates
-            const purchaseDate = new Date(project.purchaseDate).toLocaleDateString();
+            const purchaseDate = project.purchaseDate ? new Date(project.purchaseDate).toLocaleDateString() : 'N/A';
             const soldDate = project.soldDate ? new Date(project.soldDate).toLocaleDateString() : 'Not sold';
             const completionDate = project.completionDate ? new Date(project.completionDate).toLocaleDateString() : 'Not completed';
             
@@ -1938,14 +1918,14 @@ function openProjectDetail(projectId) {
                             <span>Engine:</span>
                             <span class="value">${engineText}</span>
                         </div>` : ''}
-                        <div class="detail-item">
+                        ${project.type === 'flip' ? `<div class="detail-item">
                             <i class="fas fa-dollar-sign"></i>
                             <span>Purchase Price:</span>
-                            <span class="value">$${project.purchasePrice.toFixed(2)}</span>
-                        </div>
+                            <span class="value">$${project.purchasePrice ? project.purchasePrice.toFixed(2) : '0.00'}</span>
+                        </div>` : ''}
                         <div class="detail-item">
                             <i class="fas fa-calendar-alt"></i>
-                            <span>Purchase Date:</span>
+                            <span>${project.type === 'flip' ? 'Purchase Date' : 'Booking Date'}:</span>
                             <span class="value">${purchaseDate}</span>
                         </div>
                         ${project.soldPrice ? `<div class="detail-item">
@@ -1960,7 +1940,7 @@ function openProjectDetail(projectId) {
                         </div>` : ''}
                         ${project.jobPrice ? `<div class="detail-item">
                             <i class="fas fa-wrench"></i>
-                            <span>Job Price:</span>
+                            <span>Service Charge:</span>
                             <span class="value">$${project.jobPrice.toFixed(2)}</span>
                         </div>` : ''}
                         ${project.partsCost ? `<div class="detail-item">
@@ -2008,11 +1988,11 @@ function openProjectDetail(projectId) {
                 const projectId = e.target.closest('button').dataset.id;
                 openProjectDetail(projectId);
             });
+            
             card.querySelector('.delete-project').addEventListener('click', (e) => {
-    const projectId = e.target.closest('button').dataset.id;
-    currentDeleteProjectId = projectId; // Make sure this line exists
-    openDeleteModal(projectId);
-});
+                const projectId = e.target.closest('button').dataset.id;
+                openDeleteModal(projectId);
+            });
             
             if (project.status !== 'sold' && project.status !== 'completed') {
                 if (project.status === 'not_running') {
@@ -2034,11 +2014,6 @@ function openProjectDetail(projectId) {
                     });
                 }
             }
-            
-            card.querySelector('.delete-project').addEventListener('click', (e) => {
-                const projectId = e.target.closest('button').dataset.id;
-                openDeleteModal(projectId);
-            });
             
             return card;
         }
@@ -2116,6 +2091,7 @@ function openProjectDetail(projectId) {
             
             // Set today as default date
             document.getElementById('purchase-date').valueAsDate = new Date();
+            document.getElementById('booking-date').valueAsDate = new Date();
             document.getElementById('sold-date').valueAsDate = new Date();
             document.getElementById('completion-date').valueAsDate = new Date();
             
@@ -2130,16 +2106,12 @@ function openProjectDetail(projectId) {
                 });
             });
 
-            // Add this to the setupEventListeners function
-document.getElementById('project-type').addEventListener('change', function() {
-    const isRepair = this.value === 'repair';
-    document.getElementById('purchase-price-row').style.display = isRepair ? 'none' : 'flex';
-    document.getElementById('repair-details-row').style.display = isRepair ? 'flex' : 'none';
-    
-    if (isRepair) {
-        document.getElementById('booking-date').valueAsDate = new Date();
-    }
-});
+            // Toggle between repair and flip fields
+            document.getElementById('project-type').addEventListener('change', function() {
+                const isRepair = this.value === 'repair';
+                document.getElementById('flip-details').style.display = isRepair ? 'none' : 'block';
+                document.getElementById('repair-details').style.display = isRepair ? 'block' : 'none';
+            });
             
             // Mobile menu
             mobileAll.addEventListener('click', (e) => {
@@ -2206,16 +2178,16 @@ document.getElementById('project-type').addEventListener('change', function() {
         
         // Calculate total spent
         function calculateTotalSpent() {
-            return projects.reduce((total, project) => total + project.purchasePrice, 0);
+            return projects.reduce((total, project) => total + (project.purchasePrice || 0), 0);
         }
         
         // Calculate total profit
         function calculateTotalProfit() {
             return projects.reduce((total, project) => {
                 if (project.type === 'flip' && project.soldPrice) {
-                    return total + (project.soldPrice - project.purchasePrice);
+                    return total + (project.soldPrice - (project.purchasePrice || 0));
                 } else if (project.type === 'repair' && project.jobPrice) {
-                    return total + (project.jobPrice - project.partsCost);
+                    return total + (project.jobPrice - (project.partsCost || 0));
                 }
                 return total;
             }, 0);
