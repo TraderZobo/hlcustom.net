@@ -976,7 +976,7 @@
                         </div>
                         <div class="stat-item">
                             <div class="stat-value" id="sold-projects">0</div>
-                            <div class="stat-label">Sold</div>
+                            <div class="stat-label">Complete</div>
                         </div>
                         <div class="stat-item">
                             <div class="stat-value" id="total-spent">$0</div>
@@ -986,6 +986,13 @@
                             <div class="stat-value" id="total-profit">$0</div>
                             <div class="stat-label">Profit</div>
                         </div>
+                        <div class="stat-item">
+    <div class="stat-value" id="scrap-runs">0</div>
+    <div class="stat-label">Scrap Runs</div>
+</div>
+<button class="btn btn-warning btn-sm" id="scrap-run-btn">
+    <i class="fas fa-recycle"></i> Scrap Run
+</button>
                     </div>
                 </div>
             </div>
@@ -1078,6 +1085,36 @@
                     <h3>Add New Project</h3>
                     <button class="close-modal">&times;</button>
                 </div>
+
+                <!-- Scrap Run Modal -->
+<div class="modal" id="scrap-run-modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Record Scrap Run</h3>
+            <button class="close-modal">&times;</button>
+        </div>
+        <div class="modal-body">
+            <form id="scrap-run-form">
+                <div class="form-group">
+                    <label for="scrap-amount">Amount Earned ($)</label>
+                    <input type="number" id="scrap-amount" placeholder="0.00" min="0" step="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label for="scrap-date">Date</label>
+                    <input type="date" id="scrap-date" required>
+                </div>
+                <div class="form-group">
+                    <label for="scrap-notes">Notes (optional)</label>
+                    <textarea id="scrap-notes" placeholder="Any notes about this scrap run" rows="3"></textarea>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-cancel">Cancel</button>
+            <button class="btn btn-success" id="confirm-scrap-run">Save Scrap Run</button>
+        </div>
+    </div>
+</div>
 
                 <div class="modal-body">
                     <form id="project-form">
@@ -1357,6 +1394,8 @@
         const mobileAdd = document.getElementById('mobile-add');
         
         // State variables
+        let scrapRuns = [];
+let currentScrapRunId = null;
         let projects = [];
         let currentSellProjectId = null;
         let currentCompleteRepairProjectId = null;
@@ -1443,6 +1482,66 @@
                 themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
             }
         }
+
+
+// Load scrap runs from Firestore
+function loadScrapRuns() {
+    db.collection("scrapRuns").onSnapshot((snapshot) => {
+        scrapRuns = [];
+        snapshot.forEach((doc) => {
+            scrapRuns.push({ id: doc.id, ...doc.data() });
+        });
+        updateStats();
+    });
+}
+
+// Save scrap run to Firestore
+function saveScrapRun(scrapRun) {
+    if (scrapRun.id) {
+        // Update existing scrap run
+        return db.collection("scrapRuns").doc(scrapRun.id).update(scrapRun);
+    } else {
+        // Add new scrap run
+        return db.collection("scrapRuns").add(scrapRun);
+    }
+}
+
+// Open scrap run modal
+function openScrapRunModal() {
+    document.getElementById('scrap-amount').value = '';
+    document.getElementById('scrap-date').valueAsDate = new Date();
+    document.getElementById('scrap-notes').value = '';
+    toggleModal(scrapRunModal, true);
+}
+
+// Add scrap run
+function addScrapRun() {
+    const amount = parseFloat(document.getElementById('scrap-amount').value);
+    const date = document.getElementById('scrap-date').value;
+    const notes = document.getElementById('scrap-notes').value.trim();
+    
+    if (!amount || !date) {
+        alert('Please fill in all required fields');
+        return;
+    }
+    
+    const scrapRunData = {
+        amount,
+        date,
+        notes,
+        createdAt: new Date().toISOString()
+    };
+    
+    saveScrapRun(scrapRunData)
+        .then(() => {
+            toggleModal(scrapRunModal, false);
+        })
+        .catch((error) => {
+            console.error("Error adding scrap run: ", error);
+            alert("Error adding scrap run. Please try again.");
+        });
+}
+        
         
         // Toggle dark/light mode
         function toggleTheme() {
