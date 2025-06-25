@@ -1348,6 +1348,7 @@
         const appContent = document.getElementById('app-content');
         
         // Main App DOM Elements
+        
         const projectGrid = document.getElementById('project-grid');
         const addProjectBtn = document.getElementById('add-project-btn');
         const addProjectModal = document.getElementById('add-project-modal');
@@ -1465,13 +1466,14 @@ let currentScrapRunId = null;
         }
         
         // Initialize the application after PIN is entered
-        function initApp() {
-            loadThemePreference();
-            loadProjects();
-            setupEventListeners();
-            updateStats();
-            renderProjects();
-        }
+       function initApp() {
+    loadThemePreference();
+    loadProjects();
+    loadScrapRuns(); // Add this line
+    setupEventListeners();
+    updateStats();
+    renderProjects();
+}
         
         // Load theme preference from localStorage
         function loadThemePreference() {
@@ -2324,6 +2326,7 @@ function addScrapRun() {
             document.getElementById('sold-date').valueAsDate = new Date();
             document.getElementById('completion-date').valueAsDate = new Date();
             
+            
             // Project type tabs
             projectTabs.forEach(tab => {
                 tab.addEventListener('click', () => {
@@ -2393,6 +2396,12 @@ function addScrapRun() {
             
             document.getElementById('job-price').addEventListener('input', updateRepairProfitCalculation);
             document.getElementById('parts-cost').addEventListener('input', updateRepairProfitCalculation);
+            // Add these lines to setupEventListeners
+document.getElementById('scrap-run-btn').addEventListener('click', openScrapRunModal);
+document.getElementById('confirm-scrap-run').addEventListener('click', addScrapRun);
+
+// Add scrap date default
+document.getElementById('scrap-date').valueAsDate = new Date();
         }
         
         // Toggle modal visibility
@@ -2411,29 +2420,35 @@ function addScrapRun() {
         }
         
         // Calculate total profit
-        function calculateTotalProfit() {
-            return projects.reduce((total, project) => {
-                if (project.type === 'flip' && project.soldPrice) {
-                    return total + (project.soldPrice - (project.purchasePrice || 0));
-                } else if (project.type === 'repair' && project.jobPrice) {
-                    return total + (project.jobPrice - (project.partsCost || 0));
-                }
-                return total;
-            }, 0);
+       function calculateTotalProfit() {
+    let profit = projects.reduce((total, project) => {
+        if (project.type === 'flip' && project.soldPrice) {
+            return total + (project.soldPrice - (project.purchasePrice || 0));
+        } else if (project.type === 'repair' && project.jobPrice) {
+            return total + (project.jobPrice - (project.partsCost || 0));
         }
+        return total;
+    }, 0);
+    
+    // Add scrap run amounts to total profit
+    profit += scrapRuns.reduce((total, scrapRun) => total + (scrapRun.amount || 0), 0);
+    
+    return profit;
+}
         
         // Update statistics
-        function updateStats() {
-            document.getElementById('total-projects').textContent = projects.length;
-            document.getElementById('active-projects').textContent = projects.filter(p => p.status !== 'sold' && p.status !== 'completed').length;
-            document.getElementById('sold-projects').textContent = projects.filter(p => p.status === 'sold' || p.status === 'completed').length;
-            
-            const totalSpent = calculateTotalSpent();
-            const totalProfit = calculateTotalProfit();
-            
-            document.getElementById('total-spent').textContent = `$${totalSpent.toFixed(2)}`;
-            document.getElementById('total-profit').textContent = `$${totalProfit.toFixed(2)}`;
-        }
+      function updateStats() {
+    document.getElementById('total-projects').textContent = projects.length;
+    document.getElementById('active-projects').textContent = projects.filter(p => p.status !== 'sold' && p.status !== 'completed').length;
+    document.getElementById('sold-projects').textContent = projects.filter(p => p.status === 'sold' || p.status === 'completed').length;
+    document.getElementById('scrap-runs').textContent = scrapRuns.length; // Add this line
+    
+    const totalSpent = calculateTotalSpent();
+    const totalProfit = calculateTotalProfit();
+    
+    document.getElementById('total-spent').textContent = `$${totalSpent.toFixed(2)}`;
+    document.getElementById('total-profit').textContent = `$${totalProfit.toFixed(2)}`;
+}
         
         // Initialize the PIN entry when DOM is loaded
         document.addEventListener('DOMContentLoaded', setupPinEntry);
