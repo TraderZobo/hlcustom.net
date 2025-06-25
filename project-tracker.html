@@ -2000,248 +2000,6 @@
             }
         }
         
-        // Complete repair
-        function completeRepair() {
-            const jobPrice = parseFloat(document.getElementById('job-price').value);
-            const partsCost = parseFloat(document.getElementById('parts-cost').value);
-            const repairDescription = document.getElementById('repair-description').value;
-            const partsInstalled = document.getElementById('parts-installed').value;
-            const completionDate = document.getElementById('completion-date').value;
-            
-            if (!jobPrice || !partsCost || !completionDate || !repairDescription) {
-                alert('Please fill in all required fields');
-                return;
-            }
-            
-            const project = projects.find(p => p.id === currentCompleteRepairProjectId);
-            if (project) {
-                const updatedProject = {
-                    ...project,
-                    status: 'completed',
-                    jobPrice: jobPrice,
-                    partsCost: partsCost,
-                    repairDescription: repairDescription,
-                    partsInstalled: partsInstalled,
-                    completionDate: completionDate
-                };
-                
-                saveProject(updatedProject)
-                    .then(() => {
-                        toggleModal(completeRepairModal, false);
-                    })
-                    .catch((error) => {
-                        console.error("Error updating project: ", error);
-                        alert("Error updating project. Please try again.");
-                    });
-            }
-        }
-        
-        // Open delete confirmation modal
-        function openDeleteModal(projectId) {
-            const project = projects.find(p => p.id === projectId);
-            if (project) {
-                currentDeleteProjectId = projectId;
-                projectToDelete.textContent = project.name;
-                toggleModal(deleteProjectModal, true);
-            }
-        }
-        
-        // Open project detail view
-        function openProjectDetail(projectId) {
-            const project = projects.find(p => p.id === projectId);
-            if (!project) return;
-            
-            currentDetailProjectId = projectId;
-            detailProjectName.textContent = project.name;
-            
-            // Clear previous content
-            detailProjectInfo.innerHTML = '';
-            projectImagesContainer.innerHTML = '';
-            projectNotesContainer.innerHTML = '';
-            repairLogContainer.innerHTML = '';
-            
-            // Add back the add image button
-            projectImagesContainer.appendChild(addImageBtn);
-            
-            // Display project info
-            const infoHtml = `
-                <div class="detail-item">
-                    <span>Type:</span>
-                    <span class="value">${project.type === 'flip' ? 'Flip' : 'Repair'}</span>
-                </div>
-                <div class="detail-item">
-                    <span>Service:</span>
-                    <span class="value">${getServiceName(project.service)}</span>
-                </div>
-                ${project.engineType ? `<div class="detail-item">
-                    <span>Engine:</span>
-                    <span class="value">${getEngineTypeName(project.engineType)}</span>
-                </div>` : ''}
-                <div class="detail-item">
-                    <span>Status:</span>
-                    <span class="value">${getStatusName(project.status)}</span>
-                </div>
-                ${project.type === 'flip' ? `<div class="detail-item">
-                    <span>Purchase Price:</span>
-                    <span class="value">$${project.purchasePrice ? project.purchasePrice.toFixed(2) : '0.00'}</span>
-                </div>` : ''}
-                <div class="detail-item">
-                    <span>${project.type === 'flip' ? 'Purchase Date' : 'Booking Date'}:</span>
-                    <span class="value">${project.purchaseDate ? new Date(project.purchaseDate).toLocaleDateString() : 'N/A'}</span>
-                </div>
-                ${project.type === 'repair' && project.repairReason ? `<div class="detail-item">
-                    <span>Repair Reason:</span>
-                    <span class="value">${project.repairReason}</span>
-                </div>` : ''}
-                ${project.soldPrice ? `<div class="detail-item">
-                    <span>Sold Price:</span>
-                    <span class="value">$${project.soldPrice.toFixed(2)}</span>
-                </div>` : ''}
-                ${project.soldDate ? `<div class="detail-item">
-                    <span>Sold Date:</span>
-                    <span class="value">${new Date(project.soldDate).toLocaleDateString()}</span>
-                </div>` : ''}
-                ${project.jobPrice ? `<div class="detail-item">
-                    <span>Service Charge:</span>
-                    <span class="value">$${project.jobPrice.toFixed(2)}</span>
-                </div>` : ''}
-                ${project.partsCost ? `<div class="detail-item">
-                    <span>Parts Cost:</span>
-                    <span class="value">$${project.partsCost.toFixed(2)}</span>
-                </div>` : ''}
-                ${project.completionDate ? `<div class="detail-item">
-                    <span>Completion Date:</span>
-                    <span class="value">${new Date(project.completionDate).toLocaleDateString()}</span>
-                </div>` : ''}
-                ${project.repairDescription ? `<div class="detail-item">
-                    <span>Repair Description:</span>
-                    <span class="value">${project.repairDescription}</span>
-                </div>` : ''}
-                ${project.partsInstalled ? `<div class="detail-item">
-                    <span>Parts Installed:</span>
-                    <span class="value">${project.partsInstalled}</span>
-                </div>` : ''}
-            `;
-            
-            detailProjectInfo.innerHTML = infoHtml;
-            
-            // Display images
-            if (project.images && project.images.length > 0) {
-                project.images.forEach((image, index) => {
-                    const imageElement = document.createElement('div');
-                    imageElement.className = 'project-image';
-                    imageElement.innerHTML = `
-                        <img src="${image.data}" alt="Project image">
-                        <div class="project-image-remove" data-index="${index}">
-                            <i class="fas fa-times"></i>
-                        </div>
-                    `;
-                    projectImagesContainer.insertBefore(imageElement, addImageBtn);
-                    
-                    // Add event listener to remove button
-                    imageElement.querySelector('.project-image-remove').addEventListener('click', (e) => {
-                        e.stopPropagation();
-                        removeProjectImage(index);
-                    });
-                });
-            }
-            
-            // Display notes
-            if (project.notes && project.notes.length > 0) {
-                project.notes.forEach(note => {
-                    const noteElement = document.createElement('div');
-                    noteElement.className = 'note-item';
-                    noteElement.innerHTML = `
-                        <div class="note-header">
-                            <span>${new Date(note.date).toLocaleString()}</span>
-                        </div>
-                        <div class="note-content">${note.text}</div>
-                    `;
-                    projectNotesContainer.appendChild(noteElement);
-                });
-            }
-            
-            // Display repair logs (only for repair projects)
-            if (project.type === 'repair') {
-                document.getElementById('repair-log-section').style.display = 'block';
-                if (project.repairLogs && project.repairLogs.length > 0) {
-                    project.repairLogs.forEach(log => {
-                        const logElement = document.createElement('div');
-                        logElement.className = 'repair-log-item';
-                        logElement.innerHTML = `
-                            <div class="repair-log-header">
-                                <span>${new Date(log.date).toLocaleString()}</span>
-                            </div>
-                            <div class="repair-log-content">${log.text}</div>
-                        `;
-                        repairLogContainer.appendChild(logElement);
-                    });
-                }
-            } else {
-                // Hide repair log section for non-repair projects
-                document.getElementById('repair-log-section').style.display = 'none';
-            }
-            
-            projectDetailView.style.display = 'block';
-        }
-        
-        // Handle image upload
-        function handleImageUpload(e) {
-            const file = e.target.files[0];
-            if (!file) return;
-            
-            const reader = new FileReader();
-            reader.onload = (event) => {
-                const project = projects.find(p => p.id === currentDetailProjectId);
-                if (project) {
-                    const newImage = {
-                        name: file.name,
-                        data: event.target.result,
-                        date: new Date().toISOString()
-                    };
-                    
-                    const updatedProject = {
-                        ...project,
-                        images: [...project.images, newImage]
-                    };
-                    
-                    saveProject(updatedProject)
-                        .then(() => {
-                            openProjectDetail(currentDetailProjectId);
-                        })
-                        .catch((error) => {
-                            console.error("Error adding image: ", error);
-                            alert("Error adding image. Please try again.");
-                        });
-                }
-            };
-            reader.readAsDataURL(file);
-            e.target.value = '';
-        }
-        
-        // Remove project image
-        function removeProjectImage(index) {
-            const project = projects.find(p => p.id === currentDetailProjectId);
-            if (project) {
-                const updatedImages = [...project.images];
-                updatedImages.splice(index, 1);
-                
-                const updatedProject = {
-                    ...project,
-                    images: updatedImages
-                };
-                
-                saveProject(updatedProject)
-                    .then(() => {
-                        openProjectDetail(currentDetailProjectId);
-                    })
-                    .catch((error) => {
-                        console.error("Error removing image: ", error);
-                        alert("Error removing image. Please try again.");
-                    });
-            }
-        }
-        
         // Add project note
         function addProjectNote() {
             const text = newNoteText.value.trim();
@@ -2535,9 +2293,46 @@
             }
         }
         
+        // Calculate total spent
+        function calculateTotalSpent() {
+            return projects.reduce((total, project) => total + (project.purchasePrice || 0), 0);
+        }
+        
+        // Calculate total profit
+        function calculateTotalProfit() {
+            let profit = projects.reduce((total, project) => {
+                if (project.type === 'flip' && project.soldPrice) {
+                    return total + (project.soldPrice - (project.purchasePrice || 0));
+                } else if (project.type === 'repair' && project.jobPrice) {
+                    return total + (project.jobPrice - (project.partsCost || 0));
+                }
+                return total;
+            }, 0);
+            
+            // Add scrap run amounts to total profit
+            profit += scrapRuns.reduce((total, scrapRun) => total + (scrapRun.amount || 0), 0);
+            
+            return profit;
+        }
+        
+        // Update statistics
+        function updateStats() {
+            document.getElementById('total-projects').textContent = projects.length;
+            document.getElementById('active-projects').textContent = projects.filter(p => p.status !== 'sold' && p.status !== 'completed').length;
+            document.getElementById('sold-projects').textContent = projects.filter(p => p.status === 'sold' || p.status === 'completed').length;
+            document.getElementById('scrap-runs').textContent = scrapRuns.length;
+            
+            const totalSpent = calculateTotalSpent();
+            const totalProfit = calculateTotalProfit();
+            
+            document.getElementById('total-spent').textContent = `$${totalSpent.toFixed(2)}`;
+            document.getElementById('total-profit').textContent = `$${totalProfit.toFixed(2)}`;
+        }
+        
         // Set up event listeners
         function setupEventListeners() {
             addProjectBtn.addEventListener('click', () => toggleModal(addProjectModal, true));
+            scrapRunBtn.addEventListener('click', openScrapRunModal);
             
             closeModalButtons.forEach(button => {
                 button.addEventListener('click', (e) => {
@@ -2550,6 +2345,7 @@
             confirmSellBtn.addEventListener('click', sellProject);
             confirmCompleteRepairBtn.addEventListener('click', completeRepair);
             confirmDeleteBtn.addEventListener('click', deleteProject);
+            confirmScrapRunBtn.addEventListener('click', addScrapRun);
             themeToggle.addEventListener('click', toggleTheme);
             
             searchInput.addEventListener('input', renderProjects);
@@ -2561,6 +2357,7 @@
                     toggleModal(sellProjectModal, false);
                     toggleModal(completeRepairModal, false);
                     toggleModal(deleteProjectModal, false);
+                    toggleModal(scrapRunModal, false);
                 }
             });
             
@@ -2569,7 +2366,7 @@
             document.getElementById('booking-date').valueAsDate = new Date();
             document.getElementById('sold-date').valueAsDate = new Date();
             document.getElementById('completion-date').valueAsDate = new Date();
-            
+            document.getElementById('scrap-date').valueAsDate = new Date();
             
             // Project type tabs
             projectTabs.forEach(tab => {
@@ -2640,12 +2437,6 @@
             
             document.getElementById('job-price').addEventListener('input', updateRepairProfitCalculation);
             document.getElementById('parts-cost').addEventListener('input', updateRepairProfitCalculation);
-            // Add these lines to setupEventListeners
-document.getElementById('scrap-run-btn').addEventListener('click', openScrapRunModal);
-document.getElementById('confirm-scrap-run').addEventListener('click', addScrapRun);
-
-// Add scrap date default
-document.getElementById('scrap-date').valueAsDate = new Date();
         }
         
         // Toggle modal visibility
@@ -2654,45 +2445,11 @@ document.getElementById('scrap-date').valueAsDate = new Date();
             if (!show) {
                 if (modal === addProjectModal) {
                     projectForm.reset();
+                } else if (modal === scrapRunModal) {
+                    scrapRunForm.reset();
                 }
             }
         }
-        
-        // Calculate total spent
-        function calculateTotalSpent() {
-            return projects.reduce((total, project) => total + (project.purchasePrice || 0), 0);
-        }
-        
-        // Calculate total profit
-       function calculateTotalProfit() {
-    let profit = projects.reduce((total, project) => {
-        if (project.type === 'flip' && project.soldPrice) {
-            return total + (project.soldPrice - (project.purchasePrice || 0));
-        } else if (project.type === 'repair' && project.jobPrice) {
-            return total + (project.jobPrice - (project.partsCost || 0));
-        }
-        return total;
-    }, 0);
-    
-    // Add scrap run amounts to total profit
-    profit += scrapRuns.reduce((total, scrapRun) => total + (scrapRun.amount || 0), 0);
-    
-    return profit;
-}
-        
-        // Update statistics
-      function updateStats() {
-    document.getElementById('total-projects').textContent = projects.length;
-    document.getElementById('active-projects').textContent = projects.filter(p => p.status !== 'sold' && p.status !== 'completed').length;
-    document.getElementById('sold-projects').textContent = projects.filter(p => p.status === 'sold' || p.status === 'completed').length;
-    document.getElementById('scrap-runs').textContent = scrapRuns.length; // Add this line
-    
-    const totalSpent = calculateTotalSpent();
-    const totalProfit = calculateTotalProfit();
-    
-    document.getElementById('total-spent').textContent = `$${totalSpent.toFixed(2)}`;
-    document.getElementById('total-profit').textContent = `$${totalProfit.toFixed(2)}`;
-}
         
         // Initialize the PIN entry when DOM is loaded
         document.addEventListener('DOMContentLoaded', setupPinEntry);
