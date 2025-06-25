@@ -103,6 +103,7 @@
         transition: var(--transition);
         flex-wrap: wrap;
         justify-content: center;
+        align-items: center;
     }
     
     .stat-item {
@@ -976,7 +977,7 @@
                         </div>
                         <div class="stat-item">
                             <div class="stat-value" id="sold-projects">0</div>
-                            <div class="stat-label">Complete</div>
+                            <div class="stat-label">Sold</div>
                         </div>
                         <div class="stat-item">
                             <div class="stat-value" id="total-spent">$0</div>
@@ -987,12 +988,12 @@
                             <div class="stat-label">Profit</div>
                         </div>
                         <div class="stat-item">
-    <div class="stat-value" id="scrap-runs">0</div>
-    <div class="stat-label">Scrap Runs</div>
-</div>
-<button class="btn btn-warning btn-sm" id="scrap-run-btn">
-    <i class="fas fa-recycle"></i> Scrap Run
-</button>
+                            <div class="stat-value" id="scrap-runs">0</div>
+                            <div class="stat-label">Scrap Runs</div>
+                        </div>
+                        <button class="btn btn-warning btn-sm" id="scrap-run-btn">
+                            <i class="fas fa-recycle"></i> Scrap Run
+                        </button>
                     </div>
                 </div>
             </div>
@@ -1085,36 +1086,6 @@
                     <h3>Add New Project</h3>
                     <button class="close-modal">&times;</button>
                 </div>
-
-                <!-- Scrap Run Modal -->
-<div class="modal" id="scrap-run-modal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h3>Record Scrap Run</h3>
-            <button class="close-modal">&times;</button>
-        </div>
-        <div class="modal-body">
-            <form id="scrap-run-form">
-                <div class="form-group">
-                    <label for="scrap-amount">Amount Earned ($)</label>
-                    <input type="number" id="scrap-amount" placeholder="0.00" min="0" step="0.01" required>
-                </div>
-                <div class="form-group">
-                    <label for="scrap-date">Date</label>
-                    <input type="date" id="scrap-date" required>
-                </div>
-                <div class="form-group">
-                    <label for="scrap-notes">Notes (optional)</label>
-                    <textarea id="scrap-notes" placeholder="Any notes about this scrap run" rows="3"></textarea>
-                </div>
-            </form>
-        </div>
-        <div class="modal-footer">
-            <button class="btn btn-cancel">Cancel</button>
-            <button class="btn btn-success" id="confirm-scrap-run">Save Scrap Run</button>
-        </div>
-    </div>
-</div>
 
                 <div class="modal-body">
                     <form id="project-form">
@@ -1306,6 +1277,36 @@
             </div>
         </div>
 
+        <!-- Scrap Run Modal -->
+        <div class="modal" id="scrap-run-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Record Scrap Run</h3>
+                    <button class="close-modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form id="scrap-run-form">
+                        <div class="form-group">
+                            <label for="scrap-amount">Amount Earned ($)</label>
+                            <input type="number" id="scrap-amount" placeholder="0.00" min="0" step="0.01" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="scrap-date">Date</label>
+                            <input type="date" id="scrap-date" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="scrap-notes">Notes (optional)</label>
+                            <textarea id="scrap-notes" placeholder="Any notes about this scrap run" rows="3"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-cancel">Cancel</button>
+                    <button class="btn btn-success" id="confirm-scrap-run">Save Scrap Run</button>
+                </div>
+            </div>
+        </div>
+
         <!-- Theme Toggle Button -->
         <button class="theme-toggle" id="theme-toggle">
             <i class="fas fa-moon"></i>
@@ -1348,21 +1349,24 @@
         const appContent = document.getElementById('app-content');
         
         // Main App DOM Elements
-        
         const projectGrid = document.getElementById('project-grid');
         const addProjectBtn = document.getElementById('add-project-btn');
         const addProjectModal = document.getElementById('add-project-modal');
         const sellProjectModal = document.getElementById('sell-project-modal');
         const completeRepairModal = document.getElementById('complete-repair-modal');
         const deleteProjectModal = document.getElementById('delete-project-modal');
+        const scrapRunModal = document.getElementById('scrap-run-modal');
         const closeModalButtons = document.querySelectorAll('.close-modal, .btn-cancel');
         const saveProjectBtn = document.getElementById('save-project');
         const projectForm = document.getElementById('project-form');
         const sellForm = document.getElementById('sell-form');
         const completeRepairForm = document.getElementById('complete-repair-form');
+        const scrapRunForm = document.getElementById('scrap-run-form');
         const confirmSellBtn = document.getElementById('confirm-sell');
         const confirmCompleteRepairBtn = document.getElementById('confirm-complete-repair');
         const confirmDeleteBtn = document.getElementById('confirm-delete');
+        const confirmScrapRunBtn = document.getElementById('confirm-scrap-run');
+        const scrapRunBtn = document.getElementById('scrap-run-btn');
         const searchInput = document.getElementById('search-input');
         const sellProfitText = document.getElementById('sell-profit-text');
         const repairProfitText = document.getElementById('repair-profit-text');
@@ -1395,13 +1399,13 @@
         const mobileAdd = document.getElementById('mobile-add');
         
         // State variables
-        let scrapRuns = [];
-let currentScrapRunId = null;
         let projects = [];
+        let scrapRuns = [];
         let currentSellProjectId = null;
         let currentCompleteRepairProjectId = null;
         let currentDeleteProjectId = null;
         let currentDetailProjectId = null;
+        let currentScrapRunId = null;
         let darkMode = false;
         let currentProjectTypeFilter = 'all';
         
@@ -1466,14 +1470,14 @@ let currentScrapRunId = null;
         }
         
         // Initialize the application after PIN is entered
-       function initApp() {
-    loadThemePreference();
-    loadProjects();
-    loadScrapRuns(); // Add this line
-    setupEventListeners();
-    updateStats();
-    renderProjects();
-}
+        function initApp() {
+            loadThemePreference();
+            loadProjects();
+            loadScrapRuns();
+            setupEventListeners();
+            updateStats();
+            renderProjects();
+        }
         
         // Load theme preference from localStorage
         function loadThemePreference() {
@@ -1484,66 +1488,6 @@ let currentScrapRunId = null;
                 themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
             }
         }
-
-
-// Load scrap runs from Firestore
-function loadScrapRuns() {
-    db.collection("scrapRuns").onSnapshot((snapshot) => {
-        scrapRuns = [];
-        snapshot.forEach((doc) => {
-            scrapRuns.push({ id: doc.id, ...doc.data() });
-        });
-        updateStats();
-    });
-}
-
-// Save scrap run to Firestore
-function saveScrapRun(scrapRun) {
-    if (scrapRun.id) {
-        // Update existing scrap run
-        return db.collection("scrapRuns").doc(scrapRun.id).update(scrapRun);
-    } else {
-        // Add new scrap run
-        return db.collection("scrapRuns").add(scrapRun);
-    }
-}
-
-// Open scrap run modal
-function openScrapRunModal() {
-    document.getElementById('scrap-amount').value = '';
-    document.getElementById('scrap-date').valueAsDate = new Date();
-    document.getElementById('scrap-notes').value = '';
-    toggleModal(scrapRunModal, true);
-}
-
-// Add scrap run
-function addScrapRun() {
-    const amount = parseFloat(document.getElementById('scrap-amount').value);
-    const date = document.getElementById('scrap-date').value;
-    const notes = document.getElementById('scrap-notes').value.trim();
-    
-    if (!amount || !date) {
-        alert('Please fill in all required fields');
-        return;
-    }
-    
-    const scrapRunData = {
-        amount,
-        date,
-        notes,
-        createdAt: new Date().toISOString()
-    };
-    
-    saveScrapRun(scrapRunData)
-        .then(() => {
-            toggleModal(scrapRunModal, false);
-        })
-        .catch((error) => {
-            console.error("Error adding scrap run: ", error);
-            alert("Error adding scrap run. Please try again.");
-        });
-}
-        
         
         // Toggle dark/light mode
         function toggleTheme() {
@@ -1565,6 +1509,17 @@ function addScrapRun() {
             });
         }
         
+        // Load scrap runs from Firestore
+        function loadScrapRuns() {
+            db.collection("scrapRuns").onSnapshot((snapshot) => {
+                scrapRuns = [];
+                snapshot.forEach((doc) => {
+                    scrapRuns.push({ id: doc.id, ...doc.data() });
+                });
+                updateStats();
+            });
+        }
+        
         // Save project to Firestore
         function saveProject(project) {
             if (project.id) {
@@ -1573,6 +1528,17 @@ function addScrapRun() {
             } else {
                 // Add new project
                 return db.collection("projects").add(project);
+            }
+        }
+        
+        // Save scrap run to Firestore
+        function saveScrapRun(scrapRun) {
+            if (scrapRun.id) {
+                // Update existing scrap run
+                return db.collection("scrapRuns").doc(scrapRun.id).update(scrapRun);
+            } else {
+                // Add new scrap run
+                return db.collection("scrapRuns").add(scrapRun);
             }
         }
         
@@ -1637,6 +1603,34 @@ function addScrapRun() {
                 });
         }
         
+        // Add scrap run
+        function addScrapRun() {
+            const amount = parseFloat(document.getElementById('scrap-amount').value);
+            const date = document.getElementById('scrap-date').value;
+            const notes = document.getElementById('scrap-notes').value.trim();
+            
+            if (!amount || !date) {
+                alert('Please fill in all required fields');
+                return;
+            }
+            
+            const scrapRunData = {
+                amount,
+                date,
+                notes,
+                createdAt: new Date().toISOString()
+            };
+            
+            saveScrapRun(scrapRunData)
+                .then(() => {
+                    toggleModal(scrapRunModal, false);
+                })
+                .catch((error) => {
+                    console.error("Error adding scrap run: ", error);
+                    alert("Error adding scrap run. Please try again.");
+                });
+        }
+        
         // Update project status
         function updateProjectStatus(projectId, newStatus) {
             const project = projects.find(p => p.id === projectId);
@@ -1679,6 +1673,14 @@ function addScrapRun() {
                 document.getElementById('completion-date').valueAsDate = new Date();
                 toggleModal(completeRepairModal, true);
             }
+        }
+        
+        // Open scrap run modal
+        function openScrapRunModal() {
+            document.getElementById('scrap-amount').value = '';
+            document.getElementById('scrap-date').valueAsDate = new Date();
+            document.getElementById('scrap-notes').value = '';
+            toggleModal(scrapRunModal, true);
         }
         
         // Update profit calculation for selling
@@ -1752,6 +1754,248 @@ function addScrapRun() {
                     .catch((error) => {
                         console.error("Error updating project: ", error);
                         alert("Error updating project. Please try again.");
+                    });
+            }
+        }
+        
+        // Complete repair
+        function completeRepair() {
+            const jobPrice = parseFloat(document.getElementById('job-price').value);
+            const partsCost = parseFloat(document.getElementById('parts-cost').value);
+            const repairDescription = document.getElementById('repair-description').value;
+            const partsInstalled = document.getElementById('parts-installed').value;
+            const completionDate = document.getElementById('completion-date').value;
+            
+            if (!jobPrice || !partsCost || !completionDate || !repairDescription) {
+                alert('Please fill in all required fields');
+                return;
+            }
+            
+            const project = projects.find(p => p.id === currentCompleteRepairProjectId);
+            if (project) {
+                const updatedProject = {
+                    ...project,
+                    status: 'completed',
+                    jobPrice: jobPrice,
+                    partsCost: partsCost,
+                    repairDescription: repairDescription,
+                    partsInstalled: partsInstalled,
+                    completionDate: completionDate
+                };
+                
+                saveProject(updatedProject)
+                    .then(() => {
+                        toggleModal(completeRepairModal, false);
+                    })
+                    .catch((error) => {
+                        console.error("Error updating project: ", error);
+                        alert("Error updating project. Please try again.");
+                    });
+            }
+        }
+        
+        // Open delete confirmation modal
+        function openDeleteModal(projectId) {
+            const project = projects.find(p => p.id === projectId);
+            if (project) {
+                currentDeleteProjectId = projectId;
+                projectToDelete.textContent = project.name;
+                toggleModal(deleteProjectModal, true);
+            }
+        }
+        
+        // Open project detail view
+        function openProjectDetail(projectId) {
+            const project = projects.find(p => p.id === projectId);
+            if (!project) return;
+            
+            currentDetailProjectId = projectId;
+            detailProjectName.textContent = project.name;
+            
+            // Clear previous content
+            detailProjectInfo.innerHTML = '';
+            projectImagesContainer.innerHTML = '';
+            projectNotesContainer.innerHTML = '';
+            repairLogContainer.innerHTML = '';
+            
+            // Add back the add image button
+            projectImagesContainer.appendChild(addImageBtn);
+            
+            // Display project info
+            const infoHtml = `
+                <div class="detail-item">
+                    <span>Type:</span>
+                    <span class="value">${project.type === 'flip' ? 'Flip' : 'Repair'}</span>
+                </div>
+                <div class="detail-item">
+                    <span>Service:</span>
+                    <span class="value">${getServiceName(project.service)}</span>
+                </div>
+                ${project.engineType ? `<div class="detail-item">
+                    <span>Engine:</span>
+                    <span class="value">${getEngineTypeName(project.engineType)}</span>
+                </div>` : ''}
+                <div class="detail-item">
+                    <span>Status:</span>
+                    <span class="value">${getStatusName(project.status)}</span>
+                </div>
+                ${project.type === 'flip' ? `<div class="detail-item">
+                    <span>Purchase Price:</span>
+                    <span class="value">$${project.purchasePrice ? project.purchasePrice.toFixed(2) : '0.00'}</span>
+                </div>` : ''}
+                <div class="detail-item">
+                    <span>${project.type === 'flip' ? 'Purchase Date' : 'Booking Date'}:</span>
+                    <span class="value">${project.purchaseDate ? new Date(project.purchaseDate).toLocaleDateString() : 'N/A'}</span>
+                </div>
+                ${project.type === 'repair' && project.repairReason ? `<div class="detail-item">
+                    <span>Repair Reason:</span>
+                    <span class="value">${project.repairReason}</span>
+                </div>` : ''}
+                ${project.soldPrice ? `<div class="detail-item">
+                    <span>Sold Price:</span>
+                    <span class="value">$${project.soldPrice.toFixed(2)}</span>
+                </div>` : ''}
+                ${project.soldDate ? `<div class="detail-item">
+                    <span>Sold Date:</span>
+                    <span class="value">${new Date(project.soldDate).toLocaleDateString()}</span>
+                </div>` : ''}
+                ${project.jobPrice ? `<div class="detail-item">
+                    <span>Service Charge:</span>
+                    <span class="value">$${project.jobPrice.toFixed(2)}</span>
+                </div>` : ''}
+                ${project.partsCost ? `<div class="detail-item">
+                    <span>Parts Cost:</span>
+                    <span class="value">$${project.partsCost.toFixed(2)}</span>
+                </div>` : ''}
+                ${project.completionDate ? `<div class="detail-item">
+                    <span>Completion Date:</span>
+                    <span class="value">${new Date(project.completionDate).toLocaleDateString()}</span>
+                </div>` : ''}
+                ${project.repairDescription ? `<div class="detail-item">
+                    <span>Repair Description:</span>
+                    <span class="value">${project.repairDescription}</span>
+                </div>` : ''}
+                ${project.partsInstalled ? `<div class="detail-item">
+                    <span>Parts Installed:</span>
+                    <span class="value">${project.partsInstalled}</span>
+                </div>` : ''}
+            `;
+            
+            detailProjectInfo.innerHTML = infoHtml;
+            
+            // Display images
+            if (project.images && project.images.length > 0) {
+                project.images.forEach((image, index) => {
+                    const imageElement = document.createElement('div');
+                    imageElement.className = 'project-image';
+                    imageElement.innerHTML = `
+                        <img src="${image.data}" alt="Project image">
+                        <div class="project-image-remove" data-index="${index}">
+                            <i class="fas fa-times"></i>
+                        </div>
+                    `;
+                    projectImagesContainer.insertBefore(imageElement, addImageBtn);
+                    
+                    // Add event listener to remove button
+                    imageElement.querySelector('.project-image-remove').addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        removeProjectImage(index);
+                    });
+                });
+            }
+            
+            // Display notes
+            if (project.notes && project.notes.length > 0) {
+                project.notes.forEach(note => {
+                    const noteElement = document.createElement('div');
+                    noteElement.className = 'note-item';
+                    noteElement.innerHTML = `
+                        <div class="note-header">
+                            <span>${new Date(note.date).toLocaleString()}</span>
+                        </div>
+                        <div class="note-content">${note.text}</div>
+                    `;
+                    projectNotesContainer.appendChild(noteElement);
+                });
+            }
+            
+            // Display repair logs (only for repair projects)
+            if (project.type === 'repair') {
+                document.getElementById('repair-log-section').style.display = 'block';
+                if (project.repairLogs && project.repairLogs.length > 0) {
+                    project.repairLogs.forEach(log => {
+                        const logElement = document.createElement('div');
+                        logElement.className = 'repair-log-item';
+                        logElement.innerHTML = `
+                            <div class="repair-log-header">
+                                <span>${new Date(log.date).toLocaleString()}</span>
+                            </div>
+                            <div class="repair-log-content">${log.text}</div>
+                        `;
+                        repairLogContainer.appendChild(logElement);
+                    });
+                }
+            } else {
+                // Hide repair log section for non-repair projects
+                document.getElementById('repair-log-section').style.display = 'none';
+            }
+            
+            projectDetailView.style.display = 'block';
+        }
+        
+        // Handle image upload
+        function handleImageUpload(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                const project = projects.find(p => p.id === currentDetailProjectId);
+                if (project) {
+                    const newImage = {
+                        name: file.name,
+                        data: event.target.result,
+                        date: new Date().toISOString()
+                    };
+                    
+                    const updatedProject = {
+                        ...project,
+                        images: [...project.images, newImage]
+                    };
+                    
+                    saveProject(updatedProject)
+                        .then(() => {
+                            openProjectDetail(currentDetailProjectId);
+                        })
+                        .catch((error) => {
+                            console.error("Error adding image: ", error);
+                            alert("Error adding image. Please try again.");
+                        });
+                }
+            };
+            reader.readAsDataURL(file);
+            e.target.value = '';
+        }
+        
+        // Remove project image
+        function removeProjectImage(index) {
+            const project = projects.find(p => p.id === currentDetailProjectId);
+            if (project) {
+                const updatedImages = [...project.images];
+                updatedImages.splice(index, 1);
+                
+                const updatedProject = {
+                    ...project,
+                    images: updatedImages
+                };
+                
+                saveProject(updatedProject)
+                    .then(() => {
+                        openProjectDetail(currentDetailProjectId);
+                    })
+                    .catch((error) => {
+                        console.error("Error removing image: ", error);
+                        alert("Error removing image. Please try again.");
                     });
             }
         }
