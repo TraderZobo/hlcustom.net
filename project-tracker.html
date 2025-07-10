@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>H&L Custom Staff Dashboard</title>
+    <title>H&L Garage Flipping Dashboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
     :root {
@@ -23,6 +23,11 @@
         --card-bg: white;
         --header-bg: linear-gradient(135deg, var(--primary), var(--secondary));
         --stat-bg: rgba(255, 255, 255, 0.15);
+        
+        /* Ownership colors */
+        --hunter-color: #3498db;
+        --logan-color: #e74c3c;
+        --both-color: #9b59b6;
     }
     
     .dark-mode {
@@ -46,7 +51,7 @@
         color: var(--text-color);
         line-height: 1.6;
         transition: var(--transition);
-        -webkit-text-size-adjust: 100%; /* Prevent font scaling in landscape */
+        -webkit-text-size-adjust: 100%;
     }
     
     .container {
@@ -127,7 +132,7 @@
         padding: 20px;
         box-shadow: var(--shadow);
         transition: var(--transition);
-        margin-bottom: 70px; /* Space for mobile menu */
+        margin-bottom: 70px;
     }
     
     .content-header {
@@ -167,7 +172,7 @@
     
     .project-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
         gap: 20px;
     }
     
@@ -178,6 +183,19 @@
         transition: var(--transition);
         background: var(--card-bg);
         position: relative;
+        border-left: 5px solid var(--secondary);
+    }
+    
+    .project-card.hunter-owned {
+        border-left-color: var(--hunter-color);
+    }
+    
+    .project-card.logan-owned {
+        border-left-color: var(--logan-color);
+    }
+    
+    .project-card.both-owned {
+        border-left-color: var(--both-color);
     }
     
     .project-card:hover {
@@ -188,12 +206,24 @@
     .card-header {
         padding: 15px;
         color: white;
+        position: relative;
     }
     
     .status-badge {
         position: absolute;
         top: 10px;
         right: 10px;
+        background: rgba(0, 0, 0, 0.3);
+        padding: 4px 10px;
+        border-radius: 20px;
+        font-size: 0.7rem;
+        font-weight: 600;
+    }
+    
+    .ownership-badge {
+        position: absolute;
+        top: 10px;
+        left: 10px;
         background: rgba(0, 0, 0, 0.3);
         padding: 4px 10px;
         border-radius: 20px;
@@ -288,6 +318,21 @@
     .btn-sm {
         padding: 6px 10px;
         font-size: 0.8rem;
+    }
+    
+    .btn-hunter {
+        background-color: var(--hunter-color);
+        color: white;
+    }
+    
+    .btn-logan {
+        background-color: var(--logan-color);
+        color: white;
+    }
+    
+    .btn-both {
+        background-color: var(--both-color);
+        color: white;
     }
     
     .btn:hover {
@@ -546,7 +591,7 @@
         background: var(--primary);
     }
     
-    /* Project Type Tabs */
+    /* Project Status Tabs */
     .project-tabs {
         display: flex;
         margin-bottom: 15px;
@@ -687,7 +732,13 @@
         margin-top: 15px;
     }
     
-    .repair-log-item {
+    .expense-list {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+    
+    .expense-item {
         background: var(--card-bg);
         padding: 12px;
         border-radius: 6px;
@@ -695,7 +746,7 @@
         margin-bottom: 12px;
     }
     
-    .repair-log-header {
+    .expense-header {
         display: flex;
         justify-content: space-between;
         margin-bottom: 8px;
@@ -703,7 +754,7 @@
         font-size: 0.9rem;
     }
     
-    .repair-log-date {
+    .expense-date {
         color: #777;
         font-size: 0.8rem;
     }
@@ -748,7 +799,6 @@
             max-width: 100%;
         }
         
-        /* Simplified mobile layout */
         .project-grid {
             grid-template-columns: 1fr;
             gap: 12px;
@@ -778,19 +828,16 @@
             padding: 6px 8px;
             font-size: 0.8rem;
         }
-        
-        /* Mobile menu */
-      <style>
-    /* Previous CSS remains the same until the mobile menu section */
-
-    /* Mobile Menu Dropdown */
+    }
+    
+    /* Mobile Menu */
     .mobile-menu-container {
         position: fixed;
         bottom: 20px;
         right: 20px;
         z-index: 100;
     }
-
+    
     .mobile-menu-button {
         width: 60px;
         height: 60px;
@@ -806,11 +853,11 @@
         transition: var(--transition);
         font-size: 1.5rem;
     }
-
+    
     .mobile-menu-button:hover {
         transform: scale(1.1);
     }
-
+    
     .mobile-menu-dropdown {
         position: absolute;
         bottom: 70px;
@@ -826,13 +873,13 @@
         transition: all 0.3s ease;
         z-index: 101;
     }
-
+    
     .mobile-menu-dropdown.active {
         transform: translateY(0);
         opacity: 1;
         visibility: visible;
     }
-
+    
     .mobile-menu-item {
         display: flex;
         align-items: center;
@@ -842,21 +889,21 @@
         transition: var(--transition);
         border-bottom: 1px solid rgba(0, 0, 0, 0.05);
     }
-
+    
     .mobile-menu-item:last-child {
         border-bottom: none;
     }
-
+    
     .mobile-menu-item:hover {
         background: rgba(0, 0, 0, 0.05);
     }
-
+    
     .mobile-menu-item i {
         margin-right: 10px;
         width: 20px;
         text-align: center;
     }
-
+    
     /* Dark Mode Toggle */
     .theme-toggle {
         position: fixed;
@@ -876,11 +923,11 @@
         border: none;
         transition: var(--transition);
     }
-
+    
     .theme-toggle:hover {
         transform: scale(1.1);
     }
-
+    
     /* Dark Mode Styles */
     .dark-mode {
         /* Dark mode colors */
@@ -891,46 +938,92 @@
         --stat-bg: rgba(0, 0, 0, 0.2);
         --light: #333;
     }
-
+    
     .dark-mode .mobile-menu-dropdown {
         background: #333;
         border: 1px solid #444;
     }
-
+    
     .dark-mode .mobile-menu-item {
         border-bottom-color: #444;
     }
-
+    
     .dark-mode .mobile-menu-item:hover {
         background: rgba(255, 255, 255, 0.05);
     }
-
-    /* Mobile-specific adjustments */
-    @media (max-width: 768px) {
-        /* Remove the old mobile menu */
-        .mobile-menu {
-            display: none;
-        }
-
-        /* Adjust theme toggle position */
-        .theme-toggle {
-            bottom: 90px;
-            right: 20px;
-            width: 50px;
-            height: 50px;
-        }
-
-        .mobile-menu-container {
-            display: block;
-        }
+    
+    /* Ownership indicators */
+    .hunter-bg {
+        background: var(--hunter-color);
     }
-
+    
+    .logan-bg {
+        background: var(--logan-color);
+    }
+    
+    .both-bg {
+        background: var(--both-color);
+    }
+    
+    /* Expense categories */
+    .expense-category {
+        display: inline-block;
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-size: 0.7rem;
+        font-weight: 600;
+        margin-right: 5px;
+    }
+    
+    .parts-category {
+        background: rgba(52, 152, 219, 0.2);
+        color: var(--hunter-color);
+    }
+    
+    .fuel-category {
+        background: rgba(231, 76, 60, 0.2);
+        color: var(--logan-color);
+    }
+    
+    .other-category {
+        background: rgba(155, 89, 182, 0.2);
+        color: var(--both-color);
+    }
+    
+    /* Profit split display */
+    .profit-split {
+        display: flex;
+        gap: 10px;
+        margin-top: 10px;
+    }
+    
+    .profit-split-item {
+        flex: 1;
+        text-align: center;
+        padding: 8px;
+        border-radius: 6px;
+        font-weight: 600;
+    }
+    
+    .profit-split-hunter {
+        background: rgba(52, 152, 219, 0.1);
+        border: 1px solid var(--hunter-color);
+        color: var(--hunter-color);
+    }
+    
+    .profit-split-logan {
+        background: rgba(231, 76, 60, 0.1);
+        border: 1px solid var(--logan-color);
+        color: var(--logan-color);
+    }
+    
+    /* Responsive adjustments */
     @media (min-width: 769px) {
         .mobile-menu-container {
             display: none;
         }
     }
-</style>
+    </style>
 </head>
 
 <!-- Firebase App + Firestore SDK -->
@@ -941,7 +1034,7 @@
     <!-- PIN Entry Modal -->
     <div class="pin-modal" id="pin-modal">
         <div class="pin-container">
-            <h2>Staff Login</h2>
+            <h2>H&L Garage Login</h2>
             <p>Enter your 6-digit PIN to access the system</p>
             <div class="pin-input">
                 <input type="password" maxlength="1" id="pin1" autofocus>
@@ -963,7 +1056,7 @@
                 <div class="header-content">
                     <div class="logo">
                         <i class="fas fa-tools"></i>
-                        <h1>H&L Custom Admin Dashboard</h1>
+                        <h1>H&L Garage Dashboard</h1>
                     </div>
 
                     <div class="stats desktop-only">
@@ -976,8 +1069,8 @@
                             <div class="stat-label">Active</div>
                         </div>
                         <div class="stat-item">
-                            <div class="stat-value" id="sold-projects">0</div>
-                            <div class="stat-label">Sold</div>
+                            <div class="stat-value" id="completed-projects">0</div>
+                            <div class="stat-label">Completed</div>
                         </div>
                         <div class="stat-item">
                             <div class="stat-value" id="total-spent">$0</div>
@@ -988,12 +1081,13 @@
                             <div class="stat-label">Profit</div>
                         </div>
                         <div class="stat-item">
-                            <div class="stat-value" id="scrap-runs">0</div>
-                            <div class="stat-label">Scrap Runs</div>
+                            <div class="stat-value" id="hunter-profit">$0</div>
+                            <div class="stat-label">Hunter's Share</div>
                         </div>
-                        <button class="btn btn-warning btn-sm" id="scrap-run-btn">
-                            <i class="fas fa-recycle"></i> Scrap Run
-                        </button>
+                        <div class="stat-item">
+                            <div class="stat-value" id="logan-profit">$0</div>
+                            <div class="stat-label">Logan's Share</div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1002,7 +1096,7 @@
         <div class="container">
             <div class="main-content">
                 <div class="content-header">
-                    <h2 id="project-type-title">All Projects</h2>
+                    <h2 id="project-status-title">All Projects</h2>
                     <div style="display: flex; gap: 15px;">
                         <div class="search-bar">
                             <i class="fas fa-search"></i>
@@ -1015,11 +1109,13 @@
                     </div>
                 </div>
                 
-                <!-- Project Type Tabs -->
+                <!-- Project Status Tabs -->
                 <div class="project-tabs">
-                    <div class="project-tab active" data-type="all">All</div>
-                    <div class="project-tab" data-type="flip">Flips</div>
-                    <div class="project-tab" data-type="repair">Repairs</div>
+                    <div class="project-tab active" data-status="all">All</div>
+                    <div class="project-tab" data-status="active">Active</div>
+                    <div class="project-tab" data-status="needs_work">Needs Work</div>
+                    <div class="project-tab" data-status="ready">Ready to Sell</div>
+                    <div class="project-tab" data-status="sold">Sold</div>
                 </div>
                 
                 <div class="project-grid" id="project-grid">
@@ -1066,15 +1162,22 @@
                     </div>
                 </div>
                 
-                <div class="project-detail-section" id="repair-log-section">
-                    <h3><i class="fas fa-clipboard-list"></i> Repair Log</h3>
-                    <div id="repair-log-container">
-                        <!-- Repair log items will be added here -->
+                <div class="project-detail-section">
+                    <h3><i class="fas fa-receipt"></i> Expenses</h3>
+                    <div id="expenses-container">
+                        <!-- Expenses will be added here -->
                     </div>
-                    <div class="add-note-form">
-                        <textarea id="new-repair-log-text" placeholder="Add repair log entry..." rows="3" style="width: 100%;"></textarea>
-                        <button class="btn btn-primary" id="add-repair-log-btn" style="margin-top: 10px;">Add Log Entry</button>
-                    </div>
+                    <button class="btn btn-primary" id="add-expense-btn" style="margin-top: 10px;">
+                        <i class="fas fa-plus"></i> Add Expense
+                    </button>
+                </div>
+                
+                <div class="project-detail-section" id="sale-section">
+                    <h3><i class="fas fa-dollar-sign"></i> Sale Details</h3>
+                    <div id="sale-details"></div>
+                    <button class="btn btn-success" id="sell-project-btn" style="margin-top: 10px;">
+                        <i class="fas fa-tag"></i> Mark as Sold
+                    </button>
                 </div>
             </div>
         </div>
@@ -1095,22 +1198,25 @@
                         </div>
                         
                         <div class="form-group">
-                            <label for="project-type">Project Type</label>
-                            <select id="project-type" required>
-                                <option value="">Select Type</option>
-                                <option value="flip">For Flip</option>
-                                <option value="repair">For Repair</option>
+                            <label for="project-ownership">Ownership</label>
+                            <select id="project-ownership" required>
+                                <option value="">Select Ownership</option>
+                                <option value="hunter">Hunter's Project</option>
+                                <option value="logan">Logan's Project</option>
+                                <option value="both">Joint Project (50/50)</option>
                             </select>
                         </div>
                         
                         <div class="form-row">
                             <div class="form-group">
-                                <label for="project-service">Service Type</label>
+                                <label for="project-service">Equipment Type</label>
                                 <select id="project-service" required>
-                                    <option value="">Select Service</option>
+                                    <option value="">Select Type</option>
                                     <option value="lawn_mower">Lawn Mower</option>
                                     <option value="dirtbike_quad">Dirtbike/Quad</option>
                                     <option value="trimmer_blower">Trimmer/Blower</option>
+                                    <option value="generator">Generator</option>
+                                    <option value="pressure_washer">Pressure Washer</option>
                                     <option value="other">Other</option>
                                 </select>
                             </div>
@@ -1129,35 +1235,26 @@
                         <div class="form-group">
                             <label for="initial-status">Initial Status</label>
                             <select id="initial-status" required>
-                                <option value="not_running">Needs Work</option>
-                                <option value="running">Running</option>
+                                <option value="needs_work">Needs Work</option>
+                                <option value="active">In Progress</option>
+                                <option value="ready">Ready to Sell</option>
                             </select>
                         </div>
                         
-                        <!-- Flip-specific fields (hidden by default) -->
-                        <div id="flip-details">
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="purchase-price">Purchase Price ($)</label>
-                                    <input type="number" id="purchase-price" placeholder="0.00" min="0" step="0.01">
-                                </div>
-                                <div class="form-group">
-                                    <label for="purchase-date">Purchase Date</label>
-                                    <input type="date" id="purchase-date">
-                                </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="purchase-price">Purchase Price ($)</label>
+                                <input type="number" id="purchase-price" placeholder="0.00" min="0" step="0.01">
+                            </div>
+                            <div class="form-group">
+                                <label for="purchase-date">Purchase Date</label>
+                                <input type="date" id="purchase-date">
                             </div>
                         </div>
                         
-                        <!-- Repair-specific fields (hidden by default) -->
-                        <div id="repair-details" style="display: none;">
-                            <div class="form-group">
-                                <label for="repair-reason">Repair Reason</label>
-                                <textarea id="repair-reason" placeholder="What is the equipment in for?" rows="2"></textarea>
-                            </div>
-                            <div class="form-group">
-                                <label for="booking-date">Booking Date</label>
-                                <input type="date" id="booking-date">
-                            </div>
+                        <div class="form-group">
+                            <label for="project-notes">Initial Notes</label>
+                            <textarea id="project-notes" placeholder="Any initial notes about this project..." rows="3"></textarea>
                         </div>
                     </form>
                 </div>
@@ -1193,8 +1290,19 @@
                             </div>
                         </div>
                         
+                        <div class="form-group">
+                            <label for="sold-to">Sold To (optional)</label>
+                            <input type="text" id="sold-to" placeholder="Buyer's name">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="sale-notes">Sale Notes (optional)</label>
+                            <textarea id="sale-notes" placeholder="Any notes about the sale..." rows="3"></textarea>
+                        </div>
+                        
                         <div class="profit-message">
                             <h4>Profit Summary</h4>
+                            <div id="profit-split-display"></div>
                             <p id="sell-profit-text"></p>
                         </div>
                     </form>
@@ -1206,55 +1314,55 @@
             </div>
         </div>
 
-        <!-- Complete Repair Modal -->
-        <div class="modal" id="complete-repair-modal">
+        <!-- Add Expense Modal -->
+        <div class="modal" id="add-expense-modal">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h3>Complete Repair</h3>
+                    <h3>Add Expense</h3>
                     <button class="close-modal">&times;</button>
                 </div>
                 <div class="modal-body">
-                    <form id="complete-repair-form">
+                    <form id="expense-form">
                         <div class="form-group">
-                            <label for="repair-project-name">Project Name</label>
-                            <input type="text" id="repair-project-name" disabled>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="repair-description">Repair Description</label>
-                            <textarea id="repair-description" placeholder="What was done to fix the equipment?" rows="3"></textarea>
-                        </div>
-                        
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="job-price">Service Charge ($)</label>
-                                <input type="number" id="job-price" placeholder="0.00" min="0" step="0.01" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="parts-cost">Parts Cost ($)</label>
-                                <input type="number" id="parts-cost" placeholder="0.00" min="0" step="0.01" required>
-                            </div>
+                            <label for="expense-amount">Amount ($)</label>
+                            <input type="number" id="expense-amount" placeholder="0.00" min="0" step="0.01" required>
                         </div>
                         
                         <div class="form-group">
-                            <label for="parts-installed">Parts Installed</label>
-                            <textarea id="parts-installed" placeholder="List all parts that were installed" rows="2"></textarea>
+                            <label for="expense-category">Category</label>
+                            <select id="expense-category" required>
+                                <option value="">Select Category</option>
+                                <option value="parts">Parts</option>
+                                <option value="fuel">Fuel</option>
+                                <option value="labor">Labor (Paid)</option>
+                                <option value="other">Other</option>
+                            </select>
                         </div>
                         
                         <div class="form-group">
-                            <label for="completion-date">Completion Date</label>
-                            <input type="date" id="completion-date" required>
+                            <label for="expense-description">Description</label>
+                            <input type="text" id="expense-description" placeholder="What was this expense for?" required>
                         </div>
                         
-                        <div class="profit-message">
-                            <h4>ROI Summary</h4>
-                            <p id="repair-profit-text"></p>
+                        <div class="form-group">
+                            <label for="expense-date">Date</label>
+                            <input type="date" id="expense-date" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="expense-paid-by">Paid By</label>
+                            <select id="expense-paid-by" required>
+                                <option value="">Select Who Paid</option>
+                                <option value="hunter">Hunter</option>
+                                <option value="logan">Logan</option>
+                                <option value="both">Split 50/50</option>
+                            </select>
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-cancel">Cancel</button>
-                    <button class="btn btn-success" id="confirm-complete-repair">Return to Customer</button>
+                    <button class="btn btn-success" id="save-expense">Save Expense</button>
                 </div>
             </div>
         </div>
@@ -1277,43 +1385,39 @@
             </div>
         </div>
 
-        <!-- Scrap Run Modal -->
-        <div class="modal" id="scrap-run-modal">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h3>Record Scrap Run</h3>
-                    <button class="close-modal">&times;</button>
-                </div>
-                <div class="modal-body">
-                    <form id="scrap-run-form">
-                        <div class="form-group">
-                            <label for="scrap-amount">Amount Earned ($)</label>
-                            <input type="number" id="scrap-amount" placeholder="0.00" min="0" step="0.01" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="scrap-date">Date</label>
-                            <input type="date" id="scrap-date" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="scrap-notes">Notes (optional)</label>
-                            <textarea id="scrap-notes" placeholder="Any notes about this scrap run" rows="3"></textarea>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-cancel">Cancel</button>
-                    <button class="btn btn-success" id="confirm-scrap-run">Save Scrap Run</button>
-                </div>
-            </div>
-        </div>
-
         <!-- Theme Toggle Button -->
         <button class="theme-toggle" id="theme-toggle">
             <i class="fas fa-moon"></i>
         </button>
 
         <!-- Mobile Menu -->
+        <div class="mobile-menu-container">
+            <button class="mobile-menu-button" id="mobile-menu-button">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="mobile-menu-dropdown" id="mobile-menu-dropdown">
+                <a href="#" class="mobile-menu-item" id="mobile-all">
+                    <i class="fas fa-list"></i> All Projects
+                </a>
+                <a href="#" class="mobile-menu-item" id="mobile-active">
+                    <i class="fas fa-tools"></i> Active
+                </a>
+                <a href="#" class="mobile-menu-item" id="mobile-needs-work">
+                    <i class="fas fa-exclamation-circle"></i> Needs Work
+                </a>
+                <a href="#" class="mobile-menu-item" id="mobile-ready">
+                    <i class="fas fa-check-circle"></i> Ready
+                </a>
+                <a href="#" class="mobile-menu-item" id="mobile-sold">
+                    <i class="fas fa-tag"></i> Sold
+                </a>
+                <a href="#" class="mobile-menu-item" id="mobile-add">
+                    <i class="fas fa-plus"></i> Add Project
+                </a>
+            </div>
+        </div>
 
+    </div>
 
     <script>
         // Initialize Firebase
@@ -1353,23 +1457,19 @@
         const addProjectBtn = document.getElementById('add-project-btn');
         const addProjectModal = document.getElementById('add-project-modal');
         const sellProjectModal = document.getElementById('sell-project-modal');
-        const completeRepairModal = document.getElementById('complete-repair-modal');
+        const addExpenseModal = document.getElementById('add-expense-modal');
         const deleteProjectModal = document.getElementById('delete-project-modal');
-        const scrapRunModal = document.getElementById('scrap-run-modal');
         const closeModalButtons = document.querySelectorAll('.close-modal, .btn-cancel');
         const saveProjectBtn = document.getElementById('save-project');
         const projectForm = document.getElementById('project-form');
         const sellForm = document.getElementById('sell-form');
-        const completeRepairForm = document.getElementById('complete-repair-form');
-        const scrapRunForm = document.getElementById('scrap-run-form');
+        const expenseForm = document.getElementById('expense-form');
         const confirmSellBtn = document.getElementById('confirm-sell');
-        const confirmCompleteRepairBtn = document.getElementById('confirm-complete-repair');
         const confirmDeleteBtn = document.getElementById('confirm-delete');
-        const confirmScrapRunBtn = document.getElementById('confirm-scrap-run');
-        const scrapRunBtn = document.getElementById('scrap-run-btn');
+        const saveExpenseBtn = document.getElementById('save-expense');
         const searchInput = document.getElementById('search-input');
         const sellProfitText = document.getElementById('sell-profit-text');
-        const repairProfitText = document.getElementById('repair-profit-text');
+        const profitSplitDisplay = document.getElementById('profit-split-display');
         const projectToDelete = document.getElementById('project-to-delete');
         const themeToggle = document.getElementById('theme-toggle');
         
@@ -1384,37 +1484,38 @@
         const projectNotesContainer = document.getElementById('project-notes-container');
         const newNoteText = document.getElementById('new-note-text');
         const addNoteBtn = document.getElementById('add-note-btn');
-        const repairLogContainer = document.getElementById('repair-log-container');
-        const newRepairLogText = document.getElementById('new-repair-log-text');
-        const addRepairLogBtn = document.getElementById('add-repair-log-btn');
+        const expensesContainer = document.getElementById('expenses-container');
+        const addExpenseBtn = document.getElementById('add-expense-btn');
+        const sellProjectBtn = document.getElementById('sell-project-btn');
+        const saleDetails = document.getElementById('sale-details');
         
-        // Project Type Tabs
+        // Project Status Tabs
         const projectTabs = document.querySelectorAll('.project-tab');
-        const projectTypeTitle = document.getElementById('project-type-title');
+        const projectStatusTitle = document.getElementById('project-status-title');
         
         // Mobile Menu
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenuDropdown = document.getElementById('mobile-menu-dropdown');
         const mobileAll = document.getElementById('mobile-all');
-        const mobileFlips = document.getElementById('mobile-flips');
-        const mobileRepairs = document.getElementById('mobile-repairs');
+        const mobileActive = document.getElementById('mobile-active');
+        const mobileNeedsWork = document.getElementById('mobile-needs-work');
+        const mobileReady = document.getElementById('mobile-ready');
+        const mobileSold = document.getElementById('mobile-sold');
         const mobileAdd = document.getElementById('mobile-add');
         
         // State variables
         let projects = [];
-        let scrapRuns = [];
         let currentSellProjectId = null;
-        let currentCompleteRepairProjectId = null;
         let currentDeleteProjectId = null;
         let currentDetailProjectId = null;
-        let currentScrapRunId = null;
+        let currentExpenseProjectId = null;
         let darkMode = false;
-        let currentProjectTypeFilter = 'all';
+        let currentStatusFilter = 'all';
         
         // PIN Entry Logic
         function setupPinEntry() {
-            // Auto-focus first input
             pinInputs[0].focus();
             
-            // Handle input to move between fields
             pinInputs.forEach((input, index) => {
                 input.addEventListener('input', () => {
                     if (input.value.length === 1 && index < pinInputs.length - 1) {
@@ -1429,10 +1530,8 @@
                 });
             });
             
-            // Handle form submission
             pinSubmit.addEventListener('click', checkPin);
             
-            // Allow Enter key to submit
             pinInputs.forEach(input => {
                 input.addEventListener('keyup', (e) => {
                     if (e.key === 'Enter') {
@@ -1446,12 +1545,10 @@
             const enteredPin = pinInputs.map(input => input.value).join('');
             
             if (enteredPin === STAFF_PIN) {
-                // Correct PIN - show app
                 pinModal.style.display = 'none';
                 appContent.style.display = 'block';
                 initApp();
             } else {
-                // Incorrect PIN - show error
                 pinError.textContent = 'Incorrect PIN. Please try again.';
                 pinInputs.forEach(input => {
                     input.value = '';
@@ -1459,7 +1556,6 @@
                 });
                 pinInputs[0].focus();
                 
-                // Reset error after 2 seconds
                 setTimeout(() => {
                     pinError.textContent = '';
                     pinInputs.forEach(input => {
@@ -1473,7 +1569,6 @@
         function initApp() {
             loadThemePreference();
             loadProjects();
-            loadScrapRuns();
             setupEventListeners();
             updateStats();
             renderProjects();
@@ -1499,7 +1594,7 @@
         
         // Load projects from Firestore
         function loadProjects() {
-            db.collection("projects").onSnapshot((snapshot) => {
+            db.collection("projects").orderBy("createdAt", "desc").onSnapshot((snapshot) => {
                 projects = [];
                 snapshot.forEach((doc) => {
                     projects.push({ id: doc.id, ...doc.data() });
@@ -1509,36 +1604,13 @@
             });
         }
         
-        // Load scrap runs from Firestore
-        function loadScrapRuns() {
-            db.collection("scrapRuns").onSnapshot((snapshot) => {
-                scrapRuns = [];
-                snapshot.forEach((doc) => {
-                    scrapRuns.push({ id: doc.id, ...doc.data() });
-                });
-                updateStats();
-            });
-        }
-        
         // Save project to Firestore
         function saveProject(project) {
             if (project.id) {
-                // Update existing project
                 return db.collection("projects").doc(project.id).update(project);
             } else {
-                // Add new project
+                project.createdAt = new Date().toISOString();
                 return db.collection("projects").add(project);
-            }
-        }
-        
-        // Save scrap run to Firestore
-        function saveScrapRun(scrapRun) {
-            if (scrapRun.id) {
-                // Update existing scrap run
-                return db.collection("scrapRuns").doc(scrapRun.id).update(scrapRun);
-            } else {
-                // Add new scrap run
-                return db.collection("scrapRuns").add(scrapRun);
             }
         }
         
@@ -1558,39 +1630,32 @@
         // Add a new project
         function addNewProject() {
             const name = document.getElementById('project-name').value;
-            const type = document.getElementById('project-type').value;
+            const ownership = document.getElementById('project-ownership').value;
             const service = document.getElementById('project-service').value;
             const engineType = document.getElementById('engine-type').value;
             const status = document.getElementById('initial-status').value;
+            const purchasePrice = parseFloat(document.getElementById('purchase-price').value) || 0;
+            const purchaseDate = document.getElementById('purchase-date').value;
+            const notes = document.getElementById('project-notes').value.trim();
             
-            let projectData = {
-                name,
-                type,
-                service,
-                engineType,
-                status,
-                images: [],
-                notes: [],
-                repairLogs: [],
-                createdAt: new Date().toISOString()
-            };
-            
-            if (type === 'repair') {
-                // For repair projects
-                projectData.repairReason = document.getElementById('repair-reason').value;
-                projectData.bookingDate = document.getElementById('booking-date').value;
-                projectData.purchasePrice = 0; // Set to 0 for repairs
-                projectData.purchaseDate = projectData.bookingDate; // Use booking date as purchase date
-            } else {
-                // For flip projects
-                projectData.purchasePrice = parseFloat(document.getElementById('purchase-price').value) || 0;
-                projectData.purchaseDate = document.getElementById('purchase-date').value;
-            }
-            
-            if (!name || !type || !service) {
+            if (!name || !ownership || !service) {
                 alert('Please fill in all required fields');
                 return;
             }
+            
+            const projectData = {
+                name,
+                ownership,
+                service,
+                engineType,
+                status,
+                purchasePrice,
+                purchaseDate,
+                images: [],
+                notes: notes ? [{ text: notes, date: new Date().toISOString() }] : [],
+                expenses: [],
+                createdAt: new Date().toISOString()
+            };
             
             saveProject(projectData)
                 .then(() => {
@@ -1600,34 +1665,6 @@
                 .catch((error) => {
                     console.error("Error adding project: ", error);
                     alert("Error adding project. Please try again.");
-                });
-        }
-        
-        // Add scrap run
-        function addScrapRun() {
-            const amount = parseFloat(document.getElementById('scrap-amount').value);
-            const date = document.getElementById('scrap-date').value;
-            const notes = document.getElementById('scrap-notes').value.trim();
-            
-            if (!amount || !date) {
-                alert('Please fill in all required fields');
-                return;
-            }
-            
-            const scrapRunData = {
-                amount,
-                date,
-                notes,
-                createdAt: new Date().toISOString()
-            };
-            
-            saveScrapRun(scrapRunData)
-                .then(() => {
-                    toggleModal(scrapRunModal, false);
-                })
-                .catch((error) => {
-                    console.error("Error adding scrap run: ", error);
-                    alert("Error adding scrap run. Please try again.");
                 });
         }
         
@@ -1656,31 +1693,64 @@
                 document.getElementById('project-name-sell').value = project.name;
                 document.getElementById('sold-price').value = '';
                 document.getElementById('sold-date').valueAsDate = new Date();
+                document.getElementById('sold-to').value = '';
+                document.getElementById('sale-notes').value = '';
                 toggleModal(sellProjectModal, true);
             }
         }
         
-        // Open complete repair modal
-        function openCompleteRepairModal(projectId) {
-            const project = projects.find(p => p.id === projectId);
-            if (project) {
-                currentCompleteRepairProjectId = projectId;
-                document.getElementById('repair-project-name').value = project.name;
-                document.getElementById('job-price').value = '';
-                document.getElementById('parts-cost').value = '';
-                document.getElementById('repair-description').value = '';
-                document.getElementById('parts-installed').value = '';
-                document.getElementById('completion-date').valueAsDate = new Date();
-                toggleModal(completeRepairModal, true);
-            }
+        // Open add expense modal
+        function openAddExpenseModal(projectId) {
+            currentExpenseProjectId = projectId;
+            document.getElementById('expense-amount').value = '';
+            document.getElementById('expense-category').value = '';
+            document.getElementById('expense-description').value = '';
+            document.getElementById('expense-date').valueAsDate = new Date();
+            document.getElementById('expense-paid-by').value = '';
+            toggleModal(addExpenseModal, true);
         }
         
-        // Open scrap run modal
-        function openScrapRunModal() {
-            document.getElementById('scrap-amount').value = '';
-            document.getElementById('scrap-date').valueAsDate = new Date();
-            document.getElementById('scrap-notes').value = '';
-            toggleModal(scrapRunModal, true);
+        // Add expense to project
+        function addExpenseToProject() {
+            const amount = parseFloat(document.getElementById('expense-amount').value);
+            const category = document.getElementById('expense-category').value;
+            const description = document.getElementById('expense-description').value;
+            const date = document.getElementById('expense-date').value;
+            const paidBy = document.getElementById('expense-paid-by').value;
+            
+            if (!amount || !category || !description || !date || !paidBy) {
+                alert('Please fill in all required fields');
+                return;
+            }
+            
+            const project = projects.find(p => p.id === currentExpenseProjectId);
+            if (project) {
+                const newExpense = {
+                    amount,
+                    category,
+                    description,
+                    date,
+                    paidBy,
+                    addedAt: new Date().toISOString()
+                };
+                
+                const updatedProject = {
+                    ...project,
+                    expenses: [...project.expenses, newExpense]
+                };
+                
+                saveProject(updatedProject)
+                    .then(() => {
+                        toggleModal(addExpenseModal, false);
+                        if (currentDetailProjectId) {
+                            openProjectDetail(currentDetailProjectId);
+                        }
+                    })
+                    .catch((error) => {
+                        console.error("Error adding expense: ", error);
+                        alert("Error adding expense. Please try again.");
+                    });
+            }
         }
         
         // Update profit calculation for selling
@@ -1693,45 +1763,58 @@
             
             if (!soldDate) return;
             
+            // Calculate total expenses
+            const totalExpenses = project.expenses.reduce((total, expense) => total + expense.amount, 0);
+            const totalCost = project.purchasePrice + totalExpenses;
+            const profit = soldPrice - totalCost;
+            
+            // Calculate profit split based on ownership
+            let hunterShare = 0;
+            let loganShare = 0;
+            
+            if (project.ownership === 'hunter') {
+                hunterShare = profit;
+            } else if (project.ownership === 'logan') {
+                loganShare = profit;
+            } else {
+                hunterShare = profit * 0.5;
+                loganShare = profit * 0.5;
+            }
+            
+            // Display profit split
+            profitSplitDisplay.innerHTML = `
+                <div class="profit-split">
+                    <div class="profit-split-item profit-split-hunter">
+                        Hunter: $${hunterShare.toFixed(2)}
+                    </div>
+                    <div class="profit-split-item profit-split-logan">
+                        Logan: $${loganShare.toFixed(2)}
+                    </div>
+                </div>
+            `;
+            
             const purchaseDate = new Date(project.purchaseDate);
             const saleDate = new Date(soldDate);
             const daysHeld = Math.ceil((saleDate - purchaseDate) / (1000 * 60 * 60 * 24));
-            const profit = soldPrice - project.purchasePrice;
             
             let profitMessage = '';
             if (profit > 0) {
-                profitMessage = `Nice! You've made $${profit.toFixed(2)} profit in ${daysHeld} days!`;
+                profitMessage = `Total profit: $${profit.toFixed(2)} ($${soldPrice.toFixed(2)} - $${totalCost.toFixed(2)}) in ${daysHeld} days`;
             } else if (profit < 0) {
-                profitMessage = `You had a loss of $${Math.abs(profit).toFixed(2)} after ${daysHeld} days.`;
+                profitMessage = `Total loss: $${Math.abs(profit).toFixed(2)} ($${totalCost.toFixed(2)} - $${soldPrice.toFixed(2)}) after ${daysHeld} days`;
             } else {
-                profitMessage = `You broke even after ${daysHeld} days.`;
+                profitMessage = `Broke even after ${daysHeld} days`;
             }
             
             sellProfitText.textContent = profitMessage;
-        }
-        
-        // Update profit calculation for repair
-        function updateRepairProfitCalculation() {
-            const jobPrice = parseFloat(document.getElementById('job-price').value) || 0;
-            const partsCost = parseFloat(document.getElementById('parts-cost').value) || 0;
-            const profit = jobPrice - partsCost;
-            
-            let profitMessage = '';
-            if (profit > 0) {
-                profitMessage = `ROI: $${profit.toFixed(2)} (Service: $${jobPrice.toFixed(2)} - Parts: $${partsCost.toFixed(2)})`;
-            } else if (profit < 0) {
-                profitMessage = `Loss: $${Math.abs(profit).toFixed(2)} (Service: $${jobPrice.toFixed(2)} - Parts: $${partsCost.toFixed(2)})`;
-            } else {
-                profitMessage = `Broke even (Service: $${jobPrice.toFixed(2)} - Parts: $${partsCost.toFixed(2)})`;
-            }
-            
-            repairProfitText.textContent = profitMessage;
         }
         
         // Sell project
         function sellProject() {
             const soldPrice = parseFloat(document.getElementById('sold-price').value);
             const soldDate = document.getElementById('sold-date').value;
+            const soldTo = document.getElementById('sold-to').value.trim();
+            const saleNotes = document.getElementById('sale-notes').value.trim();
             
             if (!soldPrice || !soldDate) {
                 alert('Please fill in all required fields');
@@ -1744,48 +1827,14 @@
                     ...project,
                     status: 'sold',
                     soldPrice: soldPrice,
-                    soldDate: soldDate
+                    soldDate: soldDate,
+                    soldTo: soldTo || null,
+                    saleNotes: saleNotes || null
                 };
                 
                 saveProject(updatedProject)
                     .then(() => {
                         toggleModal(sellProjectModal, false);
-                    })
-                    .catch((error) => {
-                        console.error("Error updating project: ", error);
-                        alert("Error updating project. Please try again.");
-                    });
-            }
-        }
-        
-        // Complete repair
-        function completeRepair() {
-            const jobPrice = parseFloat(document.getElementById('job-price').value);
-            const partsCost = parseFloat(document.getElementById('parts-cost').value);
-            const repairDescription = document.getElementById('repair-description').value;
-            const partsInstalled = document.getElementById('parts-installed').value;
-            const completionDate = document.getElementById('completion-date').value;
-            
-            if (!jobPrice || !partsCost || !completionDate || !repairDescription) {
-                alert('Please fill in all required fields');
-                return;
-            }
-            
-            const project = projects.find(p => p.id === currentCompleteRepairProjectId);
-            if (project) {
-                const updatedProject = {
-                    ...project,
-                    status: 'completed',
-                    jobPrice: jobPrice,
-                    partsCost: partsCost,
-                    repairDescription: repairDescription,
-                    partsInstalled: partsInstalled,
-                    completionDate: completionDate
-                };
-                
-                saveProject(updatedProject)
-                    .then(() => {
-                        toggleModal(completeRepairModal, false);
                     })
                     .catch((error) => {
                         console.error("Error updating project: ", error);
@@ -1816,7 +1865,8 @@
             detailProjectInfo.innerHTML = '';
             projectImagesContainer.innerHTML = '';
             projectNotesContainer.innerHTML = '';
-            repairLogContainer.innerHTML = '';
+            expensesContainer.innerHTML = '';
+            saleDetails.innerHTML = '';
             
             // Add back the add image button
             projectImagesContainer.appendChild(addImageBtn);
@@ -1824,11 +1874,15 @@
             // Display project info
             const infoHtml = `
                 <div class="detail-item">
-                    <span>Type:</span>
-                    <span class="value">${project.type === 'flip' ? 'Flip' : 'Repair'}</span>
+                    <span>Status:</span>
+                    <span class="value">${getStatusName(project.status)}</span>
                 </div>
                 <div class="detail-item">
-                    <span>Service:</span>
+                    <span>Ownership:</span>
+                    <span class="value">${getOwnershipName(project.ownership)}</span>
+                </div>
+                <div class="detail-item">
+                    <span>Equipment:</span>
                     <span class="value">${getServiceName(project.service)}</span>
                 </div>
                 ${project.engineType ? `<div class="detail-item">
@@ -1836,21 +1890,13 @@
                     <span class="value">${getEngineTypeName(project.engineType)}</span>
                 </div>` : ''}
                 <div class="detail-item">
-                    <span>Status:</span>
-                    <span class="value">${getStatusName(project.status)}</span>
-                </div>
-                ${project.type === 'flip' ? `<div class="detail-item">
                     <span>Purchase Price:</span>
                     <span class="value">$${project.purchasePrice ? project.purchasePrice.toFixed(2) : '0.00'}</span>
-                </div>` : ''}
+                </div>
                 <div class="detail-item">
-                    <span>${project.type === 'flip' ? 'Purchase Date' : 'Booking Date'}:</span>
+                    <span>Purchase Date:</span>
                     <span class="value">${project.purchaseDate ? new Date(project.purchaseDate).toLocaleDateString() : 'N/A'}</span>
                 </div>
-                ${project.type === 'repair' && project.repairReason ? `<div class="detail-item">
-                    <span>Repair Reason:</span>
-                    <span class="value">${project.repairReason}</span>
-                </div>` : ''}
                 ${project.soldPrice ? `<div class="detail-item">
                     <span>Sold Price:</span>
                     <span class="value">$${project.soldPrice.toFixed(2)}</span>
@@ -1859,25 +1905,9 @@
                     <span>Sold Date:</span>
                     <span class="value">${new Date(project.soldDate).toLocaleDateString()}</span>
                 </div>` : ''}
-                ${project.jobPrice ? `<div class="detail-item">
-                    <span>Service Charge:</span>
-                    <span class="value">$${project.jobPrice.toFixed(2)}</span>
-                </div>` : ''}
-                ${project.partsCost ? `<div class="detail-item">
-                    <span>Parts Cost:</span>
-                    <span class="value">$${project.partsCost.toFixed(2)}</span>
-                </div>` : ''}
-                ${project.completionDate ? `<div class="detail-item">
-                    <span>Completion Date:</span>
-                    <span class="value">${new Date(project.completionDate).toLocaleDateString()}</span>
-                </div>` : ''}
-                ${project.repairDescription ? `<div class="detail-item">
-                    <span>Repair Description:</span>
-                    <span class="value">${project.repairDescription}</span>
-                </div>` : ''}
-                ${project.partsInstalled ? `<div class="detail-item">
-                    <span>Parts Installed:</span>
-                    <span class="value">${project.partsInstalled}</span>
+                ${project.soldTo ? `<div class="detail-item">
+                    <span>Sold To:</span>
+                    <span class="value">${project.soldTo}</span>
                 </div>` : ''}
             `;
             
@@ -1919,25 +1949,82 @@
                 });
             }
             
-            // Display repair logs (only for repair projects)
-            if (project.type === 'repair') {
-                document.getElementById('repair-log-section').style.display = 'block';
-                if (project.repairLogs && project.repairLogs.length > 0) {
-                    project.repairLogs.forEach(log => {
-                        const logElement = document.createElement('div');
-                        logElement.className = 'repair-log-item';
-                        logElement.innerHTML = `
-                            <div class="repair-log-header">
-                                <span>${new Date(log.date).toLocaleString()}</span>
-                            </div>
-                            <div class="repair-log-content">${log.text}</div>
-                        `;
-                        repairLogContainer.appendChild(logElement);
-                    });
+            // Display expenses
+            if (project.expenses && project.expenses.length > 0) {
+                const totalExpenses = project.expenses.reduce((total, expense) => total + expense.amount, 0);
+                
+                expensesContainer.innerHTML += `
+                    <div class="detail-item">
+                        <span>Total Expenses:</span>
+                        <span class="value">$${totalExpenses.toFixed(2)}</span>
+                    </div>
+                `;
+                
+                project.expenses.forEach(expense => {
+                    const expenseElement = document.createElement('div');
+                    expenseElement.className = 'expense-item';
+                    
+                    let categoryClass = 'other-category';
+                    if (expense.category === 'parts') categoryClass = 'parts-category';
+                    else if (expense.category === 'fuel') categoryClass = 'fuel-category';
+                    
+                    expenseElement.innerHTML = `
+                        <div class="expense-header">
+                            <span>$${expense.amount.toFixed(2)}</span>
+                            <span class="expense-date">${new Date(expense.date).toLocaleDateString()}</span>
+                        </div>
+                        <div class="expense-details">
+                            <span class="expense-category ${categoryClass}">${expense.category}</span>
+                            <span>${expense.description}</span>
+                        </div>
+                        <div class="expense-footer">
+                            <small>Paid by: ${getOwnershipName(expense.paidBy)}</small>
+                        </div>
+                    `;
+                    expensesContainer.appendChild(expenseElement);
+                });
+            }
+            
+            // Display sale details if sold
+            if (project.status === 'sold') {
+                const totalExpenses = project.expenses.reduce((total, expense) => total + expense.amount, 0);
+                const totalCost = project.purchasePrice + totalExpenses;
+                const profit = project.soldPrice - totalCost;
+                
+                let profitMessage = '';
+                if (profit > 0) {
+                    profitMessage = `Total profit: $${profit.toFixed(2)}`;
+                } else if (profit < 0) {
+                    profitMessage = `Total loss: $${Math.abs(profit).toFixed(2)}`;
+                } else {
+                    profitMessage = `Broke even`;
                 }
+                
+                saleDetails.innerHTML = `
+                    <div class="detail-item">
+                        <span>Sale Price:</span>
+                        <span class="value">$${project.soldPrice.toFixed(2)}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span>Total Cost:</span>
+                        <span class="value">$${totalCost.toFixed(2)}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span>Profit/Loss:</span>
+                        <span class="value">${profitMessage}</span>
+                    </div>
+                    ${project.saleNotes ? `<div class="detail-item">
+                        <span>Sale Notes:</span>
+                        <span class="value">${project.saleNotes}</span>
+                    </div>` : ''}
+                `;
+                
+                // Hide sell button if already sold
+                sellProjectBtn.style.display = 'none';
             } else {
-                // Hide repair log section for non-repair projects
-                document.getElementById('repair-log-section').style.display = 'none';
+                // Show sell button if not sold
+                sellProjectBtn.style.display = 'block';
+                sellProjectBtn.onclick = () => openSellModal(project.id);
             }
             
             projectDetailView.style.display = 'block';
@@ -2029,45 +2116,18 @@
             }
         }
         
-        // Add repair log entry
-        function addRepairLogEntry() {
-            const text = newRepairLogText.value.trim();
-            if (!text) return;
-            
-            const project = projects.find(p => p.id === currentDetailProjectId);
-            if (project && project.type === 'repair') {
-                const newLog = {
-                    text,
-                    date: new Date().toISOString()
-                };
-                
-                const updatedProject = {
-                    ...project,
-                    repairLogs: [...project.repairLogs, newLog]
-                };
-                
-                saveProject(updatedProject)
-                    .then(() => {
-                        newRepairLogText.value = '';
-                        openProjectDetail(currentDetailProjectId);
-                    })
-                    .catch((error) => {
-                        console.error("Error adding repair log: ", error);
-                        alert("Error adding repair log. Please try again.");
-                    });
-            }
-        }
-        
         // Render projects based on search and filter
         function renderProjects() {
             const searchTerm = searchInput.value.toLowerCase();
             
             let filteredProjects = projects.filter(project => {
                 const matchesSearch = project.name.toLowerCase().includes(searchTerm);
-                const matchesType = currentProjectTypeFilter === 'all' || 
-                                    (currentProjectTypeFilter === 'flip' && project.type === 'flip') || 
-                                    (currentProjectTypeFilter === 'repair' && project.type === 'repair');
-                return matchesSearch && matchesType;
+                const matchesStatus = currentStatusFilter === 'all' || 
+                                     (currentStatusFilter === 'active' && project.status === 'active') || 
+                                     (currentStatusFilter === 'needs_work' && project.status === 'needs_work') || 
+                                     (currentStatusFilter === 'ready' && project.status === 'ready') || 
+                                     (currentStatusFilter === 'sold' && project.status === 'sold');
+                return matchesSearch && matchesStatus;
             });
             
             projectGrid.innerHTML = '';
@@ -2092,74 +2152,72 @@
         // Create project card element
         function createProjectCard(project) {
             const card = document.createElement('div');
-            card.className = 'project-card';
+            card.className = `project-card ${project.ownership}-owned`;
             
             // Get status info
             let statusText, statusClass;
             switch (project.status) {
-                case 'not_running':
+                case 'needs_work':
                     statusText = 'Needs Work';
-                    statusClass = 'status-not-running';
+                    statusClass = 'status-needs-work';
                     break;
-                case 'running':
-                    statusText = project.type === 'repair' ? 'In Progress' : 'Running';
-                    statusClass = 'status-running';
+                case 'active':
+                    statusText = 'In Progress';
+                    statusClass = 'status-active';
+                    break;
+                case 'ready':
+                    statusText = 'Ready to Sell';
+                    statusClass = 'status-ready';
                     break;
                 case 'sold':
                     statusText = 'Sold';
                     statusClass = 'status-sold';
-                    break;
-                case 'completed':
-                    statusText = 'Completed';
-                    statusClass = 'status-completed';
                     break;
             }
             
             // Format dates
             const purchaseDate = project.purchaseDate ? new Date(project.purchaseDate).toLocaleDateString() : 'N/A';
             const soldDate = project.soldDate ? new Date(project.soldDate).toLocaleDateString() : 'Not sold';
-            const completionDate = project.completionDate ? new Date(project.completionDate).toLocaleDateString() : 'Not completed';
             
-            // Format engine type
-            let engineText = '';
-            if (project.engineType) {
-                engineText = getEngineTypeName(project.engineType);
-            }
+            // Calculate total expenses
+            const totalExpenses = project.expenses.reduce((total, expense) => total + expense.amount, 0);
+            const totalCost = project.purchasePrice + totalExpenses;
             
-            // Get service name
-            const serviceName = getServiceName(project.service);
+            // Get ownership name
+            const ownershipName = getOwnershipName(project.ownership);
             
             card.innerHTML = `
-                <div class="card-header" style="background: ${getCardHeaderColor(project)}">
+                <div class="card-header ${project.ownership}-bg">
                     <div class="status-badge">${statusText}</div>
+                    <div class="ownership-badge">${ownershipName}</div>
                     <div class="project-title">${project.name}</div>
                 </div>
                 <div class="card-body">
                     <div class="project-details">
                         <div class="detail-item">
                             <i class="fas fa-tag"></i>
-                            <span>Type:</span>
-                            <span class="value">${project.type === 'flip' ? 'Flip' : 'Repair'}</span>
+                            <span>Equipment:</span>
+                            <span class="value">${getServiceName(project.service)}</span>
                         </div>
-                        <div class="detail-item">
-                            <i class="fas fa-tools"></i>
-                            <span>Service:</span>
-                            <span class="value">${serviceName}</span>
-                        </div>
-                        ${engineText ? `<div class="detail-item">
+                        ${project.engineType ? `<div class="detail-item">
                             <i class="fas fa-cog"></i>
                             <span>Engine:</span>
-                            <span class="value">${engineText}</span>
+                            <span class="value">${getEngineTypeName(project.engineType)}</span>
                         </div>` : ''}
-                        ${project.type === 'flip' ? `<div class="detail-item">
+                        <div class="detail-item">
                             <i class="fas fa-dollar-sign"></i>
                             <span>Purchase Price:</span>
                             <span class="value">$${project.purchasePrice ? project.purchasePrice.toFixed(2) : '0.00'}</span>
-                        </div>` : ''}
+                        </div>
                         <div class="detail-item">
                             <i class="fas fa-calendar-alt"></i>
-                            <span>${project.type === 'flip' ? 'Purchase Date' : 'Booking Date'}:</span>
+                            <span>Purchase Date:</span>
                             <span class="value">${purchaseDate}</span>
+                        </div>
+                        <div class="detail-item">
+                            <i class="fas fa-receipt"></i>
+                            <span>Total Expenses:</span>
+                            <span class="value">$${totalExpenses.toFixed(2)}</span>
                         </div>
                         ${project.soldPrice ? `<div class="detail-item">
                             <i class="fas fa-money-bill-wave"></i>
@@ -2171,20 +2229,10 @@
                             <span>Sold Date:</span>
                             <span class="value">${soldDate}</span>
                         </div>` : ''}
-                        ${project.jobPrice ? `<div class="detail-item">
-                            <i class="fas fa-wrench"></i>
-                            <span>Service Charge:</span>
-                            <span class="value">$${project.jobPrice.toFixed(2)}</span>
-                        </div>` : ''}
-                        ${project.partsCost ? `<div class="detail-item">
-                            <i class="fas fa-cogs"></i>
-                            <span>Parts Cost:</span>
-                            <span class="value">$${project.partsCost.toFixed(2)}</span>
-                        </div>` : ''}
-                        ${project.completionDate ? `<div class="detail-item">
-                            <i class="fas fa-check-circle"></i>
-                            <span>Completed:</span>
-                            <span class="value">${completionDate}</span>
+                        ${project.status === 'sold' ? `<div class="detail-item">
+                            <i class="fas fa-chart-line"></i>
+                            <span>Profit/Loss:</span>
+                            <span class="value">$${(project.soldPrice - totalCost).toFixed(2)}</span>
                         </div>` : ''}
                     </div>
                 </div>
@@ -2193,21 +2241,22 @@
                         <button class="btn btn-primary btn-sm view-details" data-id="${project.id}">
                             <i class="fas fa-eye"></i> Details
                         </button>
-                        ${project.status !== 'sold' && project.status !== 'completed' ? `
-                            ${project.status === 'not_running' ? `
-                                <button class="btn btn-primary btn-sm mark-running" data-id="${project.id}">
-                                    <i class="fas fa-play"></i> ${project.type === 'repair' ? 'Start Work' : 'Mark Running'}
+                        ${project.status !== 'sold' ? `
+                            ${project.status === 'needs_work' ? `
+                                <button class="btn btn-primary btn-sm mark-active" data-id="${project.id}">
+                                    <i class="fas fa-play"></i> Start Work
                                 </button>
                             ` : ''}
-                            ${project.type === 'flip' ? `
+                            ${project.status === 'active' ? `
+                                <button class="btn btn-success btn-sm mark-ready" data-id="${project.id}">
+                                    <i class="fas fa-check"></i> Ready
+                                </button>
+                            ` : ''}
+                            ${project.status === 'ready' ? `
                                 <button class="btn btn-success btn-sm sell-project" data-id="${project.id}">
-                                    <i class="fas fa-dollar-sign"></i> Sell
+                                    <i class="fas fa-tag"></i> Sell
                                 </button>
-                            ` : `
-                                <button class="btn btn-success btn-sm complete-repair" data-id="${project.id}">
-                                    <i class="fas fa-check"></i> Complete
-                                </button>
-                            `}
+                            ` : ''}
                         ` : ''}
                         <button class="btn btn-danger btn-sm delete-project" data-id="${project.id}">
                             <i class="fas fa-trash"></i> Delete
@@ -2227,23 +2276,21 @@
                 openDeleteModal(projectId);
             });
             
-            if (project.status !== 'sold' && project.status !== 'completed') {
-                if (project.status === 'not_running') {
-                    card.querySelector('.mark-running').addEventListener('click', (e) => {
+            if (project.status !== 'sold') {
+                if (project.status === 'needs_work') {
+                    card.querySelector('.mark-active').addEventListener('click', (e) => {
                         const projectId = e.target.closest('button').dataset.id;
-                        updateProjectStatus(projectId, 'running');
+                        updateProjectStatus(projectId, 'active');
                     });
-                }
-                
-                if (project.type === 'flip') {
+                } else if (project.status === 'active') {
+                    card.querySelector('.mark-ready').addEventListener('click', (e) => {
+                        const projectId = e.target.closest('button').dataset.id;
+                        updateProjectStatus(projectId, 'ready');
+                    });
+                } else if (project.status === 'ready') {
                     card.querySelector('.sell-project').addEventListener('click', (e) => {
                         const projectId = e.target.closest('button').dataset.id;
                         openSellModal(projectId);
-                    });
-                } else {
-                    card.querySelector('.complete-repair').addEventListener('click', (e) => {
-                        const projectId = e.target.closest('button').dataset.id;
-                        openCompleteRepairModal(projectId);
                     });
                 }
             }
@@ -2251,14 +2298,13 @@
             return card;
         }
         
-        // Helper function to get card header color
-        function getCardHeaderColor(project) {
-            switch (project.status) {
-                case 'not_running': return '#e74c3c'; // Red
-                case 'running': return '#27ae60'; // Green
-                case 'sold': return '#3498db'; // Blue
-                case 'completed': return '#9b59b6'; // Purple
-                default: return '#2c3e50'; // Dark blue
+        // Helper function to get ownership name
+        function getOwnershipName(ownership) {
+            switch (ownership) {
+                case 'hunter': return 'Hunter';
+                case 'logan': return 'Logan';
+                case 'both': return 'Joint (50/50)';
+                default: return ownership;
             }
         }
         
@@ -2268,7 +2314,9 @@
                 case 'lawn_mower': return 'Lawn Mower';
                 case 'dirtbike_quad': return 'Dirtbike/Quad';
                 case 'trimmer_blower': return 'Trimmer/Blower';
-                default: return 'Other Service';
+                case 'generator': return 'Generator';
+                case 'pressure_washer': return 'Pressure Washer';
+                default: return service;
             }
         }
         
@@ -2285,54 +2333,72 @@
         // Helper function to get status name
         function getStatusName(status) {
             switch (status) {
-                case 'not_running': return 'Needs Work';
-                case 'running': return 'Running';
+                case 'needs_work': return 'Needs Work';
+                case 'active': return 'In Progress';
+                case 'ready': return 'Ready to Sell';
                 case 'sold': return 'Sold';
-                case 'completed': return 'Completed';
                 default: return status;
             }
         }
         
-        // Calculate total spent
+        // Calculate total spent across all projects
         function calculateTotalSpent() {
-            return projects.reduce((total, project) => total + (project.purchasePrice || 0), 0);
+            return projects.reduce((total, project) => {
+                const projectExpenses = project.expenses.reduce((sum, expense) => sum + expense.amount, 0);
+                return total + project.purchasePrice + projectExpenses;
+            }, 0);
         }
         
-        // Calculate total profit
+        // Calculate total profit across all projects
         function calculateTotalProfit() {
-            let profit = projects.reduce((total, project) => {
-                if (project.type === 'flip' && project.soldPrice) {
-                    return total + (project.soldPrice - (project.purchasePrice || 0));
-                } else if (project.type === 'repair' && project.jobPrice) {
-                    return total + (project.jobPrice - (project.partsCost || 0));
+            let totalProfit = 0;
+            let hunterProfit = 0;
+            let loganProfit = 0;
+            
+            projects.forEach(project => {
+                if (project.status === 'sold') {
+                    const totalExpenses = project.expenses.reduce((total, expense) => total + expense.amount, 0);
+                    const totalCost = project.purchasePrice + totalExpenses;
+                    const profit = project.soldPrice - totalCost;
+                    
+                    totalProfit += profit;
+                    
+                    if (project.ownership === 'hunter') {
+                        hunterProfit += profit;
+                    } else if (project.ownership === 'logan') {
+                        loganProfit += profit;
+                    } else {
+                        hunterProfit += profit * 0.5;
+                        loganProfit += profit * 0.5;
+                    }
                 }
-                return total;
-            }, 0);
+            });
             
-            // Add scrap run amounts to total profit
-            profit += scrapRuns.reduce((total, scrapRun) => total + (scrapRun.amount || 0), 0);
-            
-            return profit;
+            return {
+                total: totalProfit,
+                hunter: hunterProfit,
+                logan: loganProfit
+            };
         }
         
         // Update statistics
         function updateStats() {
             document.getElementById('total-projects').textContent = projects.length;
-            document.getElementById('active-projects').textContent = projects.filter(p => p.status !== 'sold' && p.status !== 'completed').length;
-            document.getElementById('sold-projects').textContent = projects.filter(p => p.status === 'sold' || p.status === 'completed').length;
-            document.getElementById('scrap-runs').textContent = scrapRuns.length;
+            document.getElementById('active-projects').textContent = projects.filter(p => p.status === 'active').length;
+            document.getElementById('completed-projects').textContent = projects.filter(p => p.status === 'sold').length;
             
             const totalSpent = calculateTotalSpent();
-            const totalProfit = calculateTotalProfit();
+            const profitData = calculateTotalProfit();
             
             document.getElementById('total-spent').textContent = `$${totalSpent.toFixed(2)}`;
-            document.getElementById('total-profit').textContent = `$${totalProfit.toFixed(2)}`;
+            document.getElementById('total-profit').textContent = `$${profitData.total.toFixed(2)}`;
+            document.getElementById('hunter-profit').textContent = `$${profitData.hunter.toFixed(2)}`;
+            document.getElementById('logan-profit').textContent = `$${profitData.logan.toFixed(2)}`;
         }
         
         // Set up event listeners
         function setupEventListeners() {
             addProjectBtn.addEventListener('click', () => toggleModal(addProjectModal, true));
-            scrapRunBtn.addEventListener('click', openScrapRunModal);
             
             closeModalButtons.forEach(button => {
                 button.addEventListener('click', (e) => {
@@ -2343,9 +2409,8 @@
             
             saveProjectBtn.addEventListener('click', addNewProject);
             confirmSellBtn.addEventListener('click', sellProject);
-            confirmCompleteRepairBtn.addEventListener('click', completeRepair);
             confirmDeleteBtn.addEventListener('click', deleteProject);
-            confirmScrapRunBtn.addEventListener('click', addScrapRun);
+            saveExpenseBtn.addEventListener('click', addExpenseToProject);
             themeToggle.addEventListener('click', toggleTheme);
             
             searchInput.addEventListener('input', renderProjects);
@@ -2355,62 +2420,77 @@
                 if (e.target.classList.contains('modal')) {
                     toggleModal(addProjectModal, false);
                     toggleModal(sellProjectModal, false);
-                    toggleModal(completeRepairModal, false);
+                    toggleModal(addExpenseModal, false);
                     toggleModal(deleteProjectModal, false);
-                    toggleModal(scrapRunModal, false);
                 }
             });
             
             // Set today as default date
             document.getElementById('purchase-date').valueAsDate = new Date();
-            document.getElementById('booking-date').valueAsDate = new Date();
+            document.getElementById('expense-date').valueAsDate = new Date();
             document.getElementById('sold-date').valueAsDate = new Date();
-            document.getElementById('completion-date').valueAsDate = new Date();
-            document.getElementById('scrap-date').valueAsDate = new Date();
             
-            // Project type tabs
+            // Project status tabs
             projectTabs.forEach(tab => {
                 tab.addEventListener('click', () => {
                     projectTabs.forEach(t => t.classList.remove('active'));
                     tab.classList.add('active');
-                    currentProjectTypeFilter = tab.dataset.type;
-                    projectTypeTitle.textContent = tab.textContent + ' Projects';
+                    currentStatusFilter = tab.dataset.status;
+                    projectStatusTitle.textContent = tab.textContent + ' Projects';
                     renderProjects();
                 });
             });
 
-            // Toggle between repair and flip fields
-            document.getElementById('project-type').addEventListener('change', function() {
-                const isRepair = this.value === 'repair';
-                document.getElementById('flip-details').style.display = isRepair ? 'none' : 'block';
-                document.getElementById('repair-details').style.display = isRepair ? 'block' : 'none';
+            // Mobile menu toggle
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenuDropdown.classList.toggle('active');
             });
             
-            // Mobile menu
+            // Mobile menu items
             mobileAll.addEventListener('click', (e) => {
                 e.preventDefault();
-                currentProjectTypeFilter = 'all';
-                projectTypeTitle.textContent = 'All Projects';
+                currentStatusFilter = 'all';
+                projectStatusTitle.textContent = 'All Projects';
                 renderProjects();
+                mobileMenuDropdown.classList.remove('active');
             });
             
-            mobileFlips.addEventListener('click', (e) => {
+            mobileActive.addEventListener('click', (e) => {
                 e.preventDefault();
-                currentProjectTypeFilter = 'flip';
-                projectTypeTitle.textContent = 'Flip Projects';
+                currentStatusFilter = 'active';
+                projectStatusTitle.textContent = 'Active Projects';
                 renderProjects();
+                mobileMenuDropdown.classList.remove('active');
             });
             
-            mobileRepairs.addEventListener('click', (e) => {
+            mobileNeedsWork.addEventListener('click', (e) => {
                 e.preventDefault();
-                currentProjectTypeFilter = 'repair';
-                projectTypeTitle.textContent = 'Repair Projects';
+                currentStatusFilter = 'needs_work';
+                projectStatusTitle.textContent = 'Needs Work Projects';
                 renderProjects();
+                mobileMenuDropdown.classList.remove('active');
+            });
+            
+            mobileReady.addEventListener('click', (e) => {
+                e.preventDefault();
+                currentStatusFilter = 'ready';
+                projectStatusTitle.textContent = 'Ready to Sell Projects';
+                renderProjects();
+                mobileMenuDropdown.classList.remove('active');
+            });
+            
+            mobileSold.addEventListener('click', (e) => {
+                e.preventDefault();
+                currentStatusFilter = 'sold';
+                projectStatusTitle.textContent = 'Sold Projects';
+                renderProjects();
+                mobileMenuDropdown.classList.remove('active');
             });
             
             mobileAdd.addEventListener('click', (e) => {
                 e.preventDefault();
                 toggleModal(addProjectModal, true);
+                mobileMenuDropdown.classList.remove('active');
             });
             
             // Project detail view
@@ -2428,15 +2508,14 @@
             // Add note
             addNoteBtn.addEventListener('click', addProjectNote);
             
-            // Add repair log
-            addRepairLogBtn.addEventListener('click', addRepairLogEntry);
+            // Add expense
+            addExpenseBtn.addEventListener('click', () => {
+                openAddExpenseModal(currentDetailProjectId);
+            });
             
             // Update profit calculation when inputs change
             document.getElementById('sold-price').addEventListener('input', updateSellProfitCalculation);
             document.getElementById('sold-date').addEventListener('input', updateSellProfitCalculation);
-            
-            document.getElementById('job-price').addEventListener('input', updateRepairProfitCalculation);
-            document.getElementById('parts-cost').addEventListener('input', updateRepairProfitCalculation);
         }
         
         // Toggle modal visibility
@@ -2445,8 +2524,8 @@
             if (!show) {
                 if (modal === addProjectModal) {
                     projectForm.reset();
-                } else if (modal === scrapRunModal) {
-                    scrapRunForm.reset();
+                } else if (modal === addExpenseModal) {
+                    expenseForm.reset();
                 }
             }
         }
