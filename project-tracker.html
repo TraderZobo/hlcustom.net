@@ -780,162 +780,135 @@
         }
         
         /* Mobile menu */
-      <style>
-    /* Previous CSS remains the same until the mobile menu section */
-
-    /* Mobile Menu Dropdown */
-    .mobile-menu-container {
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
-        z-index: 100;
-    }
-
-    .mobile-menu-button {
-        width: 60px;
-        height: 60px;
-        border-radius: 50%;
-        background: var(--secondary);
-        color: white;
-        border: none;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        box-shadow: var(--shadow);
-        transition: var(--transition);
-        font-size: 1.5rem;
-    }
-
-    .mobile-menu-button:hover {
-        transform: scale(1.1);
-    }
-
-    .mobile-menu-dropdown {
-        position: absolute;
-        bottom: 70px;
-        right: 0;
-        background: var(--card-bg);
-        border-radius: 8px;
-        box-shadow: var(--shadow);
-        width: 200px;
-        overflow: hidden;
-        transform: translateY(20px);
-        opacity: 0;
-        visibility: hidden;
-        transition: all 0.3s ease;
-        z-index: 101;
-    }
-
-    .mobile-menu-dropdown.active {
-        transform: translateY(0);
-        opacity: 1;
-        visibility: visible;
-    }
-
-    .mobile-menu-item {
-        display: flex;
-        align-items: center;
-        padding: 12px 15px;
-        color: var(--text-color);
-        text-decoration: none;
-        transition: var(--transition);
-        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-    }
-
-    .mobile-menu-item:last-child {
-        border-bottom: none;
-    }
-
-    .mobile-menu-item:hover {
-        background: rgba(0, 0, 0, 0.05);
-    }
-
-    .mobile-menu-item i {
-        margin-right: 10px;
-        width: 20px;
-        text-align: center;
-    }
-
-    /* Dark Mode Toggle */
-    .theme-toggle {
-        position: fixed;
-        bottom: 90px;
-        right: 20px;
-        width: 50px;
-        height: 50px;
-        border-radius: 50%;
-        background: var(--secondary);
-        color: white;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        box-shadow: var(--shadow);
-        z-index: 100;
-        border: none;
-        transition: var(--transition);
-    }
-
-    .theme-toggle:hover {
-        transform: scale(1.1);
-    }
-
-    /* Dark Mode Styles */
-    .dark-mode {
-        /* Dark mode colors */
-        --bg-color: #1a1a1a;
-        --text-color: #f0f0f0;
-        --card-bg: #2d2d2d;
-        --header-bg: linear-gradient(135deg, #1a2b3c, #1e3a5f);
-        --stat-bg: rgba(0, 0, 0, 0.2);
-        --light: #333;
-    }
-
-    .dark-mode .mobile-menu-dropdown {
-        background: #333;
-        border: 1px solid #444;
-    }
-
-    .dark-mode .mobile-menu-item {
-        border-bottom-color: #444;
-    }
-
-    .dark-mode .mobile-menu-item:hover {
-        background: rgba(255, 255, 255, 0.05);
-    }
-
-    /* Mobile-specific adjustments */
-    @media (max-width: 768px) {
-        /* Remove the old mobile menu */
-        .mobile-menu {
-            display: none;
+        .mobile-menu-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 100;
         }
 
-        /* Adjust theme toggle position */
+        .mobile-menu-button {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--secondary);
+            color: white;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            font-size: 1.5rem;
+        }
+
+        .mobile-menu-button:hover {
+            transform: scale(1.1);
+        }
+
+        .mobile-menu-dropdown {
+            position: absolute;
+            bottom: 70px;
+            right: 0;
+            background: var(--card-bg);
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            width: 200px;
+            overflow: hidden;
+            transform: translateY(20px);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 101;
+        }
+
+        .mobile-menu-dropdown.active {
+            transform: translateY(0);
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .mobile-menu-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            color: var(--text-color);
+            text-decoration: none;
+            transition: var(--transition);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .mobile-menu-item:last-child {
+            border-bottom: none;
+        }
+
+        .mobile-menu-item:hover {
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        .mobile-menu-item i {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+
+        /* Dark Mode Toggle */
         .theme-toggle {
+            position: fixed;
             bottom: 90px;
             right: 20px;
             width: 50px;
             height: 50px;
+            border-radius: 50%;
+            background: var(--secondary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: var(--shadow);
+            z-index: 100;
+            border: none;
+            transition: var(--transition);
         }
 
-        .mobile-menu-container {
-            display: block;
+        .theme-toggle:hover {
+            transform: scale(1.1);
         }
-    }
 
-    @media (min-width: 769px) {
-        .mobile-menu-container {
-            display: none;
+        /* Dark Mode Styles */
+        .dark-mode {
+            /* Dark mode colors */
+            --bg-color: #1a1a1a;
+            --text-color: #f0f0f0;
+            --card-bg: #2d2d2d;
+            --header-bg: linear-gradient(135deg, #1a2b3c, #1e3a5f);
+            --stat-bg: rgba(0, 0, 0, 0.2);
+            --light: #333;
+        }
+
+        .dark-mode .mobile-menu-dropdown {
+            background: #333;
+            border: 1px solid #444;
+        }
+
+        .dark-mode .mobile-menu-item {
+            border-bottom-color: #444;
+        }
+
+        .dark-mode .mobile-menu-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        @media (min-width: 769px) {
+            .mobile-menu-container {
+                display: none;
+            }
         }
     }
 </style>
 </head>
-
-<!-- Firebase App + Firestore SDK -->
-<script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-firestore-compat.js"></script>
 
 <body>
     <!-- PIN Entry Modal -->
@@ -993,6 +966,9 @@
                         </div>
                         <button class="btn btn-warning btn-sm" id="scrap-run-btn">
                             <i class="fas fa-recycle"></i> Scrap Run
+                        </button>
+                        <button class="btn btn-warning btn-sm" id="fuel-cost-btn">
+                            <i class="fas fa-gas-pump"></i> Add Fuel
                         </button>
                     </div>
                 </div>
@@ -1307,13 +1283,76 @@
             </div>
         </div>
 
+        <!-- Fuel Cost Modal -->
+        <div class="modal" id="fuel-cost-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Add Fuel Cost</h3>
+                    <button class="close-modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form id="fuel-cost-form">
+                        <div class="form-group">
+                            <label for="fuel-project-select">Select Project</label>
+                            <select id="fuel-project-select" required>
+                                <option value="">Select Project</option>
+                                <!-- Projects will be populated here -->
+                            </select>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="fuel-amount">Fuel Cost ($)</label>
+                                <input type="number" id="fuel-amount" placeholder="0.00" min="0" step="0.01" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="fuel-date">Date</label>
+                                <input type="date" id="fuel-date" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="fuel-notes">Notes (optional)</label>
+                            <textarea id="fuel-notes" placeholder="Any notes about this fuel purchase" rows="3"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-cancel">Cancel</button>
+                    <button class="btn btn-success" id="confirm-fuel-cost">Save Fuel Cost</button>
+                </div>
+            </div>
+        </div>
+
         <!-- Theme Toggle Button -->
         <button class="theme-toggle" id="theme-toggle">
             <i class="fas fa-moon"></i>
         </button>
 
         <!-- Mobile Menu -->
+        <div class="mobile-menu-container">
+            <button class="mobile-menu-button" id="mobile-menu-button">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="mobile-menu-dropdown" id="mobile-menu-dropdown">
+                <a href="#" class="mobile-menu-item" id="mobile-all">
+                    <i class="fas fa-list"></i> All Projects
+                </a>
+                <a href="#" class="mobile-menu-item" id="mobile-flips">
+                    <i class="fas fa-exchange-alt"></i> Flips
+                </a>
+                <a href="#" class="mobile-menu-item" id="mobile-repairs">
+                    <i class="fas fa-wrench"></i> Repairs
+                </a>
+                <a href="#" class="mobile-menu-item" id="mobile-add">
+                    <i class="fas fa-plus"></i> Add Project
+                </a>
+            </div>
+        </div>
 
+    </div>
+
+    <!-- Firebase App + Firestore SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-firestore-compat.js"></script>
 
     <script>
         // Initialize Firebase
@@ -1356,22 +1395,27 @@
         const completeRepairModal = document.getElementById('complete-repair-modal');
         const deleteProjectModal = document.getElementById('delete-project-modal');
         const scrapRunModal = document.getElementById('scrap-run-modal');
+        const fuelCostModal = document.getElementById('fuel-cost-modal');
         const closeModalButtons = document.querySelectorAll('.close-modal, .btn-cancel');
         const saveProjectBtn = document.getElementById('save-project');
         const projectForm = document.getElementById('project-form');
         const sellForm = document.getElementById('sell-form');
         const completeRepairForm = document.getElementById('complete-repair-form');
         const scrapRunForm = document.getElementById('scrap-run-form');
+        const fuelCostForm = document.getElementById('fuel-cost-form');
         const confirmSellBtn = document.getElementById('confirm-sell');
         const confirmCompleteRepairBtn = document.getElementById('confirm-complete-repair');
         const confirmDeleteBtn = document.getElementById('confirm-delete');
         const confirmScrapRunBtn = document.getElementById('confirm-scrap-run');
+        const confirmFuelCostBtn = document.getElementById('confirm-fuel-cost');
         const scrapRunBtn = document.getElementById('scrap-run-btn');
+        const fuelCostBtn = document.getElementById('fuel-cost-btn');
         const searchInput = document.getElementById('search-input');
         const sellProfitText = document.getElementById('sell-profit-text');
         const repairProfitText = document.getElementById('repair-profit-text');
         const projectToDelete = document.getElementById('project-to-delete');
         const themeToggle = document.getElementById('theme-toggle');
+        const fuelProjectSelect = document.getElementById('fuel-project-select');
         
         // Project Detail View Elements
         const projectDetailView = document.getElementById('project-detail-view');
@@ -1393,6 +1437,8 @@
         const projectTypeTitle = document.getElementById('project-type-title');
         
         // Mobile Menu
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenuDropdown = document.getElementById('mobile-menu-dropdown');
         const mobileAll = document.getElementById('mobile-all');
         const mobileFlips = document.getElementById('mobile-flips');
         const mobileRepairs = document.getElementById('mobile-repairs');
@@ -1401,11 +1447,13 @@
         // State variables
         let projects = [];
         let scrapRuns = [];
+        let fuelCosts = [];
         let currentSellProjectId = null;
         let currentCompleteRepairProjectId = null;
         let currentDeleteProjectId = null;
         let currentDetailProjectId = null;
         let currentScrapRunId = null;
+        let currentFuelCostId = null;
         let darkMode = false;
         let currentProjectTypeFilter = 'all';
         
@@ -1474,6 +1522,7 @@
             loadThemePreference();
             loadProjects();
             loadScrapRuns();
+            loadFuelCosts();
             setupEventListeners();
             updateStats();
             renderProjects();
@@ -1520,6 +1569,17 @@
             });
         }
         
+        // Load fuel costs from Firestore
+        function loadFuelCosts() {
+            db.collection("fuelCosts").onSnapshot((snapshot) => {
+                fuelCosts = [];
+                snapshot.forEach((doc) => {
+                    fuelCosts.push({ id: doc.id, ...doc.data() });
+                });
+                updateStats();
+            });
+        }
+        
         // Save project to Firestore
         function saveProject(project) {
             if (project.id) {
@@ -1539,6 +1599,17 @@
             } else {
                 // Add new scrap run
                 return db.collection("scrapRuns").add(scrapRun);
+            }
+        }
+        
+        // Save fuel cost to Firestore
+        function saveFuelCost(fuelCost) {
+            if (fuelCost.id) {
+                // Update existing fuel cost
+                return db.collection("fuelCosts").doc(fuelCost.id).update(fuelCost);
+            } else {
+                // Add new fuel cost
+                return db.collection("fuelCosts").add(fuelCost);
             }
         }
         
@@ -1631,6 +1702,43 @@
                 });
         }
         
+        // Add fuel cost
+        function addFuelCost() {
+            const projectId = fuelProjectSelect.value;
+            const amount = parseFloat(document.getElementById('fuel-amount').value);
+            const date = document.getElementById('fuel-date').value;
+            const notes = document.getElementById('fuel-notes').value.trim();
+            
+            if (!projectId || !amount || !date) {
+                alert('Please fill in all required fields');
+                return;
+            }
+            
+            const project = projects.find(p => p.id === projectId);
+            if (!project) {
+                alert('Selected project not found');
+                return;
+            }
+            
+            const fuelCostData = {
+                projectId,
+                projectName: project.name,
+                amount,
+                date,
+                notes,
+                createdAt: new Date().toISOString()
+            };
+            
+            saveFuelCost(fuelCostData)
+                .then(() => {
+                    toggleModal(fuelCostModal, false);
+                })
+                .catch((error) => {
+                    console.error("Error adding fuel cost: ", error);
+                    alert("Error adding fuel cost. Please try again.");
+                });
+        }
+        
         // Update project status
         function updateProjectStatus(projectId, newStatus) {
             const project = projects.find(p => p.id === projectId);
@@ -1683,6 +1791,24 @@
             toggleModal(scrapRunModal, true);
         }
         
+        // Open fuel cost modal
+        function openFuelCostModal() {
+            // Populate project dropdown
+            fuelProjectSelect.innerHTML = '<option value="">Select Project</option>';
+            projects.forEach(project => {
+                const option = document.createElement('option');
+                option.value = project.id;
+                option.textContent = project.name;
+                fuelProjectSelect.appendChild(option);
+            });
+            
+            document.getElementById('fuel-amount').value = '';
+            document.getElementById('fuel-date').valueAsDate = new Date();
+            document.getElementById('fuel-notes').value = '';
+            
+            toggleModal(fuelCostModal, true);
+        }
+        
         // Update profit calculation for selling
         function updateSellProfitCalculation() {
             const project = projects.find(p => p.id === currentSellProjectId);
@@ -1696,7 +1822,12 @@
             const purchaseDate = new Date(project.purchaseDate);
             const saleDate = new Date(soldDate);
             const daysHeld = Math.ceil((saleDate - purchaseDate) / (1000 * 60 * 60 * 24));
-            const profit = soldPrice - project.purchasePrice;
+            
+            // Calculate total fuel costs for this project
+            const projectFuelCosts = fuelCosts.filter(fc => fc.projectId === currentSellProjectId)
+                .reduce((total, fc) => total + (fc.amount || 0), 0);
+            
+            const profit = soldPrice - project.purchasePrice - projectFuelCosts;
             
             let profitMessage = '';
             if (profit > 0) {
@@ -1707,6 +1838,11 @@
                 profitMessage = `You broke even after ${daysHeld} days.`;
             }
             
+            // Add fuel cost info if there are any
+            if (projectFuelCosts > 0) {
+                profitMessage += ` (Includes $${projectFuelCosts.toFixed(2)} in fuel costs)`;
+            }
+            
             sellProfitText.textContent = profitMessage;
         }
         
@@ -1714,15 +1850,27 @@
         function updateRepairProfitCalculation() {
             const jobPrice = parseFloat(document.getElementById('job-price').value) || 0;
             const partsCost = parseFloat(document.getElementById('parts-cost').value) || 0;
-            const profit = jobPrice - partsCost;
+            
+            // Calculate total fuel costs for this project
+            const projectFuelCosts = fuelCosts.filter(fc => fc.projectId === currentCompleteRepairProjectId)
+                .reduce((total, fc) => total + (fc.amount || 0), 0);
+            
+            const profit = jobPrice - partsCost - projectFuelCosts;
             
             let profitMessage = '';
             if (profit > 0) {
-                profitMessage = `ROI: $${profit.toFixed(2)} (Service: $${jobPrice.toFixed(2)} - Parts: $${partsCost.toFixed(2)})`;
+                profitMessage = `ROI: $${profit.toFixed(2)} (Service: $${jobPrice.toFixed(2)} - Parts: $${partsCost.toFixed(2)}`;
             } else if (profit < 0) {
-                profitMessage = `Loss: $${Math.abs(profit).toFixed(2)} (Service: $${jobPrice.toFixed(2)} - Parts: $${partsCost.toFixed(2)})`;
+                profitMessage = `Loss: $${Math.abs(profit).toFixed(2)} (Service: $${jobPrice.toFixed(2)} - Parts: $${partsCost.toFixed(2)}`;
             } else {
-                profitMessage = `Broke even (Service: $${jobPrice.toFixed(2)} - Parts: $${partsCost.toFixed(2)})`;
+                profitMessage = `Broke even (Service: $${jobPrice.toFixed(2)} - Parts: $${partsCost.toFixed(2)}`;
+            }
+            
+            // Add fuel cost info if there are any
+            if (projectFuelCosts > 0) {
+                profitMessage += ` - Fuel: $${projectFuelCosts.toFixed(2)})`;
+            } else {
+                profitMessage += ')';
             }
             
             repairProfitText.textContent = profitMessage;
@@ -1882,6 +2030,34 @@
             `;
             
             detailProjectInfo.innerHTML = infoHtml;
+            
+            // Display fuel costs if there are any
+            const projectFuelCosts = fuelCosts.filter(fc => fc.projectId === projectId);
+            if (projectFuelCosts.length > 0) {
+                const totalFuelCost = projectFuelCosts.reduce((total, fc) => total + (fc.amount || 0), 0);
+                
+                const fuelCostsHtml = `
+                    <div class="project-detail-section">
+                        <h3><i class="fas fa-gas-pump"></i> Fuel Costs</h3>
+                        <div class="detail-item">
+                            <span>Total Fuel Cost:</span>
+                            <span class="value">$${totalFuelCost.toFixed(2)}</span>
+                        </div>
+                        <div class="notes-list">
+                            ${projectFuelCosts.map(fc => `
+                                <div class="note-item">
+                                    <div class="note-header">
+                                        <span>${new Date(fc.date).toLocaleDateString()}</span>
+                                        <span>$${fc.amount.toFixed(2)}</span>
+                                    </div>
+                                    ${fc.notes ? `<div class="note-content">${fc.notes}</div>` : ''}
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+                detailProjectInfo.insertAdjacentHTML('beforeend', fuelCostsHtml);
+            }
             
             // Display images
             if (project.images && project.images.length > 0) {
@@ -2129,6 +2305,10 @@
             // Get service name
             const serviceName = getServiceName(project.service);
             
+            // Calculate total fuel costs for this project
+            const projectFuelCosts = fuelCosts.filter(fc => fc.projectId === project.id)
+                .reduce((total, fc) => total + (fc.amount || 0), 0);
+            
             card.innerHTML = `
                 <div class="card-header" style="background: ${getCardHeaderColor(project)}">
                     <div class="status-badge">${statusText}</div>
@@ -2185,6 +2365,11 @@
                             <i class="fas fa-check-circle"></i>
                             <span>Completed:</span>
                             <span class="value">${completionDate}</span>
+                        </div>` : ''}
+                        ${projectFuelCosts > 0 ? `<div class="detail-item">
+                            <i class="fas fa-gas-pump"></i>
+                            <span>Fuel Costs:</span>
+                            <span class="value">$${projectFuelCosts.toFixed(2)}</span>
                         </div>` : ''}
                     </div>
                 </div>
@@ -2312,6 +2497,9 @@
             // Add scrap run amounts to total profit
             profit += scrapRuns.reduce((total, scrapRun) => total + (scrapRun.amount || 0), 0);
             
+            // Subtract fuel costs from total profit
+            profit -= fuelCosts.reduce((total, fuelCost) => total + (fuelCost.amount || 0), 0);
+            
             return profit;
         }
         
@@ -2333,6 +2521,7 @@
         function setupEventListeners() {
             addProjectBtn.addEventListener('click', () => toggleModal(addProjectModal, true));
             scrapRunBtn.addEventListener('click', openScrapRunModal);
+            fuelCostBtn.addEventListener('click', openFuelCostModal);
             
             closeModalButtons.forEach(button => {
                 button.addEventListener('click', (e) => {
@@ -2346,6 +2535,7 @@
             confirmCompleteRepairBtn.addEventListener('click', completeRepair);
             confirmDeleteBtn.addEventListener('click', deleteProject);
             confirmScrapRunBtn.addEventListener('click', addScrapRun);
+            confirmFuelCostBtn.addEventListener('click', addFuelCost);
             themeToggle.addEventListener('click', toggleTheme);
             
             searchInput.addEventListener('input', renderProjects);
@@ -2358,6 +2548,7 @@
                     toggleModal(completeRepairModal, false);
                     toggleModal(deleteProjectModal, false);
                     toggleModal(scrapRunModal, false);
+                    toggleModal(fuelCostModal, false);
                 }
             });
             
@@ -2367,6 +2558,7 @@
             document.getElementById('sold-date').valueAsDate = new Date();
             document.getElementById('completion-date').valueAsDate = new Date();
             document.getElementById('scrap-date').valueAsDate = new Date();
+            document.getElementById('fuel-date').valueAsDate = new Date();
             
             // Project type tabs
             projectTabs.forEach(tab => {
@@ -2386,12 +2578,18 @@
                 document.getElementById('repair-details').style.display = isRepair ? 'block' : 'none';
             });
             
-            // Mobile menu
+            // Mobile menu toggle
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenuDropdown.classList.toggle('active');
+            });
+            
+            // Mobile menu items
             mobileAll.addEventListener('click', (e) => {
                 e.preventDefault();
                 currentProjectTypeFilter = 'all';
                 projectTypeTitle.textContent = 'All Projects';
                 renderProjects();
+                mobileMenuDropdown.classList.remove('active');
             });
             
             mobileFlips.addEventListener('click', (e) => {
@@ -2399,6 +2597,7 @@
                 currentProjectTypeFilter = 'flip';
                 projectTypeTitle.textContent = 'Flip Projects';
                 renderProjects();
+                mobileMenuDropdown.classList.remove('active');
             });
             
             mobileRepairs.addEventListener('click', (e) => {
@@ -2406,11 +2605,13 @@
                 currentProjectTypeFilter = 'repair';
                 projectTypeTitle.textContent = 'Repair Projects';
                 renderProjects();
+                mobileMenuDropdown.classList.remove('active');
             });
             
             mobileAdd.addEventListener('click', (e) => {
                 e.preventDefault();
                 toggleModal(addProjectModal, true);
+                mobileMenuDropdown.classList.remove('active');
             });
             
             // Project detail view
@@ -2447,6 +2648,8 @@
                     projectForm.reset();
                 } else if (modal === scrapRunModal) {
                     scrapRunForm.reset();
+                } else if (modal === fuelCostModal) {
+                    fuelCostForm.reset();
                 }
             }
         }
