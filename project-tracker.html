@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>H&L Garage Monthly Profit Tracker</title>
+    <title>H&L Custom Staff Dashboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
     :root {
@@ -46,7 +46,7 @@
         color: var(--text-color);
         line-height: 1.6;
         transition: var(--transition);
-        -webkit-text-size-adjust: 100%;
+        -webkit-text-size-adjust: 100%; /* Prevent font scaling in landscape */
     }
     
     .container {
@@ -94,56 +94,31 @@
         font-weight: 700;
     }
     
-    .countdown {
-        background: var(--stat-bg);
-        padding: 10px 15px;
-        border-radius: 30px;
-        font-weight: 600;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-    }
-    
-    .countdown i {
-        font-size: 1.2rem;
-    }
-    
     .stats {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-        gap: 15px;
-        margin-bottom: 20px;
-    }
-    
-    .stat-card {
-        background: var(--card-bg);
-        border-radius: 8px;
-        padding: 15px;
-        box-shadow: var(--shadow);
+        display: flex;
+        gap: 10px;
+        background: var(--stat-bg);
+        padding: 8px 15px;
+        border-radius: 30px;
         transition: var(--transition);
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
     }
     
-    .stat-card h3 {
-        font-size: 0.9rem;
-        color: #777;
-        margin-bottom: 8px;
+    .stat-item {
+        text-align: center;
+        min-width: 60px;
     }
     
     .stat-value {
-        font-size: 1.5rem;
+        font-size: 1rem;
         font-weight: 700;
     }
     
-    .positive {
-        color: var(--success);
-    }
-    
-    .negative {
-        color: var(--danger);
-    }
-    
-    .neutral {
-        color: var(--warning);
+    .stat-label {
+        font-size: 0.7rem;
+        opacity: 0.9;
     }
     
     .main-content {
@@ -152,7 +127,7 @@
         padding: 20px;
         box-shadow: var(--shadow);
         transition: var(--transition);
-        margin-bottom: 70px;
+        margin-bottom: 70px; /* Space for mobile menu */
     }
     
     .content-header {
@@ -170,7 +145,112 @@
         font-size: 1.3rem;
     }
     
+    .search-bar {
+        display: flex;
+        align-items: center;
+        background: var(--light);
+        border-radius: 30px;
+        padding: 8px 15px;
+        width: 100%;
+        max-width: 300px;
+    }
+    
+    .search-bar input {
+        background: transparent;
+        border: none;
+        outline: none;
+        flex: 1;
+        padding: 5px 10px;
+        color: var(--text-color);
+        font-size: 0.9rem;
+    }
+    
+    .project-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 20px;
+    }
+    
+    .project-card {
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: var(--shadow);
+        transition: var(--transition);
+        background: var(--card-bg);
+        position: relative;
+    }
+    
+    .project-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
+    
+    .card-header {
+        padding: 15px;
+        color: white;
+    }
+    
+    .status-badge {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: rgba(0, 0, 0, 0.3);
+        padding: 4px 10px;
+        border-radius: 20px;
+        font-size: 0.7rem;
+        font-weight: 600;
+    }
+    
+    .card-body {
+        padding: 15px;
+    }
+    
+    .project-title {
+        font-size: 1.1rem;
+        font-weight: 700;
+        margin-bottom: 8px;
+        color: var(--text-color);
+        transition: var(--transition);
+    }
+    
+    .project-details {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-bottom: 15px;
+    }
+    
+    .detail-item {
+        display: flex;
+        gap: 8px;
+        font-size: 0.85rem;
+        align-items: flex-start;
+    }
+    
+    .detail-item i {
+        color: var(--secondary);
+        width: 16px;
+        font-size: 0.9rem;
+        margin-top: 2px;
+    }
+    
+    .detail-item .value {
+        font-weight: 600;
+        word-break: break-word;
+    }
+    
+    .card-footer {
+        padding: 0 15px 15px;
+    }
+    
+    .action-buttons {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+    
     .btn {
+        flex: 1;
         padding: 8px 12px;
         border: none;
         border-radius: 6px;
@@ -182,6 +262,7 @@
         justify-content: center;
         gap: 6px;
         font-size: 0.85rem;
+        min-width: 100px;
     }
     
     .btn-primary {
@@ -204,84 +285,13 @@
         color: white;
     }
     
+    .btn-sm {
+        padding: 6px 10px;
+        font-size: 0.8rem;
+    }
+    
     .btn:hover {
         opacity: 0.9;
-    }
-    
-    .transactions {
-        margin-top: 20px;
-    }
-    
-    .transaction-list {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-    }
-    
-    .transaction-item {
-        background: var(--card-bg);
-        padding: 12px;
-        border-radius: 6px;
-        box-shadow: var(--shadow);
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-    
-    .transaction-details {
-        flex: 1;
-    }
-    
-    .transaction-date {
-        font-size: 0.8rem;
-        color: #777;
-    }
-    
-    .transaction-amount {
-        font-weight: 700;
-        font-size: 1.1rem;
-    }
-    
-    .income {
-        color: var(--success);
-    }
-    
-    .expense {
-        color: var(--danger);
-    }
-    
-    .transaction-category {
-        display: inline-block;
-        padding: 2px 6px;
-        border-radius: 4px;
-        font-size: 0.7rem;
-        font-weight: 600;
-        margin-right: 5px;
-        background: rgba(52, 152, 219, 0.2);
-        color: var(--secondary);
-    }
-    
-    .add-transaction-btn {
-        background: linear-gradient(to right, var(--success), #2ecc71);
-        color: white;
-        border: none;
-        padding: 10px 15px;
-        border-radius: 6px;
-        font-weight: 600;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
-        transition: var(--transition);
-        box-shadow: 0 4px 6px rgba(46, 204, 113, 0.3);
-        font-size: 0.9rem;
-        margin-top: 15px;
-    }
-    
-    .add-transaction-btn:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 8px rgba(46, 204, 113, 0.4);
     }
     
     .modal {
@@ -385,12 +395,29 @@
         color: white;
     }
     
+    .profit-message {
+        background: rgba(39, 174, 96, 0.1);
+        border-left: 4px solid var(--success);
+        padding: 12px;
+        margin: 15px 0;
+        border-radius: 0 6px 6px 0;
+        display: none;
+        font-size: 0.9rem;
+    }
+    
+    .profit-message h4 {
+        color: var(--success);
+        margin-bottom: 5px;
+        font-size: 1rem;
+    }
+    
     .empty-state {
         text-align: center;
         padding: 30px 15px;
         color: var(--text-color);
         opacity: 0.7;
         transition: var(--transition);
+        grid-column: 1 / -1;
     }
     
     .empty-state i {
@@ -429,8 +456,8 @@
         transform: scale(1.1);
     }
     
-    .wipe-month-btn {
-        background: var(--danger);
+    .add-project-btn {
+        background: linear-gradient(to right, var(--success), #2ecc71);
         color: white;
         border: none;
         padding: 10px 15px;
@@ -442,13 +469,243 @@
         justify-content: center;
         gap: 8px;
         transition: var(--transition);
-        box-shadow: 0 4px 6px rgba(231, 76, 60, 0.3);
+        box-shadow: 0 4px 6px rgba(46, 204, 113, 0.3);
         font-size: 0.9rem;
     }
     
-    .wipe-month-btn:hover {
+    .add-project-btn:hover {
         transform: translateY(-2px);
-        box-shadow: 0 6px 8px rgba(231, 76, 60, 0.4);
+        box-shadow: 0 6px 8px rgba(46, 204, 113, 0.4);
+    }
+    
+    .pin-modal {
+        display: flex;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: var(--bg-color);
+        z-index: 2000;
+        align-items: center;
+        justify-content: center;
+        padding: 15px;
+    }
+    
+    .pin-container {
+        background: var(--card-bg);
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: var(--shadow);
+        text-align: center;
+        max-width: 400px;
+        width: 100%;
+    }
+    
+    .pin-container h2 {
+        margin-bottom: 15px;
+        color: var(--secondary);
+        font-size: 1.3rem;
+    }
+    
+    .pin-input {
+        display: flex;
+        justify-content: center;
+        gap: 8px;
+        margin-bottom: 15px;
+    }
+    
+    .pin-input input {
+        width: 35px;
+        height: 45px;
+        text-align: center;
+        font-size: 1.3rem;
+        border: 2px solid #ddd;
+        border-radius: 5px;
+    }
+    
+    .pin-error {
+        color: var(--danger);
+        margin-bottom: 15px;
+        min-height: 20px;
+        font-size: 0.9rem;
+    }
+    
+    .pin-submit {
+        background: var(--secondary);
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: var(--transition);
+    }
+    
+    .pin-submit:hover {
+        background: var(--primary);
+    }
+    
+    /* Project Type Tabs */
+    .project-tabs {
+        display: flex;
+        margin-bottom: 15px;
+        border-bottom: 2px solid #ddd;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    .project-tab {
+        padding: 8px 15px;
+        cursor: pointer;
+        font-weight: 600;
+        border-bottom: 3px solid transparent;
+        transition: var(--transition);
+        font-size: 0.9rem;
+        white-space: nowrap;
+    }
+    
+    .project-tab.active {
+        border-bottom-color: var(--secondary);
+        color: var(--secondary);
+    }
+    
+    /* Project Detail View */
+    .project-detail-container {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: var(--bg-color);
+        z-index: 1000;
+        overflow-y: auto;
+        padding: 15px;
+    }
+    
+    .project-detail-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+        padding-bottom: 12px;
+        border-bottom: 1px solid #ddd;
+    }
+    
+    .project-detail-content {
+        margin-bottom: 20px;
+    }
+    
+    .project-detail-section {
+        margin-bottom: 20px;
+    }
+    
+    .project-detail-section h3 {
+        margin-bottom: 12px;
+        color: var(--secondary);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 1.1rem;
+    }
+    
+    .project-detail-images {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+        gap: 12px;
+        margin-top: 12px;
+    }
+    
+    .project-image {
+        border-radius: 6px;
+        overflow: hidden;
+        height: 120px;
+        position: relative;
+    }
+    
+    .project-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    
+    .project-image-remove {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        background: var(--danger);
+        color: white;
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        font-size: 0.8rem;
+    }
+    
+    .add-image-btn {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        border: 2px dashed #ddd;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: var(--transition);
+        font-size: 0.8rem;
+    }
+    
+    .add-image-btn:hover {
+        border-color: var(--secondary);
+    }
+    
+    .notes-list {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+    
+    .note-item {
+        background: var(--card-bg);
+        padding: 12px;
+        border-radius: 6px;
+        box-shadow: var(--shadow);
+    }
+    
+    .note-header {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 8px;
+        font-size: 0.8rem;
+        color: #777;
+    }
+    
+    .add-note-form {
+        margin-top: 15px;
+    }
+    
+    .repair-log-item {
+        background: var(--card-bg);
+        padding: 12px;
+        border-radius: 6px;
+        box-shadow: var(--shadow);
+        margin-bottom: 12px;
+    }
+    
+    .repair-log-header {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 8px;
+        font-weight: 600;
+        font-size: 0.9rem;
+    }
+    
+    .repair-log-date {
+        color: #777;
+        font-size: 0.8rem;
     }
     
     /* Mobile-specific styles */
@@ -464,7 +721,16 @@
         }
         
         .stats {
-            grid-template-columns: 1fr 1fr;
+            width: 100%;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 8px;
+            padding: 8px;
+        }
+        
+        .stat-item {
+            min-width: auto;
+            flex: 1;
         }
         
         .content-header {
@@ -477,25 +743,54 @@
             width: 100%;
         }
         
-        .transaction-item {
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 8px;
+        .search-bar {
+            width: 100%;
+            max-width: 100%;
         }
         
-        .transaction-amount {
-            align-self: flex-end;
+        /* Simplified mobile layout */
+        .project-grid {
+            grid-template-columns: 1fr;
+            gap: 12px;
         }
-    }
-    
-    /* Mobile Menu */
+        
+        .project-card {
+            border-radius: 6px;
+        }
+        
+        .card-header {
+            padding: 12px;
+        }
+        
+        .card-body {
+            padding: 12px;
+        }
+        
+        .action-buttons {
+            flex-direction: row;
+            gap: 6px;
+        }
+        
+        .btn {
+            width: auto;
+            flex: 1 1 auto;
+            min-width: 0;
+            padding: 6px 8px;
+            font-size: 0.8rem;
+        }
+        
+        /* Mobile menu */
+      <style>
+    /* Previous CSS remains the same until the mobile menu section */
+
+    /* Mobile Menu Dropdown */
     .mobile-menu-container {
         position: fixed;
         bottom: 20px;
         right: 20px;
         z-index: 100;
     }
-    
+
     .mobile-menu-button {
         width: 60px;
         height: 60px;
@@ -511,11 +806,11 @@
         transition: var(--transition);
         font-size: 1.5rem;
     }
-    
+
     .mobile-menu-button:hover {
         transform: scale(1.1);
     }
-    
+
     .mobile-menu-dropdown {
         position: absolute;
         bottom: 70px;
@@ -531,13 +826,13 @@
         transition: all 0.3s ease;
         z-index: 101;
     }
-    
+
     .mobile-menu-dropdown.active {
         transform: translateY(0);
         opacity: 1;
         visibility: visible;
     }
-    
+
     .mobile-menu-item {
         display: flex;
         align-items: center;
@@ -547,21 +842,21 @@
         transition: var(--transition);
         border-bottom: 1px solid rgba(0, 0, 0, 0.05);
     }
-    
+
     .mobile-menu-item:last-child {
         border-bottom: none;
     }
-    
+
     .mobile-menu-item:hover {
         background: rgba(0, 0, 0, 0.05);
     }
-    
+
     .mobile-menu-item i {
         margin-right: 10px;
         width: 20px;
         text-align: center;
     }
-    
+
     /* Dark Mode Toggle */
     .theme-toggle {
         position: fixed;
@@ -581,11 +876,11 @@
         border: none;
         transition: var(--transition);
     }
-    
+
     .theme-toggle:hover {
         transform: scale(1.1);
     }
-    
+
     /* Dark Mode Styles */
     .dark-mode {
         /* Dark mode colors */
@@ -596,27 +891,46 @@
         --stat-bg: rgba(0, 0, 0, 0.2);
         --light: #333;
     }
-    
+
     .dark-mode .mobile-menu-dropdown {
         background: #333;
         border: 1px solid #444;
     }
-    
+
     .dark-mode .mobile-menu-item {
         border-bottom-color: #444;
     }
-    
+
     .dark-mode .mobile-menu-item:hover {
         background: rgba(255, 255, 255, 0.05);
     }
-    
-    /* Responsive adjustments */
+
+    /* Mobile-specific adjustments */
+    @media (max-width: 768px) {
+        /* Remove the old mobile menu */
+        .mobile-menu {
+            display: none;
+        }
+
+        /* Adjust theme toggle position */
+        .theme-toggle {
+            bottom: 90px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+        }
+
+        .mobile-menu-container {
+            display: block;
+        }
+    }
+
     @media (min-width: 769px) {
         .mobile-menu-container {
             display: none;
         }
     }
-    </style>
+</style>
 </head>
 
 <!-- Firebase App + Firestore SDK -->
@@ -627,7 +941,7 @@
     <!-- PIN Entry Modal -->
     <div class="pin-modal" id="pin-modal">
         <div class="pin-container">
-            <h2>H&L Garage Login</h2>
+            <h2>Staff Login</h2>
             <p>Enter your 6-digit PIN to access the system</p>
             <div class="pin-input">
                 <input type="password" maxlength="1" id="pin1" autofocus>
@@ -649,111 +963,346 @@
                 <div class="header-content">
                     <div class="logo">
                         <i class="fas fa-tools"></i>
-                        <h1>H&L Monthly Profit Tracker</h1>
+                        <h1>H&L Custom Admin Dashboard</h1>
                     </div>
-                    <div class="countdown" id="countdown">
-                        <i class="fas fa-calendar-alt"></i>
-                        <span id="countdown-text">Calculating...</span>
+
+                    <div class="stats desktop-only">
+                        <div class="stat-item">
+                            <div class="stat-value" id="total-projects">0</div>
+                            <div class="stat-label">Total</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="active-projects">0</div>
+                            <div class="stat-label">Active</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="sold-projects">0</div>
+                            <div class="stat-label">Sold</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="total-spent">$0</div>
+                            <div class="stat-label">Spent</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="total-profit">$0</div>
+                            <div class="stat-label">Profit</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="scrap-runs">0</div>
+                            <div class="stat-label">Scrap Runs</div>
+                        </div>
+                        <button class="btn btn-warning btn-sm" id="scrap-run-btn">
+                            <i class="fas fa-recycle"></i> Scrap Run
+                        </button>
                     </div>
                 </div>
             </div>
         </header>
 
         <div class="container">
-            <div class="stats" id="stats">
-                <!-- Stats will be populated by JavaScript -->
-            </div>
-            
             <div class="main-content">
                 <div class="content-header">
-                    <h2>Monthly Transactions</h2>
-                    <button class="wipe-month-btn" id="wipe-month-btn">
-                        <i class="fas fa-sync-alt"></i> Wipe Month
-                    </button>
+                    <h2 id="project-type-title">All Projects</h2>
+                    <div style="display: flex; gap: 15px;">
+                        <div class="search-bar">
+                            <i class="fas fa-search"></i>
+                            <input type="text" id="search-input" placeholder="Search projects...">
+                        </div>
+                        <button class="add-project-btn" id="add-project-btn">
+                            <i class="fas fa-plus"></i>
+                            <span class="desktop-only">Add Project</span>
+                        </button>
+                    </div>
                 </div>
                 
-                <div class="transactions">
-                    <div class="transaction-list" id="transaction-list">
-                        <!-- Transactions will be populated by JavaScript -->
-                    </div>
-                    
-                    <button class="add-transaction-btn" id="add-transaction-btn">
-                        <i class="fas fa-plus"></i> Add Transaction
-                    </button>
+                <!-- Project Type Tabs -->
+                <div class="project-tabs">
+                    <div class="project-tab active" data-type="all">All</div>
+                    <div class="project-tab" data-type="flip">Flips</div>
+                    <div class="project-tab" data-type="repair">Repairs</div>
+                </div>
+                
+                <div class="project-grid" id="project-grid">
+                    <!-- Projects will be dynamically inserted here -->
                 </div>
             </div>
         </div>
 
-        <!-- Add Transaction Modal -->
-        <div class="modal" id="add-transaction-modal">
+        <!-- Project Detail View -->
+        <div class="project-detail-container" id="project-detail-view">
+            <div class="project-detail-header">
+                <h2 id="detail-project-name"></h2>
+                <button id="close-detail-view" class="btn btn-cancel">
+                    <i class="fas fa-times"></i> Close
+                </button>
+            </div>
+            
+            <div class="project-detail-content">
+                <div class="project-detail-section">
+                    <h3><i class="fas fa-info-circle"></i> Project Details</h3>
+                    <div id="detail-project-info"></div>
+                </div>
+                
+                <div class="project-detail-section">
+                    <h3><i class="fas fa-images"></i> Images</h3>
+                    <div class="project-detail-images" id="project-images-container">
+                        <!-- Images will be added here -->
+                        <div class="project-image add-image-btn" id="add-image-btn">
+                            <i class="fas fa-plus" style="font-size: 2rem; color: #777;"></i>
+                            <span>Add Image</span>
+                        </div>
+                    </div>
+                    <input type="file" id="image-upload" accept="image/*" style="display: none;">
+                </div>
+                
+                <div class="project-detail-section">
+                    <h3><i class="fas fa-sticky-note"></i> Notes</h3>
+                    <div class="notes-list" id="project-notes-container">
+                        <!-- Notes will be added here -->
+                    </div>
+                    <div class="add-note-form">
+                        <textarea id="new-note-text" placeholder="Add a new note..." rows="3" style="width: 100%;"></textarea>
+                        <button class="btn btn-primary" id="add-note-btn" style="margin-top: 10px;">Add Note</button>
+                    </div>
+                </div>
+                
+                <div class="project-detail-section" id="repair-log-section">
+                    <h3><i class="fas fa-clipboard-list"></i> Repair Log</h3>
+                    <div id="repair-log-container">
+                        <!-- Repair log items will be added here -->
+                    </div>
+                    <div class="add-note-form">
+                        <textarea id="new-repair-log-text" placeholder="Add repair log entry..." rows="3" style="width: 100%;"></textarea>
+                        <button class="btn btn-primary" id="add-repair-log-btn" style="margin-top: 10px;">Add Log Entry</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add Project Modal -->
+        <div class="modal" id="add-project-modal">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h3>Add Transaction</h3>
+                    <h3>Add New Project</h3>
                     <button class="close-modal">&times;</button>
                 </div>
+
                 <div class="modal-body">
-                    <form id="transaction-form">
+                    <form id="project-form">
                         <div class="form-group">
-                            <label for="transaction-type">Transaction Type</label>
-                            <select id="transaction-type" required>
+                            <label for="project-name">Project Name</label>
+                            <input type="text" id="project-name" placeholder="e.g., Honda Lawn Mower" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="project-type">Project Type</label>
+                            <select id="project-type" required>
                                 <option value="">Select Type</option>
-                                <option value="income">Income (Sale)</option>
-                                <option value="expense">Expense</option>
+                                <option value="flip">For Flip</option>
+                                <option value="repair">For Repair</option>
                             </select>
                         </div>
                         
-                        <div class="form-group">
-                            <label for="transaction-amount">Amount ($)</label>
-                            <input type="number" id="transaction-amount" placeholder="0.00" min="0" step="0.01" required>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="project-service">Service Type</label>
+                                <select id="project-service" required>
+                                    <option value="">Select Service</option>
+                                    <option value="lawn_mower">Lawn Mower</option>
+                                    <option value="dirtbike_quad">Dirtbike/Quad</option>
+                                    <option value="trimmer_blower">Trimmer/Blower</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="engine-type">Engine Type</label>
+                                <select id="engine-type">
+                                    <option value="">Select Engine Type</option>
+                                    <option value="2_stroke">2-Stroke</option>
+                                    <option value="4_stroke">4-Stroke</option>
+                                    <option value="electric">Electric</option>
+                                    <option value="none">None</option>
+                                </select>
+                            </div>
                         </div>
                         
                         <div class="form-group">
-                            <label for="transaction-description">Description</label>
-                            <input type="text" id="transaction-description" placeholder="What is this for?" required>
-                        </div>
-                        
-                        <div class="form-group" id="expense-category-group">
-                            <label for="transaction-category">Expense Category</label>
-                            <select id="transaction-category">
-                                <option value="">Select Category</option>
-                                <option value="parts">Parts</option>
-                                <option value="fuel">Fuel</option>
-                                <option value="tools">Tools/Equipment</option>
-                                <option value="other">Other</option>
+                            <label for="initial-status">Initial Status</label>
+                            <select id="initial-status" required>
+                                <option value="not_running">Needs Work</option>
+                                <option value="running">Running</option>
                             </select>
                         </div>
                         
-                        <div class="form-group">
-                            <label for="transaction-date">Date</label>
-                            <input type="date" id="transaction-date" required>
+                        <!-- Flip-specific fields (hidden by default) -->
+                        <div id="flip-details">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="purchase-price">Purchase Price ($)</label>
+                                    <input type="number" id="purchase-price" placeholder="0.00" min="0" step="0.01">
+                                </div>
+                                <div class="form-group">
+                                    <label for="purchase-date">Purchase Date</label>
+                                    <input type="date" id="purchase-date">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Repair-specific fields (hidden by default) -->
+                        <div id="repair-details" style="display: none;">
+                            <div class="form-group">
+                                <label for="repair-reason">Repair Reason</label>
+                                <textarea id="repair-reason" placeholder="What is the equipment in for?" rows="2"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="booking-date">Booking Date</label>
+                                <input type="date" id="booking-date">
+                            </div>
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-cancel">Cancel</button>
-                    <button class="btn btn-success" id="save-transaction">Save Transaction</button>
+                    <button class="btn btn-success" id="save-project">Save Project</button>
                 </div>
             </div>
         </div>
 
-        <!-- Wipe Month Confirmation Modal -->
-        <div class="modal" id="wipe-month-modal">
+        <!-- Sell Project Modal -->
+        <div class="modal" id="sell-project-modal">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h3>Wipe Current Month</h3>
+                    <h3>Sell Project</h3>
                     <button class="close-modal">&times;</button>
                 </div>
                 <div class="modal-body">
-                    <p>Are you sure you want to wipe the current month's data?</p>
-                    <p>This will archive all transactions and reset the monthly totals. This action cannot be undone.</p>
-                    <div class="stat-card" style="margin-top: 15px;">
-                        <h3>Current Month Profit</h3>
-                        <div class="stat-value" id="current-month-profit">$0.00</div>
-                    </div>
+                    <form id="sell-form">
+                        <div class="form-group">
+                            <label for="project-name-sell">Project Name</label>
+                            <input type="text" id="project-name-sell" disabled>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="sold-price">Sold Price ($)</label>
+                                <input type="number" id="sold-price" placeholder="0.00" min="0" step="0.01" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="sold-date">Sold Date</label>
+                                <input type="date" id="sold-date" required>
+                            </div>
+                        </div>
+                        
+                        <div class="profit-message">
+                            <h4>Profit Summary</h4>
+                            <p id="sell-profit-text"></p>
+                        </div>
+                    </form>
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-cancel">Cancel</button>
-                    <button class="btn btn-danger" id="confirm-wipe-month">Wipe Month</button>
+                    <button class="btn btn-success" id="confirm-sell">Confirm Sale</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Complete Repair Modal -->
+        <div class="modal" id="complete-repair-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Complete Repair</h3>
+                    <button class="close-modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form id="complete-repair-form">
+                        <div class="form-group">
+                            <label for="repair-project-name">Project Name</label>
+                            <input type="text" id="repair-project-name" disabled>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="repair-description">Repair Description</label>
+                            <textarea id="repair-description" placeholder="What was done to fix the equipment?" rows="3"></textarea>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="job-price">Service Charge ($)</label>
+                                <input type="number" id="job-price" placeholder="0.00" min="0" step="0.01" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="parts-cost">Parts Cost ($)</label>
+                                <input type="number" id="parts-cost" placeholder="0.00" min="0" step="0.01" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="parts-installed">Parts Installed</label>
+                            <textarea id="parts-installed" placeholder="List all parts that were installed" rows="2"></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="completion-date">Completion Date</label>
+                            <input type="date" id="completion-date" required>
+                        </div>
+                        
+                        <div class="profit-message">
+                            <h4>ROI Summary</h4>
+                            <p id="repair-profit-text"></p>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-cancel">Cancel</button>
+                    <button class="btn btn-success" id="confirm-complete-repair">Return to Customer</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Delete Project Modal -->
+        <div class="modal" id="delete-project-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Delete Project</h3>
+                    <button class="close-modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete this project? This action cannot be undone.</p>
+                    <p><strong id="project-to-delete"></strong></p>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-cancel">Cancel</button>
+                    <button class="btn btn-danger" id="confirm-delete">Delete Project</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scrap Run Modal -->
+        <div class="modal" id="scrap-run-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Record Scrap Run</h3>
+                    <button class="close-modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form id="scrap-run-form">
+                        <div class="form-group">
+                            <label for="scrap-amount">Amount Earned ($)</label>
+                            <input type="number" id="scrap-amount" placeholder="0.00" min="0" step="0.01" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="scrap-date">Date</label>
+                            <input type="date" id="scrap-date" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="scrap-notes">Notes (optional)</label>
+                            <textarea id="scrap-notes" placeholder="Any notes about this scrap run" rows="3"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-cancel">Cancel</button>
+                    <button class="btn btn-success" id="confirm-scrap-run">Save Scrap Run</button>
                 </div>
             </div>
         </div>
@@ -764,20 +1313,7 @@
         </button>
 
         <!-- Mobile Menu -->
-        <div class="mobile-menu-container">
-            <button class="mobile-menu-button" id="mobile-menu-button">
-                <i class="fas fa-bars"></i>
-            </button>
-            <div class="mobile-menu-dropdown" id="mobile-menu-dropdown">
-                <a href="#" class="mobile-menu-item" id="mobile-add-transaction">
-                    <i class="fas fa-plus"></i> Add Transaction
-                </a>
-                <a href="#" class="mobile-menu-item" id="mobile-wipe-month">
-                    <i class="fas fa-sync-alt"></i> Wipe Month
-                </a>
-            </div>
-        </div>
-    </div>
+
 
     <script>
         // Initialize Firebase
@@ -813,40 +1349,72 @@
         const appContent = document.getElementById('app-content');
         
         // Main App DOM Elements
-        const countdownElement = document.getElementById('countdown-text');
-        const statsContainer = document.getElementById('stats');
-        const transactionList = document.getElementById('transaction-list');
-        const addTransactionBtn = document.getElementById('add-transaction-btn');
-        const addTransactionModal = document.getElementById('add-transaction-modal');
-        const wipeMonthBtn = document.getElementById('wipe-month-btn');
-        const wipeMonthModal = document.getElementById('wipe-month-modal');
+        const projectGrid = document.getElementById('project-grid');
+        const addProjectBtn = document.getElementById('add-project-btn');
+        const addProjectModal = document.getElementById('add-project-modal');
+        const sellProjectModal = document.getElementById('sell-project-modal');
+        const completeRepairModal = document.getElementById('complete-repair-modal');
+        const deleteProjectModal = document.getElementById('delete-project-modal');
+        const scrapRunModal = document.getElementById('scrap-run-modal');
         const closeModalButtons = document.querySelectorAll('.close-modal, .btn-cancel');
-        const saveTransactionBtn = document.getElementById('save-transaction');
-        const transactionForm = document.getElementById('transaction-form');
-        const confirmWipeMonthBtn = document.getElementById('confirm-wipe-month');
-        const currentMonthProfitElement = document.getElementById('current-month-profit');
+        const saveProjectBtn = document.getElementById('save-project');
+        const projectForm = document.getElementById('project-form');
+        const sellForm = document.getElementById('sell-form');
+        const completeRepairForm = document.getElementById('complete-repair-form');
+        const scrapRunForm = document.getElementById('scrap-run-form');
+        const confirmSellBtn = document.getElementById('confirm-sell');
+        const confirmCompleteRepairBtn = document.getElementById('confirm-complete-repair');
+        const confirmDeleteBtn = document.getElementById('confirm-delete');
+        const confirmScrapRunBtn = document.getElementById('confirm-scrap-run');
+        const scrapRunBtn = document.getElementById('scrap-run-btn');
+        const searchInput = document.getElementById('search-input');
+        const sellProfitText = document.getElementById('sell-profit-text');
+        const repairProfitText = document.getElementById('repair-profit-text');
+        const projectToDelete = document.getElementById('project-to-delete');
         const themeToggle = document.getElementById('theme-toggle');
         
-        // Transaction form elements
-        const transactionTypeSelect = document.getElementById('transaction-type');
-        const expenseCategoryGroup = document.getElementById('expense-category-group');
-        const transactionCategorySelect = document.getElementById('transaction-category');
+        // Project Detail View Elements
+        const projectDetailView = document.getElementById('project-detail-view');
+        const closeDetailView = document.getElementById('close-detail-view');
+        const detailProjectName = document.getElementById('detail-project-name');
+        const detailProjectInfo = document.getElementById('detail-project-info');
+        const projectImagesContainer = document.getElementById('project-images-container');
+        const addImageBtn = document.getElementById('add-image-btn');
+        const imageUpload = document.getElementById('image-upload');
+        const projectNotesContainer = document.getElementById('project-notes-container');
+        const newNoteText = document.getElementById('new-note-text');
+        const addNoteBtn = document.getElementById('add-note-btn');
+        const repairLogContainer = document.getElementById('repair-log-container');
+        const newRepairLogText = document.getElementById('new-repair-log-text');
+        const addRepairLogBtn = document.getElementById('add-repair-log-btn');
+        
+        // Project Type Tabs
+        const projectTabs = document.querySelectorAll('.project-tab');
+        const projectTypeTitle = document.getElementById('project-type-title');
         
         // Mobile Menu
-        const mobileMenuButton = document.getElementById('mobile-menu-button');
-        const mobileMenuDropdown = document.getElementById('mobile-menu-dropdown');
-        const mobileAddTransaction = document.getElementById('mobile-add-transaction');
-        const mobileWipeMonth = document.getElementById('mobile-wipe-month');
+        const mobileAll = document.getElementById('mobile-all');
+        const mobileFlips = document.getElementById('mobile-flips');
+        const mobileRepairs = document.getElementById('mobile-repairs');
+        const mobileAdd = document.getElementById('mobile-add');
         
         // State variables
-        let transactions = [];
-        let currentMonth = '';
+        let projects = [];
+        let scrapRuns = [];
+        let currentSellProjectId = null;
+        let currentCompleteRepairProjectId = null;
+        let currentDeleteProjectId = null;
+        let currentDetailProjectId = null;
+        let currentScrapRunId = null;
         let darkMode = false;
+        let currentProjectTypeFilter = 'all';
         
         // PIN Entry Logic
         function setupPinEntry() {
+            // Auto-focus first input
             pinInputs[0].focus();
             
+            // Handle input to move between fields
             pinInputs.forEach((input, index) => {
                 input.addEventListener('input', () => {
                     if (input.value.length === 1 && index < pinInputs.length - 1) {
@@ -861,8 +1429,10 @@
                 });
             });
             
+            // Handle form submission
             pinSubmit.addEventListener('click', checkPin);
             
+            // Allow Enter key to submit
             pinInputs.forEach(input => {
                 input.addEventListener('keyup', (e) => {
                     if (e.key === 'Enter') {
@@ -876,10 +1446,12 @@
             const enteredPin = pinInputs.map(input => input.value).join('');
             
             if (enteredPin === STAFF_PIN) {
+                // Correct PIN - show app
                 pinModal.style.display = 'none';
                 appContent.style.display = 'block';
                 initApp();
             } else {
+                // Incorrect PIN - show error
                 pinError.textContent = 'Incorrect PIN. Please try again.';
                 pinInputs.forEach(input => {
                     input.value = '';
@@ -887,6 +1459,7 @@
                 });
                 pinInputs[0].focus();
                 
+                // Reset error after 2 seconds
                 setTimeout(() => {
                     pinError.textContent = '';
                     pinInputs.forEach(input => {
@@ -899,13 +1472,11 @@
         // Initialize the application after PIN is entered
         function initApp() {
             loadThemePreference();
+            loadProjects();
+            loadScrapRuns();
             setupEventListeners();
-            updateCountdown();
-            loadCurrentMonth();
-            loadTransactions();
-            
-            // Update countdown every minute
-            setInterval(updateCountdown, 60000);
+            updateStats();
+            renderProjects();
         }
         
         // Load theme preference from localStorage
@@ -926,253 +1497,842 @@
             themeToggle.innerHTML = darkMode ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
         }
         
-        // Update the countdown to the 6th of next month
-        function updateCountdown() {
-            const now = new Date();
-            let nextPayoutDate;
-            
-            if (now.getDate() < 6) {
-                // If before the 6th of current month
-                nextPayoutDate = new Date(now.getFullYear(), now.getMonth(), 6);
-            } else {
-                // If after the 6th, get 6th of next month
-                nextPayoutDate = new Date(now.getFullYear(), now.getMonth() + 1, 6);
-            }
-            
-            const diff = nextPayoutDate - now;
-            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-            
-            if (days > 0) {
-                countdownElement.textContent = `${days}d ${hours}h ${minutes}m until next payout`;
-            } else if (hours > 0) {
-                countdownElement.textContent = `${hours}h ${minutes}m until next payout`;
-            } else {
-                countdownElement.textContent = `${minutes}m until next payout`;
-            }
-        }
-        
-        // Get current month in YYYY-MM format
-        function getCurrentMonth() {
-            const now = new Date();
-            const year = now.getFullYear();
-            const month = String(now.getMonth() + 1).padStart(2, '0');
-            return `${year}-${month}`;
-        }
-        
-        // Load current month from Firestore or create new
-        function loadCurrentMonth() {
-            currentMonth = getCurrentMonth();
-            loadTransactions();
-        }
-        
-        // Load transactions for current month
-        function loadTransactions() {
-            db.collection("transactions")
-                .where("month", "==", currentMonth)
-                .orderBy("date", "desc")
-                .onSnapshot((snapshot) => {
-                    transactions = [];
-                    snapshot.forEach((doc) => {
-                        transactions.push({ id: doc.id, ...doc.data() });
-                    });
-                    updateStats();
-                    renderTransactions();
+        // Load projects from Firestore
+        function loadProjects() {
+            db.collection("projects").onSnapshot((snapshot) => {
+                projects = [];
+                snapshot.forEach((doc) => {
+                    projects.push({ id: doc.id, ...doc.data() });
                 });
+                updateStats();
+                renderProjects();
+            });
         }
         
-        // Save transaction to Firestore
-        function saveTransaction(transaction) {
-            transaction.month = currentMonth;
-            return db.collection("transactions").add(transaction);
+        // Load scrap runs from Firestore
+        function loadScrapRuns() {
+            db.collection("scrapRuns").onSnapshot((snapshot) => {
+                scrapRuns = [];
+                snapshot.forEach((doc) => {
+                    scrapRuns.push({ id: doc.id, ...doc.data() });
+                });
+                updateStats();
+            });
         }
         
-        // Archive current month's transactions
-        function wipeCurrentMonth() {
-            const totalIncome = transactions
-                .filter(t => t.type === 'income')
-                .reduce((sum, t) => sum + t.amount, 0);
-                
-            const totalExpenses = transactions
-                .filter(t => t.type === 'expense')
-                .reduce((sum, t) => sum + t.amount, 0);
-                
-            const profit = totalIncome - totalExpenses;
+        // Save project to Firestore
+        function saveProject(project) {
+            if (project.id) {
+                // Update existing project
+                return db.collection("projects").doc(project.id).update(project);
+            } else {
+                // Add new project
+                return db.collection("projects").add(project);
+            }
+        }
+        
+        // Save scrap run to Firestore
+        function saveScrapRun(scrapRun) {
+            if (scrapRun.id) {
+                // Update existing scrap run
+                return db.collection("scrapRuns").doc(scrapRun.id).update(scrapRun);
+            } else {
+                // Add new scrap run
+                return db.collection("scrapRuns").add(scrapRun);
+            }
+        }
+        
+        // Delete project from Firestore
+        function deleteProject() {
+            if (!currentDeleteProjectId) return;
             
-            // Create month archive
-            const monthArchive = {
-                month: currentMonth,
-                income: totalIncome,
-                expenses: totalExpenses,
-                profit: profit,
-                archivedAt: new Date().toISOString()
-            };
-            
-            // Save archive
-            db.collection("monthArchives").add(monthArchive)
+            db.collection("projects").doc(currentDeleteProjectId).delete()
                 .then(() => {
-                    // Delete all transactions for current month
-                    const batch = db.batch();
-                    transactions.forEach(t => {
-                        const ref = db.collection("transactions").doc(t.id);
-                        batch.delete(ref);
-                    });
-                    
-                    return batch.commit();
-                })
-                .then(() => {
-                    toggleModal(wipeMonthModal, false);
-                    loadCurrentMonth(); // This will reload with new empty month
+                    toggleModal(deleteProjectModal, false);
                 })
                 .catch((error) => {
-                    console.error("Error wiping month: ", error);
-                    alert("Error wiping month. Please try again.");
+                    alert("Delete failed: " + error.message);
                 });
         }
         
-        // Add a new transaction
-        function addNewTransaction() {
-            const type = document.getElementById('transaction-type').value;
-            const amount = parseFloat(document.getElementById('transaction-amount').value);
-            const description = document.getElementById('transaction-description').value;
-            const category = type === 'expense' ? document.getElementById('transaction-category').value : null;
-            const date = document.getElementById('transaction-date').value;
+        // Add a new project
+        function addNewProject() {
+            const name = document.getElementById('project-name').value;
+            const type = document.getElementById('project-type').value;
+            const service = document.getElementById('project-service').value;
+            const engineType = document.getElementById('engine-type').value;
+            const status = document.getElementById('initial-status').value;
             
-            if (!type || !amount || !description || !date) {
+            let projectData = {
+                name,
+                type,
+                service,
+                engineType,
+                status,
+                images: [],
+                notes: [],
+                repairLogs: [],
+                createdAt: new Date().toISOString()
+            };
+            
+            if (type === 'repair') {
+                // For repair projects
+                projectData.repairReason = document.getElementById('repair-reason').value;
+                projectData.bookingDate = document.getElementById('booking-date').value;
+                projectData.purchasePrice = 0; // Set to 0 for repairs
+                projectData.purchaseDate = projectData.bookingDate; // Use booking date as purchase date
+            } else {
+                // For flip projects
+                projectData.purchasePrice = parseFloat(document.getElementById('purchase-price').value) || 0;
+                projectData.purchaseDate = document.getElementById('purchase-date').value;
+            }
+            
+            if (!name || !type || !service) {
                 alert('Please fill in all required fields');
                 return;
             }
             
-            const transactionData = {
-                type,
-                amount,
-                description,
-                category,
-                date,
-                createdAt: new Date().toISOString()
-            };
-            
-            saveTransaction(transactionData)
+            saveProject(projectData)
                 .then(() => {
-                    toggleModal(addTransactionModal, false);
-                    transactionForm.reset();
+                    toggleModal(addProjectModal, false);
+                    projectForm.reset();
                 })
                 .catch((error) => {
-                    console.error("Error adding transaction: ", error);
-                    alert("Error adding transaction. Please try again.");
+                    console.error("Error adding project: ", error);
+                    alert("Error adding project. Please try again.");
                 });
         }
         
-        // Update statistics
-        function updateStats() {
-            const totalIncome = transactions
-                .filter(t => t.type === 'income')
-                .reduce((sum, t) => sum + t.amount, 0);
-                
-            const totalExpenses = transactions
-                .filter(t => t.type === 'expense')
-                .reduce((sum, t) => sum + t.amount, 0);
-                
-            const profit = totalIncome - totalExpenses;
+        // Add scrap run
+        function addScrapRun() {
+            const amount = parseFloat(document.getElementById('scrap-amount').value);
+            const date = document.getElementById('scrap-date').value;
+            const notes = document.getElementById('scrap-notes').value.trim();
             
-            // Breakdown expenses by category
-            const partsExpenses = transactions
-                .filter(t => t.type === 'expense' && t.category === 'parts')
-                .reduce((sum, t) => sum + t.amount, 0);
-                
-            const fuelExpenses = transactions
-                .filter(t => t.type === 'expense' && t.category === 'fuel')
-                .reduce((sum, t) => sum + t.amount, 0);
-                
-            const otherExpenses = transactions
-                .filter(t => t.type === 'expense' && (!t.category || t.category === 'other'))
-                .reduce((sum, t) => sum + t.amount, 0);
+            if (!amount || !date) {
+                alert('Please fill in all required fields');
+                return;
+            }
             
-            // Update stats display
-            statsContainer.innerHTML = `
-                <div class="stat-card">
-                    <h3>Total Income</h3>
-                    <div class="stat-value positive">$${totalIncome.toFixed(2)}</div>
-                </div>
-                <div class="stat-card">
-                    <h3>Total Expenses</h3>
-                    <div class="stat-value negative">$${totalExpenses.toFixed(2)}</div>
-                </div>
-                <div class="stat-card">
-                    <h3>Net Profit</h3>
-                    <div class="stat-value ${profit >= 0 ? 'positive' : 'negative'}">$${profit.toFixed(2)}</div>
-                </div>
-                <div class="stat-card">
-                    <h3>Parts Costs</h3>
-                    <div class="stat-value negative">$${partsExpenses.toFixed(2)}</div>
-                </div>
-                <div class="stat-card">
-                    <h3>Fuel Costs</h3>
-                    <div class="stat-value negative">$${fuelExpenses.toFixed(2)}</div>
-                </div>
-                <div class="stat-card">
-                    <h3>Other Costs</h3>
-                    <div class="stat-value negative">$${otherExpenses.toFixed(2)}</div>
-                </div>
-            `;
+            const scrapRunData = {
+                amount,
+                date,
+                notes,
+                createdAt: new Date().toISOString()
+            };
             
-            // Update wipe month modal with current profit
-            currentMonthProfitElement.textContent = `$${profit.toFixed(2)}`;
-            currentMonthProfitElement.className = `stat-value ${profit >= 0 ? 'positive' : 'negative'}`;
+            saveScrapRun(scrapRunData)
+                .then(() => {
+                    toggleModal(scrapRunModal, false);
+                })
+                .catch((error) => {
+                    console.error("Error adding scrap run: ", error);
+                    alert("Error adding scrap run. Please try again.");
+                });
         }
         
-        // Render transactions list
-        function renderTransactions() {
-            transactionList.innerHTML = '';
+        // Update project status
+        function updateProjectStatus(projectId, newStatus) {
+            const project = projects.find(p => p.id === projectId);
+            if (project) {
+                const updatedProject = {
+                    ...project,
+                    status: newStatus
+                };
+                
+                saveProject(updatedProject)
+                    .catch((error) => {
+                        console.error("Error updating project status: ", error);
+                        alert("Error updating project status. Please try again.");
+                    });
+            }
+        }
+        
+        // Open sell project modal
+        function openSellModal(projectId) {
+            const project = projects.find(p => p.id === projectId);
+            if (project) {
+                currentSellProjectId = projectId;
+                document.getElementById('project-name-sell').value = project.name;
+                document.getElementById('sold-price').value = '';
+                document.getElementById('sold-date').valueAsDate = new Date();
+                toggleModal(sellProjectModal, true);
+            }
+        }
+        
+        // Open complete repair modal
+        function openCompleteRepairModal(projectId) {
+            const project = projects.find(p => p.id === projectId);
+            if (project) {
+                currentCompleteRepairProjectId = projectId;
+                document.getElementById('repair-project-name').value = project.name;
+                document.getElementById('job-price').value = '';
+                document.getElementById('parts-cost').value = '';
+                document.getElementById('repair-description').value = '';
+                document.getElementById('parts-installed').value = '';
+                document.getElementById('completion-date').valueAsDate = new Date();
+                toggleModal(completeRepairModal, true);
+            }
+        }
+        
+        // Open scrap run modal
+        function openScrapRunModal() {
+            document.getElementById('scrap-amount').value = '';
+            document.getElementById('scrap-date').valueAsDate = new Date();
+            document.getElementById('scrap-notes').value = '';
+            toggleModal(scrapRunModal, true);
+        }
+        
+        // Update profit calculation for selling
+        function updateSellProfitCalculation() {
+            const project = projects.find(p => p.id === currentSellProjectId);
+            if (!project) return;
             
-            if (transactions.length === 0) {
-                transactionList.innerHTML = `
+            const soldPrice = parseFloat(document.getElementById('sold-price').value) || 0;
+            const soldDate = document.getElementById('sold-date').value;
+            
+            if (!soldDate) return;
+            
+            const purchaseDate = new Date(project.purchaseDate);
+            const saleDate = new Date(soldDate);
+            const daysHeld = Math.ceil((saleDate - purchaseDate) / (1000 * 60 * 60 * 24));
+            const profit = soldPrice - project.purchasePrice;
+            
+            let profitMessage = '';
+            if (profit > 0) {
+                profitMessage = `Nice! You've made $${profit.toFixed(2)} profit in ${daysHeld} days!`;
+            } else if (profit < 0) {
+                profitMessage = `You had a loss of $${Math.abs(profit).toFixed(2)} after ${daysHeld} days.`;
+            } else {
+                profitMessage = `You broke even after ${daysHeld} days.`;
+            }
+            
+            sellProfitText.textContent = profitMessage;
+        }
+        
+        // Update profit calculation for repair
+        function updateRepairProfitCalculation() {
+            const jobPrice = parseFloat(document.getElementById('job-price').value) || 0;
+            const partsCost = parseFloat(document.getElementById('parts-cost').value) || 0;
+            const profit = jobPrice - partsCost;
+            
+            let profitMessage = '';
+            if (profit > 0) {
+                profitMessage = `ROI: $${profit.toFixed(2)} (Service: $${jobPrice.toFixed(2)} - Parts: $${partsCost.toFixed(2)})`;
+            } else if (profit < 0) {
+                profitMessage = `Loss: $${Math.abs(profit).toFixed(2)} (Service: $${jobPrice.toFixed(2)} - Parts: $${partsCost.toFixed(2)})`;
+            } else {
+                profitMessage = `Broke even (Service: $${jobPrice.toFixed(2)} - Parts: $${partsCost.toFixed(2)})`;
+            }
+            
+            repairProfitText.textContent = profitMessage;
+        }
+        
+        // Sell project
+        function sellProject() {
+            const soldPrice = parseFloat(document.getElementById('sold-price').value);
+            const soldDate = document.getElementById('sold-date').value;
+            
+            if (!soldPrice || !soldDate) {
+                alert('Please fill in all required fields');
+                return;
+            }
+            
+            const project = projects.find(p => p.id === currentSellProjectId);
+            if (project) {
+                const updatedProject = {
+                    ...project,
+                    status: 'sold',
+                    soldPrice: soldPrice,
+                    soldDate: soldDate
+                };
+                
+                saveProject(updatedProject)
+                    .then(() => {
+                        toggleModal(sellProjectModal, false);
+                    })
+                    .catch((error) => {
+                        console.error("Error updating project: ", error);
+                        alert("Error updating project. Please try again.");
+                    });
+            }
+        }
+        
+        // Complete repair
+        function completeRepair() {
+            const jobPrice = parseFloat(document.getElementById('job-price').value);
+            const partsCost = parseFloat(document.getElementById('parts-cost').value);
+            const repairDescription = document.getElementById('repair-description').value;
+            const partsInstalled = document.getElementById('parts-installed').value;
+            const completionDate = document.getElementById('completion-date').value;
+            
+            if (!jobPrice || !partsCost || !completionDate || !repairDescription) {
+                alert('Please fill in all required fields');
+                return;
+            }
+            
+            const project = projects.find(p => p.id === currentCompleteRepairProjectId);
+            if (project) {
+                const updatedProject = {
+                    ...project,
+                    status: 'completed',
+                    jobPrice: jobPrice,
+                    partsCost: partsCost,
+                    repairDescription: repairDescription,
+                    partsInstalled: partsInstalled,
+                    completionDate: completionDate
+                };
+                
+                saveProject(updatedProject)
+                    .then(() => {
+                        toggleModal(completeRepairModal, false);
+                    })
+                    .catch((error) => {
+                        console.error("Error updating project: ", error);
+                        alert("Error updating project. Please try again.");
+                    });
+            }
+        }
+        
+        // Open delete confirmation modal
+        function openDeleteModal(projectId) {
+            const project = projects.find(p => p.id === projectId);
+            if (project) {
+                currentDeleteProjectId = projectId;
+                projectToDelete.textContent = project.name;
+                toggleModal(deleteProjectModal, true);
+            }
+        }
+        
+        // Open project detail view
+        function openProjectDetail(projectId) {
+            const project = projects.find(p => p.id === projectId);
+            if (!project) return;
+            
+            currentDetailProjectId = projectId;
+            detailProjectName.textContent = project.name;
+            
+            // Clear previous content
+            detailProjectInfo.innerHTML = '';
+            projectImagesContainer.innerHTML = '';
+            projectNotesContainer.innerHTML = '';
+            repairLogContainer.innerHTML = '';
+            
+            // Add back the add image button
+            projectImagesContainer.appendChild(addImageBtn);
+            
+            // Display project info
+            const infoHtml = `
+                <div class="detail-item">
+                    <span>Type:</span>
+                    <span class="value">${project.type === 'flip' ? 'Flip' : 'Repair'}</span>
+                </div>
+                <div class="detail-item">
+                    <span>Service:</span>
+                    <span class="value">${getServiceName(project.service)}</span>
+                </div>
+                ${project.engineType ? `<div class="detail-item">
+                    <span>Engine:</span>
+                    <span class="value">${getEngineTypeName(project.engineType)}</span>
+                </div>` : ''}
+                <div class="detail-item">
+                    <span>Status:</span>
+                    <span class="value">${getStatusName(project.status)}</span>
+                </div>
+                ${project.type === 'flip' ? `<div class="detail-item">
+                    <span>Purchase Price:</span>
+                    <span class="value">$${project.purchasePrice ? project.purchasePrice.toFixed(2) : '0.00'}</span>
+                </div>` : ''}
+                <div class="detail-item">
+                    <span>${project.type === 'flip' ? 'Purchase Date' : 'Booking Date'}:</span>
+                    <span class="value">${project.purchaseDate ? new Date(project.purchaseDate).toLocaleDateString() : 'N/A'}</span>
+                </div>
+                ${project.type === 'repair' && project.repairReason ? `<div class="detail-item">
+                    <span>Repair Reason:</span>
+                    <span class="value">${project.repairReason}</span>
+                </div>` : ''}
+                ${project.soldPrice ? `<div class="detail-item">
+                    <span>Sold Price:</span>
+                    <span class="value">$${project.soldPrice.toFixed(2)}</span>
+                </div>` : ''}
+                ${project.soldDate ? `<div class="detail-item">
+                    <span>Sold Date:</span>
+                    <span class="value">${new Date(project.soldDate).toLocaleDateString()}</span>
+                </div>` : ''}
+                ${project.jobPrice ? `<div class="detail-item">
+                    <span>Service Charge:</span>
+                    <span class="value">$${project.jobPrice.toFixed(2)}</span>
+                </div>` : ''}
+                ${project.partsCost ? `<div class="detail-item">
+                    <span>Parts Cost:</span>
+                    <span class="value">$${project.partsCost.toFixed(2)}</span>
+                </div>` : ''}
+                ${project.completionDate ? `<div class="detail-item">
+                    <span>Completion Date:</span>
+                    <span class="value">${new Date(project.completionDate).toLocaleDateString()}</span>
+                </div>` : ''}
+                ${project.repairDescription ? `<div class="detail-item">
+                    <span>Repair Description:</span>
+                    <span class="value">${project.repairDescription}</span>
+                </div>` : ''}
+                ${project.partsInstalled ? `<div class="detail-item">
+                    <span>Parts Installed:</span>
+                    <span class="value">${project.partsInstalled}</span>
+                </div>` : ''}
+            `;
+            
+            detailProjectInfo.innerHTML = infoHtml;
+            
+            // Display images
+            if (project.images && project.images.length > 0) {
+                project.images.forEach((image, index) => {
+                    const imageElement = document.createElement('div');
+                    imageElement.className = 'project-image';
+                    imageElement.innerHTML = `
+                        <img src="${image.data}" alt="Project image">
+                        <div class="project-image-remove" data-index="${index}">
+                            <i class="fas fa-times"></i>
+                        </div>
+                    `;
+                    projectImagesContainer.insertBefore(imageElement, addImageBtn);
+                    
+                    // Add event listener to remove button
+                    imageElement.querySelector('.project-image-remove').addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        removeProjectImage(index);
+                    });
+                });
+            }
+            
+            // Display notes
+            if (project.notes && project.notes.length > 0) {
+                project.notes.forEach(note => {
+                    const noteElement = document.createElement('div');
+                    noteElement.className = 'note-item';
+                    noteElement.innerHTML = `
+                        <div class="note-header">
+                            <span>${new Date(note.date).toLocaleString()}</span>
+                        </div>
+                        <div class="note-content">${note.text}</div>
+                    `;
+                    projectNotesContainer.appendChild(noteElement);
+                });
+            }
+            
+            // Display repair logs (only for repair projects)
+            if (project.type === 'repair') {
+                document.getElementById('repair-log-section').style.display = 'block';
+                if (project.repairLogs && project.repairLogs.length > 0) {
+                    project.repairLogs.forEach(log => {
+                        const logElement = document.createElement('div');
+                        logElement.className = 'repair-log-item';
+                        logElement.innerHTML = `
+                            <div class="repair-log-header">
+                                <span>${new Date(log.date).toLocaleString()}</span>
+                            </div>
+                            <div class="repair-log-content">${log.text}</div>
+                        `;
+                        repairLogContainer.appendChild(logElement);
+                    });
+                }
+            } else {
+                // Hide repair log section for non-repair projects
+                document.getElementById('repair-log-section').style.display = 'none';
+            }
+            
+            projectDetailView.style.display = 'block';
+        }
+        
+        // Handle image upload
+        function handleImageUpload(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                const project = projects.find(p => p.id === currentDetailProjectId);
+                if (project) {
+                    const newImage = {
+                        name: file.name,
+                        data: event.target.result,
+                        date: new Date().toISOString()
+                    };
+                    
+                    const updatedProject = {
+                        ...project,
+                        images: [...project.images, newImage]
+                    };
+                    
+                    saveProject(updatedProject)
+                        .then(() => {
+                            openProjectDetail(currentDetailProjectId);
+                        })
+                        .catch((error) => {
+                            console.error("Error adding image: ", error);
+                            alert("Error adding image. Please try again.");
+                        });
+                }
+            };
+            reader.readAsDataURL(file);
+            e.target.value = '';
+        }
+        
+        // Remove project image
+        function removeProjectImage(index) {
+            const project = projects.find(p => p.id === currentDetailProjectId);
+            if (project) {
+                const updatedImages = [...project.images];
+                updatedImages.splice(index, 1);
+                
+                const updatedProject = {
+                    ...project,
+                    images: updatedImages
+                };
+                
+                saveProject(updatedProject)
+                    .then(() => {
+                        openProjectDetail(currentDetailProjectId);
+                    })
+                    .catch((error) => {
+                        console.error("Error removing image: ", error);
+                        alert("Error removing image. Please try again.");
+                    });
+            }
+        }
+        
+        // Add project note
+        function addProjectNote() {
+            const text = newNoteText.value.trim();
+            if (!text) return;
+            
+            const project = projects.find(p => p.id === currentDetailProjectId);
+            if (project) {
+                const newNote = {
+                    text,
+                    date: new Date().toISOString()
+                };
+                
+                const updatedProject = {
+                    ...project,
+                    notes: [...project.notes, newNote]
+                };
+                
+                saveProject(updatedProject)
+                    .then(() => {
+                        newNoteText.value = '';
+                        openProjectDetail(currentDetailProjectId);
+                    })
+                    .catch((error) => {
+                        console.error("Error adding note: ", error);
+                        alert("Error adding note. Please try again.");
+                    });
+            }
+        }
+        
+        // Add repair log entry
+        function addRepairLogEntry() {
+            const text = newRepairLogText.value.trim();
+            if (!text) return;
+            
+            const project = projects.find(p => p.id === currentDetailProjectId);
+            if (project && project.type === 'repair') {
+                const newLog = {
+                    text,
+                    date: new Date().toISOString()
+                };
+                
+                const updatedProject = {
+                    ...project,
+                    repairLogs: [...project.repairLogs, newLog]
+                };
+                
+                saveProject(updatedProject)
+                    .then(() => {
+                        newRepairLogText.value = '';
+                        openProjectDetail(currentDetailProjectId);
+                    })
+                    .catch((error) => {
+                        console.error("Error adding repair log: ", error);
+                        alert("Error adding repair log. Please try again.");
+                    });
+            }
+        }
+        
+        // Render projects based on search and filter
+        function renderProjects() {
+            const searchTerm = searchInput.value.toLowerCase();
+            
+            let filteredProjects = projects.filter(project => {
+                const matchesSearch = project.name.toLowerCase().includes(searchTerm);
+                const matchesType = currentProjectTypeFilter === 'all' || 
+                                    (currentProjectTypeFilter === 'flip' && project.type === 'flip') || 
+                                    (currentProjectTypeFilter === 'repair' && project.type === 'repair');
+                return matchesSearch && matchesType;
+            });
+            
+            projectGrid.innerHTML = '';
+            
+            if (filteredProjects.length === 0) {
+                projectGrid.innerHTML = `
                     <div class="empty-state">
-                        <i class="fas fa-receipt"></i>
-                        <h3>No Transactions Yet</h3>
-                        <p>Add your first transaction to get started!</p>
+                        <i class="fas fa-box-open"></i>
+                        <h3>No Projects Found</h3>
+                        <p>${projects.length === 0 ? 'Add your first project to get started!' : 'Try changing your search term'}</p>
                     </div>
                 `;
                 return;
             }
             
-            transactions.forEach(transaction => {
-                const transactionElement = document.createElement('div');
-                transactionElement.className = 'transaction-item';
-                
-                const isIncome = transaction.type === 'income';
-                const amountClass = isIncome ? 'income' : 'expense';
-                const sign = isIncome ? '+' : '-';
-                
-                let categoryBadge = '';
-                if (transaction.category) {
-                    categoryBadge = `<span class="transaction-category">${transaction.category}</span>`;
+            filteredProjects.forEach(project => {
+                const projectCard = createProjectCard(project);
+                projectGrid.appendChild(projectCard);
+            });
+        }
+        
+        // Create project card element
+        function createProjectCard(project) {
+            const card = document.createElement('div');
+            card.className = 'project-card';
+            
+            // Get status info
+            let statusText, statusClass;
+            switch (project.status) {
+                case 'not_running':
+                    statusText = 'Needs Work';
+                    statusClass = 'status-not-running';
+                    break;
+                case 'running':
+                    statusText = project.type === 'repair' ? 'In Progress' : 'Running';
+                    statusClass = 'status-running';
+                    break;
+                case 'sold':
+                    statusText = 'Sold';
+                    statusClass = 'status-sold';
+                    break;
+                case 'completed':
+                    statusText = 'Completed';
+                    statusClass = 'status-completed';
+                    break;
+            }
+            
+            // Format dates
+            const purchaseDate = project.purchaseDate ? new Date(project.purchaseDate).toLocaleDateString() : 'N/A';
+            const soldDate = project.soldDate ? new Date(project.soldDate).toLocaleDateString() : 'Not sold';
+            const completionDate = project.completionDate ? new Date(project.completionDate).toLocaleDateString() : 'Not completed';
+            
+            // Format engine type
+            let engineText = '';
+            if (project.engineType) {
+                engineText = getEngineTypeName(project.engineType);
+            }
+            
+            // Get service name
+            const serviceName = getServiceName(project.service);
+            
+            card.innerHTML = `
+                <div class="card-header" style="background: ${getCardHeaderColor(project)}">
+                    <div class="status-badge">${statusText}</div>
+                    <div class="project-title">${project.name}</div>
+                </div>
+                <div class="card-body">
+                    <div class="project-details">
+                        <div class="detail-item">
+                            <i class="fas fa-tag"></i>
+                            <span>Type:</span>
+                            <span class="value">${project.type === 'flip' ? 'Flip' : 'Repair'}</span>
+                        </div>
+                        <div class="detail-item">
+                            <i class="fas fa-tools"></i>
+                            <span>Service:</span>
+                            <span class="value">${serviceName}</span>
+                        </div>
+                        ${engineText ? `<div class="detail-item">
+                            <i class="fas fa-cog"></i>
+                            <span>Engine:</span>
+                            <span class="value">${engineText}</span>
+                        </div>` : ''}
+                        ${project.type === 'flip' ? `<div class="detail-item">
+                            <i class="fas fa-dollar-sign"></i>
+                            <span>Purchase Price:</span>
+                            <span class="value">$${project.purchasePrice ? project.purchasePrice.toFixed(2) : '0.00'}</span>
+                        </div>` : ''}
+                        <div class="detail-item">
+                            <i class="fas fa-calendar-alt"></i>
+                            <span>${project.type === 'flip' ? 'Purchase Date' : 'Booking Date'}:</span>
+                            <span class="value">${purchaseDate}</span>
+                        </div>
+                        ${project.soldPrice ? `<div class="detail-item">
+                            <i class="fas fa-money-bill-wave"></i>
+                            <span>Sold Price:</span>
+                            <span class="value">$${project.soldPrice.toFixed(2)}</span>
+                        </div>` : ''}
+                        ${project.soldDate ? `<div class="detail-item">
+                            <i class="fas fa-calendar-check"></i>
+                            <span>Sold Date:</span>
+                            <span class="value">${soldDate}</span>
+                        </div>` : ''}
+                        ${project.jobPrice ? `<div class="detail-item">
+                            <i class="fas fa-wrench"></i>
+                            <span>Service Charge:</span>
+                            <span class="value">$${project.jobPrice.toFixed(2)}</span>
+                        </div>` : ''}
+                        ${project.partsCost ? `<div class="detail-item">
+                            <i class="fas fa-cogs"></i>
+                            <span>Parts Cost:</span>
+                            <span class="value">$${project.partsCost.toFixed(2)}</span>
+                        </div>` : ''}
+                        ${project.completionDate ? `<div class="detail-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Completed:</span>
+                            <span class="value">${completionDate}</span>
+                        </div>` : ''}
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="action-buttons">
+                        <button class="btn btn-primary btn-sm view-details" data-id="${project.id}">
+                            <i class="fas fa-eye"></i> Details
+                        </button>
+                        ${project.status !== 'sold' && project.status !== 'completed' ? `
+                            ${project.status === 'not_running' ? `
+                                <button class="btn btn-primary btn-sm mark-running" data-id="${project.id}">
+                                    <i class="fas fa-play"></i> ${project.type === 'repair' ? 'Start Work' : 'Mark Running'}
+                                </button>
+                            ` : ''}
+                            ${project.type === 'flip' ? `
+                                <button class="btn btn-success btn-sm sell-project" data-id="${project.id}">
+                                    <i class="fas fa-dollar-sign"></i> Sell
+                                </button>
+                            ` : `
+                                <button class="btn btn-success btn-sm complete-repair" data-id="${project.id}">
+                                    <i class="fas fa-check"></i> Complete
+                                </button>
+                            `}
+                        ` : ''}
+                        <button class="btn btn-danger btn-sm delete-project" data-id="${project.id}">
+                            <i class="fas fa-trash"></i> Delete
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            // Add event listeners to buttons
+            card.querySelector('.view-details').addEventListener('click', (e) => {
+                const projectId = e.target.closest('button').dataset.id;
+                openProjectDetail(projectId);
+            });
+            
+            card.querySelector('.delete-project').addEventListener('click', (e) => {
+                const projectId = e.target.closest('button').dataset.id;
+                openDeleteModal(projectId);
+            });
+            
+            if (project.status !== 'sold' && project.status !== 'completed') {
+                if (project.status === 'not_running') {
+                    card.querySelector('.mark-running').addEventListener('click', (e) => {
+                        const projectId = e.target.closest('button').dataset.id;
+                        updateProjectStatus(projectId, 'running');
+                    });
                 }
                 
-                transactionElement.innerHTML = `
-                    <div class="transaction-details">
-                        ${categoryBadge}
-                        <span>${transaction.description}</span>
-                        <div class="transaction-date">${new Date(transaction.date).toLocaleDateString()}</div>
-                    </div>
-                    <div class="transaction-amount ${amountClass}">${sign}$${transaction.amount.toFixed(2)}</div>
-                `;
-                
-                transactionList.appendChild(transactionElement);
-            });
+                if (project.type === 'flip') {
+                    card.querySelector('.sell-project').addEventListener('click', (e) => {
+                        const projectId = e.target.closest('button').dataset.id;
+                        openSellModal(projectId);
+                    });
+                } else {
+                    card.querySelector('.complete-repair').addEventListener('click', (e) => {
+                        const projectId = e.target.closest('button').dataset.id;
+                        openCompleteRepairModal(projectId);
+                    });
+                }
+            }
+            
+            return card;
+        }
+        
+        // Helper function to get card header color
+        function getCardHeaderColor(project) {
+            switch (project.status) {
+                case 'not_running': return '#e74c3c'; // Red
+                case 'running': return '#27ae60'; // Green
+                case 'sold': return '#3498db'; // Blue
+                case 'completed': return '#9b59b6'; // Purple
+                default: return '#2c3e50'; // Dark blue
+            }
+        }
+        
+        // Helper function to get service name
+        function getServiceName(service) {
+            switch (service) {
+                case 'lawn_mower': return 'Lawn Mower';
+                case 'dirtbike_quad': return 'Dirtbike/Quad';
+                case 'trimmer_blower': return 'Trimmer/Blower';
+                default: return 'Other Service';
+            }
+        }
+        
+        // Helper function to get engine type name
+        function getEngineTypeName(engineType) {
+            switch (engineType) {
+                case '2_stroke': return '2-Stroke';
+                case '4_stroke': return '4-Stroke';
+                case 'electric': return 'Electric';
+                default: return engineType;
+            }
+        }
+        
+        // Helper function to get status name
+        function getStatusName(status) {
+            switch (status) {
+                case 'not_running': return 'Needs Work';
+                case 'running': return 'Running';
+                case 'sold': return 'Sold';
+                case 'completed': return 'Completed';
+                default: return status;
+            }
+        }
+        
+        // Calculate total spent
+        function calculateTotalSpent() {
+            return projects.reduce((total, project) => total + (project.purchasePrice || 0), 0);
+        }
+        
+        // Calculate total profit
+        function calculateTotalProfit() {
+            let profit = projects.reduce((total, project) => {
+                if (project.type === 'flip' && project.soldPrice) {
+                    return total + (project.soldPrice - (project.purchasePrice || 0));
+                } else if (project.type === 'repair' && project.jobPrice) {
+                    return total + (project.jobPrice - (project.partsCost || 0));
+                }
+                return total;
+            }, 0);
+            
+            // Add scrap run amounts to total profit
+            profit += scrapRuns.reduce((total, scrapRun) => total + (scrapRun.amount || 0), 0);
+            
+            return profit;
+        }
+        
+        // Update statistics
+        function updateStats() {
+            document.getElementById('total-projects').textContent = projects.length;
+            document.getElementById('active-projects').textContent = projects.filter(p => p.status !== 'sold' && p.status !== 'completed').length;
+            document.getElementById('sold-projects').textContent = projects.filter(p => p.status === 'sold' || p.status === 'completed').length;
+            document.getElementById('scrap-runs').textContent = scrapRuns.length;
+            
+            const totalSpent = calculateTotalSpent();
+            const totalProfit = calculateTotalProfit();
+            
+            document.getElementById('total-spent').textContent = `$${totalSpent.toFixed(2)}`;
+            document.getElementById('total-profit').textContent = `$${totalProfit.toFixed(2)}`;
         }
         
         // Set up event listeners
         function setupEventListeners() {
-            addTransactionBtn.addEventListener('click', () => {
-                document.getElementById('transaction-date').valueAsDate = new Date();
-                toggleModal(addTransactionModal, true);
-            });
-            
-            wipeMonthBtn.addEventListener('click', () => {
-                toggleModal(wipeMonthModal, true);
-            });
+            addProjectBtn.addEventListener('click', () => toggleModal(addProjectModal, true));
+            scrapRunBtn.addEventListener('click', openScrapRunModal);
             
             closeModalButtons.forEach(button => {
                 button.addEventListener('click', (e) => {
@@ -1181,48 +2341,113 @@
                 });
             });
             
-            saveTransactionBtn.addEventListener('click', addNewTransaction);
-            confirmWipeMonthBtn.addEventListener('click', wipeCurrentMonth);
+            saveProjectBtn.addEventListener('click', addNewProject);
+            confirmSellBtn.addEventListener('click', sellProject);
+            confirmCompleteRepairBtn.addEventListener('click', completeRepair);
+            confirmDeleteBtn.addEventListener('click', deleteProject);
+            confirmScrapRunBtn.addEventListener('click', addScrapRun);
             themeToggle.addEventListener('click', toggleTheme);
             
-            // Show/hide expense category based on transaction type
-            transactionTypeSelect.addEventListener('change', function() {
-                expenseCategoryGroup.style.display = this.value === 'expense' ? 'block' : 'none';
-            });
+            searchInput.addEventListener('input', renderProjects);
             
             // Close modal when clicking outside
             document.addEventListener('click', (e) => {
                 if (e.target.classList.contains('modal')) {
-                    toggleModal(addTransactionModal, false);
-                    toggleModal(wipeMonthModal, false);
+                    toggleModal(addProjectModal, false);
+                    toggleModal(sellProjectModal, false);
+                    toggleModal(completeRepairModal, false);
+                    toggleModal(deleteProjectModal, false);
+                    toggleModal(scrapRunModal, false);
                 }
             });
             
-            // Mobile menu toggle
-            mobileMenuButton.addEventListener('click', () => {
-                mobileMenuDropdown.classList.toggle('active');
+            // Set today as default date
+            document.getElementById('purchase-date').valueAsDate = new Date();
+            document.getElementById('booking-date').valueAsDate = new Date();
+            document.getElementById('sold-date').valueAsDate = new Date();
+            document.getElementById('completion-date').valueAsDate = new Date();
+            document.getElementById('scrap-date').valueAsDate = new Date();
+            
+            // Project type tabs
+            projectTabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    projectTabs.forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    currentProjectTypeFilter = tab.dataset.type;
+                    projectTypeTitle.textContent = tab.textContent + ' Projects';
+                    renderProjects();
+                });
+            });
+
+            // Toggle between repair and flip fields
+            document.getElementById('project-type').addEventListener('change', function() {
+                const isRepair = this.value === 'repair';
+                document.getElementById('flip-details').style.display = isRepair ? 'none' : 'block';
+                document.getElementById('repair-details').style.display = isRepair ? 'block' : 'none';
             });
             
-            // Mobile menu items
-            mobileAddTransaction.addEventListener('click', (e) => {
+            // Mobile menu
+            mobileAll.addEventListener('click', (e) => {
                 e.preventDefault();
-                document.getElementById('transaction-date').valueAsDate = new Date();
-                toggleModal(addTransactionModal, true);
-                mobileMenuDropdown.classList.remove('active');
+                currentProjectTypeFilter = 'all';
+                projectTypeTitle.textContent = 'All Projects';
+                renderProjects();
             });
             
-            mobileWipeMonth.addEventListener('click', (e) => {
+            mobileFlips.addEventListener('click', (e) => {
                 e.preventDefault();
-                toggleModal(wipeMonthModal, true);
-                mobileMenuDropdown.classList.remove('active');
+                currentProjectTypeFilter = 'flip';
+                projectTypeTitle.textContent = 'Flip Projects';
+                renderProjects();
             });
+            
+            mobileRepairs.addEventListener('click', (e) => {
+                e.preventDefault();
+                currentProjectTypeFilter = 'repair';
+                projectTypeTitle.textContent = 'Repair Projects';
+                renderProjects();
+            });
+            
+            mobileAdd.addEventListener('click', (e) => {
+                e.preventDefault();
+                toggleModal(addProjectModal, true);
+            });
+            
+            // Project detail view
+            closeDetailView.addEventListener('click', () => {
+                projectDetailView.style.display = 'none';
+            });
+            
+            // Image upload
+            addImageBtn.addEventListener('click', () => {
+                imageUpload.click();
+            });
+            
+            imageUpload.addEventListener('change', handleImageUpload);
+            
+            // Add note
+            addNoteBtn.addEventListener('click', addProjectNote);
+            
+            // Add repair log
+            addRepairLogBtn.addEventListener('click', addRepairLogEntry);
+            
+            // Update profit calculation when inputs change
+            document.getElementById('sold-price').addEventListener('input', updateSellProfitCalculation);
+            document.getElementById('sold-date').addEventListener('input', updateSellProfitCalculation);
+            
+            document.getElementById('job-price').addEventListener('input', updateRepairProfitCalculation);
+            document.getElementById('parts-cost').addEventListener('input', updateRepairProfitCalculation);
         }
         
         // Toggle modal visibility
         function toggleModal(modal, show) {
             modal.style.display = show ? 'flex' : 'none';
-            if (!show && modal === addTransactionModal) {
-                transactionForm.reset();
+            if (!show) {
+                if (modal === addProjectModal) {
+                    projectForm.reset();
+                } else if (modal === scrapRunModal) {
+                    scrapRunForm.reset();
+                }
             }
         }
         
