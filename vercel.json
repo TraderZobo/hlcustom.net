@@ -1,0 +1,9 @@
+{
+  "redirects": [
+    {
+      "source": "/home",
+      "destination": "https://www.hlcustom.net",
+      "permanent": true
+    }
+  ]
+}
