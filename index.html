@@ -1164,10 +1164,18 @@
         </div>
     </header>
 
-    <!-- Hero Section -->
+    <!-- Hero Section with Video Background -->
     <section class="hero">
+        <!-- Video Background -->
+        <video autoplay muted loop playsinline class="hero-video">
+            <source src="https://assets.mixkit.co/videos/preview/mixkit-mechanic-repairing-the-engine-of-a-car-39845-large.mp4" type="video/mp4">
+            <!-- Fallback image if video doesn't load -->
+            <img src="https://images.unsplash.com/photo-1592155931584-901a157a8b02?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Engine Repair Background">
+        </video>
+        <div class="hero-overlay"></div>
+        
         <div class="container">
-            <div class="hero-content" id="heroContent" style="opacity: 1; transform: none;">
+            <div class="hero-content" id="heroContent">
                 <h1>Small Engine Specialists</h1>
                 <p>Hayden & Logan - Houghton Lake's trusted source for no-nonsense small engine repairs. We replace parts, not promises.</p>
                 <div class="hero-btns">
@@ -1177,6 +1185,7 @@
             </div>
         </div>
     </section>
+
 
     <!-- About Section -->
     <section id="about" class="about-section section-bg">
