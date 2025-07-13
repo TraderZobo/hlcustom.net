@@ -314,180 +314,45 @@
         }
 
         /* Hero */
+           /* Hero with Video Background */
         .hero {
             height: 90vh;
             min-height: 600px;
-            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
-                        url('https://images.unsplash.com/photo-1592155931584-901a157a8b02?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') no-repeat center center/cover;
+            position: relative;
+            overflow: hidden;
             display: flex;
             align-items: center;
             color: var(--text-light);
-            position: relative;
-            overflow: hidden;
             border-bottom: 1px solid var(--gray);
         }
 
-    .hero-content {
-    max-width: 800px;
-    opacity: 1 !important; /* Force visibility */
-    transform: none !important; /* Remove any transform */
-}
-
-        .hero h1 {
-            font-size: 2.8rem;
-            margin-bottom: 1.2rem;
-            line-height: 1.2;
-        }
-
-        .hero p {
-            font-size: 1.1rem;
-            margin-bottom: 2rem;
-            color: var(--text-gray);
-        }
-
-        .hero-btns {
-            display: flex;
-            gap: 1rem;
-        }
-
-        /* About */
-        .about-section {
-            position: relative;
-            overflow: hidden;
-        }
-
-        .about-content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2rem;
-            align-items: center;
-        }
-
-        .about-text {
-            opacity: 0;
-            transform: translateX(-30px);
-            transition: all 0.6s ease;
-        }
-
-        .about-text.visible {
-            opacity: 1;
-            transform: translateX(0);
-        }
-
-        .about-text h3 {
-            font-size: 1.8rem;
-            margin-bottom: 1.2rem;
-            color: var(--text-light);
-        }
-
-        .about-text p {
-            margin-bottom: 1.2rem;
-            font-size: 1rem;
-            line-height: 1.7;
-            color: var(--text-gray);
-        }
-
-        .about-image {
-            position: relative;
-            opacity: 0;
-            transform: translateX(30px);
-            transition: all 0.6s ease;
-        }
-
-        .about-image.visible {
-            opacity: 1;
-            transform: translateX(0);
-        }
-
-        .about-image img {
-            width: 100%;
-            border-radius: 8px;
-            border: 1px solid var(--gray);
-        }
-
-        /* Video Section */
-        .video-section {
-            position: relative;
-            background-color: var(--primary);
-            padding: 4rem 0;
-            border-top: 1px solid var(--gray);
-            border-bottom: 1px solid var(--gray);
-        }
-
-        .video-container {
-            max-width: 1000px;
-            margin: 0 auto;
-            position: relative;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            border: 1px solid var(--gray);
-        }
-
-        .video-container iframe {
-            width: 100%;
-            height: 500px;
-            display: block;
-        }
-
-        .video-overlay {
+        .hero-video {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            background-color: rgba(0,0,0,0.5);
-            opacity: 1;
-            transition: opacity 0.3s ease;
+            object-fit: cover;
+            z-index: -1;
         }
 
-        .video-overlay.hidden {
-            opacity: 0;
-            pointer-events: none;
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            z-index: 0;
         }
 
-        .play-btn {
-            width: 80px;
-            height: 80px;
-            background-color: var(--secondary);
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-bottom: 1.5rem;
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            opacity: 1 !important;
+            transform: none !important;
         }
-
-        .play-btn:hover {
-            transform: scale(1.1);
-            background-color: #E65100;
-        }
-
-        .play-btn i {
-            color: white;
-            font-size: 2rem;
-            margin-left: 5px;
-        }
-
-        .video-overlay h3 {
-            color: white;
-            font-size: 1.5rem;
-            margin-bottom: 0.5rem;
-            text-align: center;
-        }
-
-        .video-overlay p {
-            color: var(--text-gray);
-            text-align: center;
-            max-width: 500px;
-            margin: 0 auto;
-        }
-
         /* Who We Are */
         .who-we-are {
             background-color: var(--primary);
