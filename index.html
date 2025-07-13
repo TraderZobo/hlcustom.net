@@ -405,6 +405,89 @@
             border: 1px solid var(--gray);
         }
 
+        /* Video Section */
+        .video-section {
+            position: relative;
+            background-color: var(--primary);
+            padding: 4rem 0;
+            border-top: 1px solid var(--gray);
+            border-bottom: 1px solid var(--gray);
+        }
+
+        .video-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            border: 1px solid var(--gray);
+        }
+
+        .video-container iframe {
+            width: 100%;
+            height: 500px;
+            display: block;
+        }
+
+        .video-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: rgba(0,0,0,0.5);
+            opacity: 1;
+            transition: opacity 0.3s ease;
+        }
+
+        .video-overlay.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .play-btn {
+            width: 80px;
+            height: 80px;
+            background-color: var(--secondary);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 1.5rem;
+        }
+
+        .play-btn:hover {
+            transform: scale(1.1);
+            background-color: #E65100;
+        }
+
+        .play-btn i {
+            color: white;
+            font-size: 2rem;
+            margin-left: 5px;
+        }
+
+        .video-overlay h3 {
+            color: white;
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            text-align: center;
+        }
+
+        .video-overlay p {
+            color: var(--text-gray);
+            text-align: center;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
         /* Who We Are */
         .who-we-are {
             background-color: var(--primary);
@@ -1072,6 +1155,10 @@
                 border-right: none;
                 border-bottom: 1px solid var(--gray);
             }
+            
+            .video-container iframe {
+                height: 400px;
+            }
         }
 
         @media (max-width: 768px) {
@@ -1121,6 +1208,15 @@
             .gallery-slider {
                 height: 500px;
             }
+            
+            .video-container iframe {
+                height: 350px;
+            }
+            
+            .play-btn {
+                width: 60px;
+                height: 60px;
+            }
         }
 
         @media (max-width: 576px) {
@@ -1151,6 +1247,14 @@
 
             .gallery-title h2 {
                 font-size: 1.8rem;
+            }
+            
+            .video-container iframe {
+                height: 250px;
+            }
+            
+            .video-overlay h3 {
+                font-size: 1.2rem;
             }
         }
     </style>
@@ -1223,6 +1327,26 @@
                     <img src="images/hlcustomlogo.png" alt="H&L Custom shop">
 
                 </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Video Section -->
+    <section class="video-section">
+        <div class="container">
+            <div class="section-title">
+                <h2>See Us In Action</h2>
+                <p>Watch our team at work bringing engines back to life</p>
+            </div>
+            <div class="video-container">
+                <div class="video-overlay" id="videoOverlay">
+                    <div class="play-btn" id="playBtn">
+                        <i class="fas fa-play"></i>
+                    </div>
+                    <h3>H&L Custom Engine Repair</h3>
+                    <p>See how we diagnose and fix small engine problems with precision and expertise</p>
+                </div>
+                <iframe id="videoPlayer" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="display: none;"></iframe>
             </div>
         </div>
     </section>
@@ -1715,10 +1839,23 @@ A precision-driven small engine mechanic, Logan excels at valve work, structural
         slider.addEventListener('mouseenter', stopSlider);
         slider.addEventListener('mouseleave', startSlider);
 
+        // Video Player Functionality
+        const videoOverlay = document.getElementById('videoOverlay');
+        const playBtn = document.getElementById('playBtn');
+        const videoPlayer = document.getElementById('videoPlayer');
+        
+        // Replace this with your video URL
+        const videoURL = 'https://cdn.discordapp.com/attachments/971350809973493762/1394058030563328080/copy_55C21131-17EC-49EB-898F-432B902AFBA3.mov?ex=68756d36&is=68741bb6&hm=6772328b2ebc78a058c2a5bc63d6df56a7cba9663a9e7b6fbe107d14ca3c763b&';
+        
+        playBtn.addEventListener('click', function() {
+            videoPlayer.src = videoURL;
+            videoPlayer.style.display = 'block';
+            videoOverlay.classList.add('hidden');
+        });
+
         // Scroll Animation
         function checkScroll() {
             const elements = [
-                
                 { id: 'aboutText', offset: 0.8 },
                 { id: 'aboutImage', offset: 0.8 },
                 { id: 'whoWeAreTitle', offset: 0.8 },
